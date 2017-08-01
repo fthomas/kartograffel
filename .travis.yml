@@ -4,6 +4,10 @@ scala:
 jdk:
 - oraclejdk8
 sudo: false
+addons:
+  apt:
+    packages:
+    - fakeroot
 install:
 - pip install --user codecov
 cache:
