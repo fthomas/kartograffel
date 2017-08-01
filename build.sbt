@@ -55,8 +55,6 @@ lazy val server = crossProject(JVMPlatform)
       "com.h2database" % "h2" % h2Version,
       "eu.timepit" %% "refined" % refinedVersion,
       "eu.timepit" %% "refined-pureconfig" % refinedVersion,
-      "io.circe" %% "circe-generic" % circeVersion,
-      "io.circe" %% "circe-refined" % circeVersion,
       "org.http4s" %% "http4s-blaze-server" % http4sVersion,
       "org.http4s" %% "http4s-circe" % http4sVersion,
       "org.http4s" %% "http4s-core" % http4sVersion,
@@ -96,6 +94,8 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
   .configureCross(moduleCrossConfig("shared"))
   .settings(
     libraryDependencies ++= Seq(
+      "io.circe" %%% "circe-generic" % circeVersion,
+      "io.circe" %%% "circe-refined" % circeVersion,
       "eu.timepit" %%% "refined" % refinedVersion
     )
   )

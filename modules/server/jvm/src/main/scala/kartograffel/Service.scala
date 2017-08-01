@@ -1,7 +1,5 @@
 package kartograffel
 
-import io.circe.generic.auto._
-import io.circe.refined._
 import io.circe.syntax._
 import eu.timepit.refined.auto._
 import kartograffel.shared.model.Graffel.Id
