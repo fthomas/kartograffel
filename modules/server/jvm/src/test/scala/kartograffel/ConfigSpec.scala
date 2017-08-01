@@ -21,7 +21,9 @@ object ConfigSpec extends Specification {
     "" >> {
       println(System.getProperty("user.dir"))
       val prop = "app.conf.3"
-      Properties.setProp(prop, "modules/server/jvm/src/universal/conf/application.conf")
+      Properties.setProp(
+        prop,
+        "modules/server/jvm/src/universal/conf/application.conf")
       Config.load(prop).unsafeRun() must_=== Config()
     }
   }

@@ -56,6 +56,7 @@ lazy val server = crossProject(JVMPlatform)
       "eu.timepit" %% "refined" % refinedVersion,
       "eu.timepit" %% "refined-pureconfig" % refinedVersion,
       "io.circe" %% "circe-generic" % circeVersion,
+      "io.circe" %% "circe-refined" % circeVersion,
       "org.http4s" %% "http4s-blaze-server" % http4sVersion,
       "org.http4s" %% "http4s-circe" % http4sVersion,
       "org.http4s" %% "http4s-core" % http4sVersion,
@@ -93,6 +94,11 @@ lazy val serverJVM = server.jvm
 
 lazy val shared = crossProject(JSPlatform, JVMPlatform)
   .configureCross(moduleCrossConfig("shared"))
+  .settings(
+    libraryDependencies ++= Seq(
+      "eu.timepit" %%% "refined" % refinedVersion
+    )
+  )
 
 lazy val sharedJS = shared.js
 lazy val sharedJVM = shared.jvm
@@ -133,7 +139,8 @@ lazy val compileSettings = Def.settings(
 
 lazy val metadataSettings = Def.settings(
   name := projectName,
-  licenses := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
+  licenses := Seq(
+    "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
   startYear := Some(2017)
 )
 
