@@ -9,7 +9,7 @@ import kartograffel.shared.model.{Graffel, Location}
 import org.http4s.HttpService
 import org.http4s.circe._
 import org.http4s.dsl._
-import org.http4s.server.staticcontent.{WebjarService, webjarService}
+import org.http4s.server.staticcontent.{webjarService, WebjarService}
 
 object Service {
   val api = HttpService {
