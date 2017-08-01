@@ -1,0 +1,16 @@
+language: scala
+scala:
+- 2.12.3
+jdk:
+- oraclejdk8
+sudo: false
+install:
+- pip install --user codecov
+cache:
+  directories:
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt/boot/"
+script:
+- sbt ++$TRAVIS_SCALA_VERSION validate
+after_success:
+- codecov
