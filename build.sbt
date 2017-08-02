@@ -11,6 +11,7 @@ val h2Version = "1.4.196"
 val http4sVersion = "0.17.0-M3"
 val logbackVersion = "1.2.3"
 val refinedVersion = "0.8.2"
+val scalajsDomVersion = "0.9.3"
 val scalaTestVersion = "3.0.1"
 val specs2Version = "3.8.6"
 
@@ -31,6 +32,7 @@ lazy val client = crossProject(JSPlatform)
   .enablePlugins(ScalaJSWeb)
   .settings(
     libraryDependencies ++= Seq(
+      "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,
       // Replace with specs2 when it supports Scala.js:
       // https://github.com/etorreborre/specs2/issues/465
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
