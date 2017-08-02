@@ -18,3 +18,7 @@ script:
 - sbt ++$TRAVIS_SCALA_VERSION validate
 after_success:
 - codecov
+deploy:
+  provider: script
+  script: sbt ++$TRAVIS_SCALA_VERSION deployHerokuCmds
+  skip_cleanup: true

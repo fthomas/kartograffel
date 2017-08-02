@@ -1,0 +1,3 @@
+# DO NOT REMOVE.
+# The project dir is required for sbt-heroku:
+# https://github.com/heroku/sbt-heroku/issues/23
