@@ -12,7 +12,7 @@ import org.http4s.server.staticcontent.{webjarService, WebjarService}
 object Service {
   val api = HttpService {
     case GET -> Root / "graffel" / id =>
-      Ok(Graffel(Id(""), Location(0.0, 0.0)).asJson)
+      Ok(Graffel(Id(id), Location(0.0, 0.0)).asJson)
 
     case GET -> Root / "now.json" =>
       Ok(Storage.now.map(_.asJson))
