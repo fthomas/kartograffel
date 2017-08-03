@@ -4,7 +4,7 @@ import eu.timepit.refined.api.RefType
 import kartograffel.shared.model.Position
 import kartograffel.shared.model.Position.{Latitude, Longitude}
 import org.scalajs.dom
-import org.scalajs.dom.{PositionOptions,window,PositionError,Coordinates}
+import org.scalajs.dom.{window, Coordinates, PositionError, PositionOptions}
 
 import scala.scalajs.js
 
