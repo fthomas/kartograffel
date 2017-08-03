@@ -6,21 +6,21 @@ import eu.timepit.refined.numeric.Interval
 import io.circe.generic.semiauto._
 import io.circe.{Decoder, Encoder}
 import io.circe.refined._
-import kartograffel.shared.model.Location.{Latitude, Longitude}
+import kartograffel.shared.model.Position.{Latitude, Longitude}
 
-final case class Location(
+final case class Position(
     latitude: Latitude,
     longitude: Longitude
 )
 
-object Location {
+object Position {
   type Latitude = Double Refined Interval.Closed[W.`-90.0`.T, W.`90.0`.T]
 
   type Longitude = Double Refined Interval.Closed[W.`-180.0`.T, W.`180.0`.T]
 
-  implicit val locationDecoder: Decoder[Location] =
+  implicit val positionDecoder: Decoder[Position] =
     deriveDecoder
 
-  implicit val locationEncoder: Encoder[Location] =
+  implicit val positionEncoder: Encoder[Position] =
     deriveEncoder
 }

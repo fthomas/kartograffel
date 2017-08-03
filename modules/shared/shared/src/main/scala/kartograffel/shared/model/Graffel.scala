@@ -5,7 +5,7 @@ import io.circe.{Decoder, Encoder}
 
 final case class Graffel(
     id: Graffel.Id,
-    location: Location
+    position: Position
 )
 
 object Graffel {

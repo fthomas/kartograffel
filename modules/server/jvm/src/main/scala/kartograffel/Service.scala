@@ -3,7 +3,7 @@ package kartograffel
 import io.circe.syntax._
 import eu.timepit.refined.auto._
 import kartograffel.shared.model.Graffel.Id
-import kartograffel.shared.model.{Graffel, Location}
+import kartograffel.shared.model.{Graffel, Position}
 import org.http4s.{HttpService, MediaType}
 import org.http4s.circe._
 import org.http4s.dsl._
@@ -42,7 +42,7 @@ object Service {
 
   val api = HttpService {
     case GET -> Root / "graffel" / id =>
-      Ok(Graffel(Id(id), Location(0.0, 0.0)).asJson)
+      Ok(Graffel(Id(id), Position(0.0, 0.0)).asJson)
 
     case GET -> Root / "now.json" =>
       Ok(Storage.now.map(_.asJson))
