@@ -14,6 +14,7 @@ object Server extends StreamApp {
   def blazeBuilder(config: Config): BlazeBuilder =
     BlazeBuilder
       .bindHttp(config.http.port, config.http.host)
+      .mountService(Service.frontend)
       .mountService(Service.api, "/api")
       .mountService(Service.assets, "/assets")
 }

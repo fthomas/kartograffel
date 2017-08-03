@@ -3,13 +3,29 @@ package kartograffel
 import eu.timepit.refined.api.RefType
 import kartograffel.shared.model.Location
 import kartograffel.shared.model.Location.{Latitude, Longitude}
-import org.scalajs.dom.{window, Coordinates}
+import org.scalajs.dom._
+
+import scala.scalajs.js
 
 object Client {
   def main(args: Array[String]): Unit = {
+    println("TADA")
     window.navigator.geolocation.getCurrentPosition { pos =>
-      println(locationFrom(pos.coords))
+      println("huu???")
+      println("Location" + locationFrom(pos.coords))
     }
+
+    val opts = js.Object().asInstanceOf[PositionOptions]
+    opts.timeout = 50000
+    opts.enableHighAccuracy = true
+
+    window.navigator.geolocation.getCurrentPosition({ pos: Position =>
+      println(pos)
+    }, { err: PositionError =>
+      println(err.code)
+      println(err.message)
+    }, opts)
+
     println("Hello, world!")
   }
 
