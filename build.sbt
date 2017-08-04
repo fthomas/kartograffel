@@ -32,10 +32,14 @@ lazy val client = crossProject(JSPlatform)
   .enablePlugins(ScalaJSWeb)
   .settings(
     libraryDependencies ++= Seq(
+      "be.doeraene" %%% "scalajs-jquery" % "0.9.2",
       "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,
       // Replace with specs2 when it supports Scala.js:
       // https://github.com/etorreborre/specs2/issues/465
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
+    ),
+    jsDependencies ++= Seq(
+      "org.webjars" % "jquery" % "2.1.4" / "2.1.4/jquery.js"
     ),
     scalaJSUseMainModuleInitializer := true
   )

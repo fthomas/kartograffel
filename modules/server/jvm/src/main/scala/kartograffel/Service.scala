@@ -19,6 +19,7 @@ object Service {
           |    <meta charset="UTF-8">
           |  </head>
           |  <body>
+          |    <script type="text/javascript" src="assets/${BuildInfo.moduleName}/${BuildInfo.version}/client-jsdeps.js"></script>
           |    <script type="text/javascript" src="assets/${BuildInfo.moduleName}/${BuildInfo.version}/client-fastopt.js"></script>
           |  </body>
           |</html>
@@ -33,6 +34,7 @@ object Service {
             |    <meta charset="UTF-8">
             |  </head>
             |  <body>
+            |    <script type="text/javascript" src="assets/${BuildInfo.moduleName}/${BuildInfo.version}/client-jsdeps.js"></script>
             |    <script type="text/javascript" src="assets/${BuildInfo.moduleName}/${BuildInfo.version}/client-opt.js"></script>
             |  </body>
             |</html>
@@ -43,6 +45,11 @@ object Service {
   val api = HttpService {
     case GET -> Root / "graffel" / id =>
       Ok(Graffel(Id(id), Position(0.0, 0.0)).asJson)
+
+    case req @ POST -> Root / "post" =>
+      val pos = req.as(jsonOf[Position])
+      println(pos.unsafeRun())
+      Ok("")
 
     case GET -> Root / "now.json" =>
       Ok(Storage.now.map(_.asJson))
