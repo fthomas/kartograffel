@@ -12,10 +12,15 @@ val http4sVersion = "0.17.0-M3"
 val logbackVersion = "1.2.3"
 val refinedVersion = "0.8.2"
 val scalajsDomVersion = "0.9.3"
+val scalajsJqueryVersion = "0.9.2"
 val scalaTestVersion = "3.0.1"
 val specs2Version = "3.8.6"
+val webjarJqueryVersion = "2.1.4"
 
-lazy val jsOptPostfix = taskKey[String]("")
+/// tasks
+
+lazy val jsOptPostfix =
+  taskKey[String]("Postfix of generated JS files, either 'fastopt' or 'opt'.")
 
 /// projects
 
@@ -34,14 +39,14 @@ lazy val client = crossProject(JSPlatform)
   .enablePlugins(ScalaJSWeb)
   .settings(
     libraryDependencies ++= Seq(
-      "be.doeraene" %%% "scalajs-jquery" % "0.9.2",
+      "be.doeraene" %%% "scalajs-jquery" % scalajsJqueryVersion,
       "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,
       // Replace with specs2 when it supports Scala.js:
       // https://github.com/etorreborre/specs2/issues/465
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
     ),
     jsDependencies ++= Seq(
-      "org.webjars" % "jquery" % "2.1.4" / "2.1.4/jquery.js"
+      "org.webjars" % "jquery" % webjarJqueryVersion / s"$webjarJqueryVersion/jquery.js"
     ),
     scalaJSUseMainModuleInitializer := true
   )
