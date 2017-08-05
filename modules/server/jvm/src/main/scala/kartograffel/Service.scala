@@ -20,25 +20,10 @@ object Service {
           |  </head>
           |  <body>
           |    <script type="text/javascript" src="assets/${BuildInfo.moduleName}/${BuildInfo.version}/client-jsdeps.js"></script>
-          |    <script type="text/javascript" src="assets/${BuildInfo.moduleName}/${BuildInfo.version}/client-fastopt.js"></script>
+          |    <script type="text/javascript" src="assets/${BuildInfo.moduleName}/${BuildInfo.version}/client-${BuildInfo.jsOptPostfix}.js"></script>
           |  </body>
           |</html>
           |
-        """.stripMargin).withType(MediaType.`text/html`)
-
-    case GET -> Root / "opt.html" =>
-      Ok(s"""
-            |<!DOCTYPE html>
-            |<html>
-            |  <head>
-            |    <meta charset="UTF-8">
-            |  </head>
-            |  <body>
-            |    <script type="text/javascript" src="assets/${BuildInfo.moduleName}/${BuildInfo.version}/client-jsdeps.js"></script>
-            |    <script type="text/javascript" src="assets/${BuildInfo.moduleName}/${BuildInfo.version}/client-opt.js"></script>
-            |  </body>
-            |</html>
-            |
         """.stripMargin).withType(MediaType.`text/html`)
   }
 

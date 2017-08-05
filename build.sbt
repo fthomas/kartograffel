@@ -15,6 +15,8 @@ val scalajsDomVersion = "0.9.3"
 val scalaTestVersion = "3.0.1"
 val specs2Version = "3.8.6"
 
+lazy val jsOptPostfix = taskKey[String]("")
+
 /// projects
 
 lazy val root = project
@@ -76,7 +78,15 @@ lazy val server = crossProject(JVMPlatform)
   )
   // sbt-buildinfo settings
   .settings(
-    buildInfoKeys := Seq[BuildInfoKey](name, version, moduleName),
+    jsOptPostfix := {
+      if (isDevMode.in(scalaJSPipeline).value) "fastopt" else "opt"
+    },
+    buildInfoKeys := Seq[BuildInfoKey](
+      name,
+      version,
+      moduleName,
+      jsOptPostfix
+    ),
     buildInfoPackage := rootPkg
   )
   // sbt-heroku settings
