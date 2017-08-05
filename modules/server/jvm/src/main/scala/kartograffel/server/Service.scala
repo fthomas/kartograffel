@@ -1,7 +1,8 @@
-package kartograffel
+package kartograffel.server
 
 import io.circe.syntax._
 import eu.timepit.refined.auto._
+import kartograffel.BuildInfo
 import kartograffel.shared.model.Graffel.Id
 import kartograffel.shared.model.{Graffel, Position}
 import org.http4s.{HttpService, MediaType}
@@ -10,7 +11,7 @@ import org.http4s.dsl._
 import org.http4s.server.staticcontent.{webjarService, WebjarService}
 
 object Service {
-  val frontend = HttpService {
+  val root = HttpService {
     case GET -> Root =>
       Ok(s"""
           |<!DOCTYPE html>
@@ -39,7 +40,7 @@ object Service {
     case GET -> Root / "now.json" =>
       Ok(Storage.now.map(_.asJson))
 
-    case GET -> Root / "version.json" =>
+    case GET -> Root / "version" =>
       Ok(BuildInfo.version.asJson)
   }
 

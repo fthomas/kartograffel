@@ -1,4 +1,4 @@
-package kartograffel
+package kartograffel.client
 
 import eu.timepit.refined.api.RefType
 import io.circe.syntax._

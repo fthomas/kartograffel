@@ -1,4 +1,4 @@
-package kartograffel
+package kartograffel.server
 
 import eu.timepit.refined.auto._
 import org.specs2.mutable.Specification

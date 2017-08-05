@@ -1,4 +1,4 @@
-package kartograffel
+package kartograffel.server
 
 import eu.timepit.refined.auto._
 import fs2.{Stream, Task}
@@ -14,7 +14,7 @@ object Server extends StreamApp {
   def blazeBuilder(config: Config): BlazeBuilder =
     BlazeBuilder
       .bindHttp(config.http.port, config.http.host)
-      .mountService(Service.frontend)
+      .mountService(Service.root)
       .mountService(Service.api, "/api")
       .mountService(Service.assets, "/assets")
 }

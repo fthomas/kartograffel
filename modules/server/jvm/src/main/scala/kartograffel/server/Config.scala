@@ -1,4 +1,4 @@
-package kartograffel
+package kartograffel.server
 
 import eu.timepit.refined.pureconfig._
 import eu.timepit.refined.types.net.PortNumber

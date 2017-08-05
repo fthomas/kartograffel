@@ -1,7 +1,8 @@
-package kartograffel
+package kartograffel.server
 
 import doobie.imports._
 import fs2.Task
+import kartograffel.BuildInfo
 
 object Storage {
   val transactor: Transactor[Task] = {
