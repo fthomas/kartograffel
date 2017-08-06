@@ -12,19 +12,7 @@ import org.http4s.server.staticcontent.{webjarService, WebjarService}
 object Service {
   val root = HttpService {
     case GET -> Root =>
-      Ok(s"""
-          |<!DOCTYPE html>
-          |<html>
-          |  <head>
-          |    <meta charset="UTF-8">
-          |  </head>
-          |  <body>
-          |    <script type="text/javascript" src="${BuildInfo.assetsPath}/client-jsdeps.js"></script>
-          |    <script type="text/javascript" src="${BuildInfo.assetsPath}/client-${BuildInfo.jsOptPostfix}.js"></script>
-          |  </body>
-          |</html>
-          |
-        """.stripMargin).withType(MediaType.`text/html`)
+      Ok(html.index).withType(MediaType.`text/html`)
   }
 
   val api = HttpService {
