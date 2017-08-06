@@ -17,11 +17,6 @@ val scalaTestVersion = "3.0.1"
 val specs2Version = "3.8.6"
 val webjarJqueryVersion = "2.1.4"
 
-/// tasks
-
-lazy val jsOptPostfix =
-  taskKey[String]("Postfix of generated JS files, either 'fastopt' or 'opt'.")
-
 /// projects
 
 lazy val root = project
@@ -83,16 +78,22 @@ lazy val server = crossProject(JVMPlatform)
   )
   // sbt-buildinfo settings
   .settings(
-    jsOptPostfix := {
-      if (isDevMode.in(scalaJSPipeline).value) "fastopt" else "opt"
+    buildInfoKeys := {
+      val assetsRoot = "assetsRoot" -> "assets"
+      val assetsPath = "assetsPath" -> s"${assetsRoot._2}/${moduleName.value}/${version.value}"
+      Seq[BuildInfoKey](
+        name,
+        version,
+        moduleName,
+        assetsRoot,
+        assetsPath,
+        BuildInfoKey.map(isDevMode.in(scalaJSPipeline)) {
+          case (_, value) =>
+            "jsOptPostfix" -> (if (value) "fastopt" else "opt")
+        }
+      )
     },
-    buildInfoKeys := Seq[BuildInfoKey](
-      name,
-      version,
-      moduleName,
-      jsOptPostfix
-    ),
-    buildInfoPackage := rootPkg
+    buildInfoPackage := s"$rootPkg.${moduleName.value}"
   )
   // sbt-heroku settings
   .settings(

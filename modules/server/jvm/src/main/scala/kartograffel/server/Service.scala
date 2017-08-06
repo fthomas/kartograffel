@@ -2,7 +2,6 @@ package kartograffel.server
 
 import io.circe.syntax._
 import eu.timepit.refined.auto._
-import kartograffel.BuildInfo
 import kartograffel.shared.model.Graffel.Id
 import kartograffel.shared.model.{Graffel, Position}
 import org.http4s.{HttpService, MediaType}
@@ -20,8 +19,8 @@ object Service {
           |    <meta charset="UTF-8">
           |  </head>
           |  <body>
-          |    <script type="text/javascript" src="assets/${BuildInfo.moduleName}/${BuildInfo.version}/client-jsdeps.js"></script>
-          |    <script type="text/javascript" src="assets/${BuildInfo.moduleName}/${BuildInfo.version}/client-${BuildInfo.jsOptPostfix}.js"></script>
+          |    <script type="text/javascript" src="${BuildInfo.assetsPath}/client-jsdeps.js"></script>
+          |    <script type="text/javascript" src="${BuildInfo.assetsPath}/client-${BuildInfo.jsOptPostfix}.js"></script>
           |  </body>
           |</html>
           |

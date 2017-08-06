@@ -16,5 +16,5 @@ object Server extends StreamApp {
       .bindHttp(config.http.port, config.http.host)
       .mountService(Service.root)
       .mountService(Service.api, "/api")
-      .mountService(Service.assets, "/assets")
+      .mountService(Service.assets, s"/${BuildInfo.assetsRoot}")
 }
