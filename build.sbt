@@ -136,6 +136,7 @@ def moduleCrossConfig(name: String): CrossProject => CrossProject =
 
 lazy val commonSettings = Def.settings(
   compileSettings,
+  consoleSettings,
   metadataSettings,
   packageSettings
 )
@@ -153,12 +154,27 @@ lazy val compileSettings = Def.settings(
     "-unchecked",
     "-Xfatal-warnings",
     "-Xfuture",
-    "-Xlint",
+    "-Xlint:-unused,_",
     "-Yno-adapted-args",
+    "-Ywarn-unused:implicits",
+    "-Ywarn-unused:imports",
+    "-Ywarn-unused:locals",
+    "-Ywarn-unused:params",
+    "-Ywarn-unused:patvars",
+    "-Ywarn-unused:privates",
     "-Ywarn-numeric-widen",
-    "-Ywarn-unused-import",
     "-Ywarn-value-discard"
   )
+)
+
+lazy val consoleSettings = Def.settings(
+  scalacOptions in (Compile, console) -= "-Ywarn-unused:imports",
+  scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
+  initialCommands += s"""
+    import eu.timepit.refined.auto._
+    import $rootPkg.shared._
+    import $rootPkg.shared.model._
+  """
 )
 
 lazy val metadataSettings = Def.settings(

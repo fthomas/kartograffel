@@ -1,6 +1,5 @@
 package kartograffel.server
 
-import kartograffel.BuildInfo
 import org.http4s._
 import org.http4s.testing.Http4sMatchers
 import org.specs2.mutable.Specification
