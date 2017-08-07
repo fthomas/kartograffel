@@ -194,6 +194,15 @@ lazy val noPublishSettings = Def.settings(
   publishArtifact := false
 )
 
+/// taskKeys and settingKeys
+
+lazy val h2Console = taskKey[Unit]("Runs the H2 console.")
+h2Console := {
+  val cp = managedClasspath.in(Compile).in(serverJVM).value.files
+  val h2jar = cp.find(_.toString.contains(h2Version)).get.toString
+  Fork.java(ForkOptions(), Seq("-jar", h2jar))
+}
+
 /// commands
 
 def addCommandsAlias(name: String, cmds: Seq[String]) =
