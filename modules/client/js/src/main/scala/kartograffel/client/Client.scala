@@ -9,11 +9,18 @@ import org.scalajs.dom.{window, Coordinates, PositionError, PositionOptions}
 import org.scalajs.jquery.jQuery
 
 import scala.scalajs.js
+import scalatags.JsDom.all._
 
 object Client {
+
+  val tagHtml = div(
+    input(id := "tagInput", `type` := "text", placeholder := "z.B. Spielplatz, Schlagloch..."),
+    input(id := "tagButton", `type` := "button", value := "Los!")
+  )
+
   def main(args: Array[String]): Unit = {
 
-    jQuery("body").append("<p>Hallo!</p>")
+    jQuery("body").append(tagHtml.toString)
 
     val opts = js.Object().asInstanceOf[PositionOptions]
     opts.timeout = 50000

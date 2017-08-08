@@ -13,6 +13,7 @@ val logbackVersion = "1.2.3"
 val refinedVersion = "0.8.2"
 val scalajsDomVersion = "0.9.3"
 val scalajsJqueryVersion = "0.9.2"
+val scalajsScalaTagsVersion = "0.6.5"
 val scalaTestVersion = "3.0.1"
 val specs2Version = "3.8.6"
 val webjarJqueryVersion = "2.1.4"
@@ -36,6 +37,7 @@ lazy val client = crossProject(JSPlatform)
     libraryDependencies ++= Seq(
       "be.doeraene" %%% "scalajs-jquery" % scalajsJqueryVersion,
       "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,
+      "com.lihaoyi" %%% "scalatags" % scalajsScalaTagsVersion,
       // Replace with specs2 when it supports Scala.js:
       // https://github.com/etorreborre/specs2/issues/465
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
