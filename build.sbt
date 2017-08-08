@@ -174,6 +174,7 @@ lazy val consoleSettings = Def.settings(
     import eu.timepit.refined.auto._
     import $rootPkg.shared._
     import $rootPkg.shared.model._
+    import $rootPkg.${moduleName.value}._
   """
 )
 
