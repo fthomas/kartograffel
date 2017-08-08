@@ -1,5 +1,6 @@
 package kartograffel.server
 
+import doobie.imports._
 import io.circe.syntax._
 import eu.timepit.refined.auto._
 import kartograffel.shared.model.Graffel.Id
@@ -21,7 +22,10 @@ object Service {
 
     case req @ POST -> Root / "post" =>
       val pos = req.as(jsonOf[Position])
-      println(pos.unsafeRun())
+      val pos1 = pos.unsafeRun()
+      println(pos1)
+      println(Storage)
+      println(Storage.insertGraffel(Graffel(Id("0"), pos1)).run.transact(Storage.transactor).unsafeRun())
       Ok("")
 
     case GET -> Root / "now.json" =>

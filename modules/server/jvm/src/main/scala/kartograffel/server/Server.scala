@@ -8,6 +8,7 @@ import org.http4s.util.StreamApp
 object Server extends StreamApp {
   override def stream(args: List[String]): Stream[Task, Nothing] =
     Stream.eval(Config.load).flatMap { config =>
+      Storage.create2
       blazeBuilder(config).serve
     }
 
