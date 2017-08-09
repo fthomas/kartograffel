@@ -3,6 +3,7 @@ package kartograffel.server
 import doobie.imports._
 import io.circe.syntax._
 import eu.timepit.refined.auto._
+import fs2.Task
 import kartograffel.shared.model.Graffel.Id
 import kartograffel.shared.model.{Graffel, Position}
 import org.http4s.{HttpService, MediaType}
@@ -16,7 +17,7 @@ object Service {
       Ok(html.index).withType(MediaType.`text/html`)
   }
 
-  val api = HttpService {
+  def api(transactor: Transactor[Task]) = HttpService {
     case GET -> Root / "graffel" / id =>
       Ok(Graffel(Id(id), Position(0.0, 0.0)).asJson)
 
@@ -29,12 +30,9 @@ object Service {
         Storage
           .insertGraffel(Graffel(Id("0"), pos1))
           .run
-          .transact(Storage.transactor)
+          .transact(transactor)
           .unsafeRun())
       Ok("")
-
-    case GET -> Root / "now.json" =>
-      Ok(Storage.now.map(_.asJson))
 
     case GET -> Root / "version" =>
       Ok(BuildInfo.version.asJson)
