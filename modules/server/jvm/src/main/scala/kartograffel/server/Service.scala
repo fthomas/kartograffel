@@ -25,7 +25,12 @@ object Service {
       val pos1 = pos.unsafeRun()
       println(pos1)
       println(Storage)
-      println(Storage.insertGraffel(Graffel(Id("0"), pos1)).run.transact(Storage.transactor).unsafeRun())
+      println(
+        Storage
+          .insertGraffel(Graffel(Id("0"), pos1))
+          .run
+          .transact(Storage.transactor)
+          .unsafeRun())
       Ok("")
 
     case GET -> Root / "now.json" =>

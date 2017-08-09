@@ -6,7 +6,7 @@ import kartograffel.shared.model.Graffel
 
 object Storage {
   val transactor: Transactor[Task] = {
-    val settings = Map("MODE" -> "PostgreSQL")
+    val settings = Map("MODE" -> "PostgreSQL", "AUTO_SERVER" -> "TRUE")
       .map { case (key, value) => s"$key=$value" }
       .mkString(";", ";", "")
 
@@ -26,12 +26,13 @@ object Storage {
   """.update
 
   def create2 =
-  create.run.transact(transactor).unsafeRun()
+    create.run.transact(transactor).unsafeRun()
 
   def insertGraffel(graffel: Graffel): Update0 = {
     println(graffel)
     sql"""
-        INSERT INTO graffel (id, latitude, longitude) VALUES (DEFAULT, 0.1, 0.2)
+        INSERT INTO graffel (id, latitude, longitude) VALUES (DEFAULT, ${graffel.position.latitude.value},
+        ${graffel.position.longitude.value})
     """.update
   }
 
