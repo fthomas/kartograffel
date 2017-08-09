@@ -67,8 +67,12 @@ lazy val server = crossProject(JVMPlatform)
       "org.tpolecat" %% "doobie-core-cats" % doobieVersion,
       "org.http4s" %% "http4s-testing" % http4sVersion % Test,
       "org.specs2" %% "specs2-core" % specs2Version % Test
-    ),
-    javaOptions.in(reStart) ++= {
+    )
+  )
+  // command line options for run and reStart
+  .settings(
+    fork.in(run) := true,
+    javaOptions ++= {
       val confDirectory = sourceDirectory.in(Universal).value / "conf"
       Seq(
         s"-Dconfig.file=$confDirectory/application.conf",
