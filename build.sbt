@@ -205,7 +205,9 @@ lazy val h2Console = taskKey[Unit]("Runs the H2 console.")
 h2Console := {
   val cp = managedClasspath.in(Compile).in(serverJVM).value.files
   val h2jar = cp.find(_.toString.contains(h2Version)).get.toString
-  Fork.java(ForkOptions(), Seq("-jar", h2jar))
+  val command = Seq("java", "-jar", h2jar)
+  streams.value.log.info(s"Running ${command.mkString(" ")}")
+  Process(command).run()
 }
 
 /// commands
