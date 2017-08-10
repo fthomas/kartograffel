@@ -1,12 +1,12 @@
 package kartograffel.server
 
 import doobie.imports._
+import doobie.refined._
 import cats.Monad
 import cats.implicits._
 import doobie.imports.Update0
 import doobie.util.transactor.Transactor
-import eu.timepit.refined.api.Refined
-import kartograffel.shared.model.{Entity, Graffel, Id, Position}
+import kartograffel.shared.model.{Entity, Graffel, Id}
 
 trait GraffelRepository[F[_]] {
   def query(id: Id[Graffel]): F[Option[Entity[Graffel]]]
@@ -33,19 +33,13 @@ object GraffelRepository {
       sql"""
         SELECT id, latitude, longitude FROM graffel
         WHERE id = ${id.value}
-      """
-        .query[(Long, Double, Double)]
-        .map(
-          x =>
-            Entity(Id(x._1),
-                   Graffel(Position(Refined.unsafeApply(x._2),
-                                    Refined.unsafeApply(x._3)))))
+      """.query
 
     def insert(graffel: Graffel): Update0 = {
       val position = graffel.position
       sql"""
         INSERT INTO graffel (latitude, longitude)
-        VALUES (${position.latitude.value}, ${position.longitude.value})
+        VALUES (${position.latitude}, ${position.longitude})
       """.update
     }
   }
