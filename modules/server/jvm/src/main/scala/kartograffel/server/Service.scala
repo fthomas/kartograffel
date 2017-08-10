@@ -1,13 +1,12 @@
 package kartograffel.server
 
-import io.circe.syntax._
-import eu.timepit.refined.auto._
 import fs2.Task
-import kartograffel.shared.model.{Graffel, Position}
-import org.http4s.{HttpService, MediaType}
+import io.circe.syntax._
+import kartograffel.shared.model.{Graffel, Id, Position}
 import org.http4s.circe._
 import org.http4s.dsl._
 import org.http4s.server.staticcontent.{webjarService, WebjarService}
+import org.http4s.{HttpService, MediaType}
 
 object Service {
   val root = HttpService {
@@ -16,8 +15,11 @@ object Service {
   }
 
   def api(gr: GraffelRepository[Task]) = HttpService {
-    case GET -> Root / "graffel" / _ =>
-      Ok(Graffel(Position(0.0, 0.0)).asJson)
+    case GET -> Root / "graffel" / LongVar(id) =>
+      gr.query(Id(id)).flatMap {
+        case Some(entity) => Ok(entity.value.asJson)
+        case None => NotFound()
+      }
 
     case req @ POST -> Root / "post" =>
       val pos = req.as(jsonOf[Position])
