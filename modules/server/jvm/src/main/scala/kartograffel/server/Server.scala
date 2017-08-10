@@ -20,7 +20,7 @@ object Server extends StreamApp {
     BlazeBuilder
       .bindHttp(config.http.port, config.http.host)
       .mountService(Service.root)
-      .mountService(Service.api(GraffelRepository.fromTransactor(transactor)),
+      .mountService(Service.api(GraffelRepository.withTransactor(transactor)),
                     "/api")
       .mountService(Service.assets, s"/${BuildInfo.assetsRoot}")
 }

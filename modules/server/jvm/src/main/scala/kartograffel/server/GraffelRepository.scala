@@ -13,31 +13,36 @@ trait GraffelRepository[F[_]] {
 }
 
 object GraffelRepository {
-  def fromTransactor[M[_]: Monad](xa: Transactor[M]): GraffelRepository[M] =
-    new GraffelRepository[M] {
-      override def query(id: Id[Graffel]): M[Option[Entity[Graffel]]] =
-        sql.query(id).option.transact(xa)
+  val connectionIo: GraffelRepository[ConnectionIO] =
+    new GraffelRepository[ConnectionIO] {
+      override def query(
+          id: Id[Graffel]): ConnectionIO[Option[Entity[Graffel]]] = {
+        val query: Query0[Entity[Graffel]] = sql"""
+          SELECT id, latitude, longitude FROM graffel WHERE id = ${id.value}
+        """.query
+        query.option
+      }
 
-      override def insert(graffel: Graffel): M[Entity[Graffel]] =
-        sql.insert(graffel).transact(xa)
+      override def insert(graffel: Graffel): ConnectionIO[Entity[Graffel]] = {
+        val update: Update0 = sql"""
+          INSERT INTO graffel (latitude, longitude)
+          VALUES (
+            ${graffel.position.latitude},
+            ${graffel.position.longitude}
+          )
+        """.update
+        update
+          .withUniqueGeneratedKeys[Long]("id")
+          .map(Entity.from(_, graffel))
+      }
     }
 
-  object sql {
-    def query(id: Id[Graffel]): Query0[Entity[Graffel]] =
-      sql"""
-        SELECT id, latitude, longitude FROM graffel
-        WHERE id = ${id.value}
-      """.query
+  def withTransactor[M[_]: Monad](xa: Transactor[M]): GraffelRepository[M] =
+    new GraffelRepository[M] {
+      override def query(id: Id[Graffel]): M[Option[Entity[Graffel]]] =
+        connectionIo.query(id).transact(xa)
 
-    def insert(graffel: Graffel): ConnectionIO[Entity[Graffel]] =
-      sql"""
-        INSERT INTO graffel (latitude, longitude)
-        VALUES (
-          ${graffel.position.latitude},
-          ${graffel.position.longitude}
-        )
-      """.update
-        .withUniqueGeneratedKeys[Long]("id")
-        .map(id => Entity.from(id, graffel))
-  }
+      override def insert(graffel: Graffel): M[Entity[Graffel]] =
+        connectionIo.insert(graffel).transact(xa)
+    }
 }
