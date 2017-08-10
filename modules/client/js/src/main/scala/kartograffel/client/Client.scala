@@ -2,14 +2,13 @@ package kartograffel.client
 
 import eu.timepit.refined.api.RefType
 import io.circe.syntax._
-import kartograffel.shared.model.{Graffel, Position}
 import kartograffel.shared.model.Position.{Latitude, Longitude}
+import kartograffel.shared.model.{Graffel, Position}
 import org.scalajs.dom
 import org.scalajs.dom.{window, Coordinates, PositionError, PositionOptions}
 import org.scalajs.jquery.jQuery
 
 import scala.scalajs.js
-import scala.scalajs.js.JSON
 
 object Client {
   def main(args: Array[String]): Unit = {
@@ -24,15 +23,10 @@ object Client {
       { pos: dom.Position =>
         val loc = locationFrom(pos.coords).get
         println("Location" + locationFrom(pos.coords))
-        jQuery
-          .post(url = "/api/graffel",
-                data = Graffel(loc).asJson.spaces2,
-                success = { (data: js.Object) =>
-                  println(data.toString)
-                },
-                dataType = "json")
-          .done((data: js.Any) => println(JSON.stringify(data)))
-
+        jQuery.post(url = "/api/graffel",
+                    data = Graffel(loc).asJson.spaces2,
+                    success = null,
+                    dataType = null)
       }, { err: PositionError =>
         println(err.code)
         println(err.message)

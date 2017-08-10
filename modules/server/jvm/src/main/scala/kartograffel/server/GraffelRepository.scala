@@ -3,8 +3,6 @@ package kartograffel.server
 import doobie.imports._
 import doobie.refined._
 import cats.Monad
-import cats.implicits._
-import doobie.imports.Update0
 import doobie.util.transactor.Transactor
 import kartograffel.shared.model.{Entity, Graffel, Id}
 
@@ -21,11 +19,7 @@ object GraffelRepository {
         sql.query(id).option.transact(xa)
 
       override def insert(graffel: Graffel): M[Entity[Graffel]] =
-        sql
-          .insert(graffel)
-          .run
-          .transact(xa)
-          .map(i => Entity.from(i.toLong, graffel))
+        sql.insert(graffel).transact(xa)
     }
 
   object sql {
@@ -35,12 +29,15 @@ object GraffelRepository {
         WHERE id = ${id.value}
       """.query
 
-    def insert(graffel: Graffel): Update0 = {
-      val position = graffel.position
+    def insert(graffel: Graffel): ConnectionIO[Entity[Graffel]] =
       sql"""
         INSERT INTO graffel (latitude, longitude)
-        VALUES (${position.latitude}, ${position.longitude})
+        VALUES (
+          ${graffel.position.latitude},
+          ${graffel.position.longitude}
+        )
       """.update
-    }
+        .withUniqueGeneratedKeys[Long]("id")
+        .map(id => Entity.from(id, graffel))
   }
 }
