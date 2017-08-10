@@ -18,10 +18,13 @@ object GraffelRepository {
   def fromTransactor[M[_]: Monad](xa: Transactor[M]): GraffelRepository[M] =
     new GraffelRepository[M] {
       override def query(id: Id[Graffel]): M[Option[Entity[Graffel]]] =
-        xa.trans(sql.query(id).option)
+        sql.query(id).option.transact(xa)
 
       override def insert(graffel: Graffel): M[Entity[Graffel]] =
-        xa.trans(sql.insert(graffel).run)
+        sql
+          .insert(graffel)
+          .run
+          .transact(xa)
           .map(i => Entity.from(i.toLong, graffel))
     }
 

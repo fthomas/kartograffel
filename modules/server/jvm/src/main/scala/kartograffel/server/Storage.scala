@@ -1,12 +1,13 @@
 package kartograffel.server
 
+import fs2.interop.cats._
 import doobie.imports._
 import eu.timepit.refined.auto._
 import fs2.Task
 
 object Storage {
   def transactorFrom(db: Config.Db): Transactor[Task] =
-    DriverManagerTransactor(driver = db.driver, url = db.url)
+    DriverManagerTransactor[Task](driver = db.driver, url = db.url)
 
   val create: Update0 = sql"""
     DROP TABLE IF EXISTS graffel;
