@@ -203,11 +203,16 @@ lazy val noPublishSettings = Def.settings(
 
 lazy val h2Console = taskKey[Unit]("Runs the H2 console.")
 h2Console := {
-  val cp = managedClasspath.in(Compile).in(serverJVM).value.files
-  val h2jar = cp.find(_.toString.contains(h2Version)).get.toString
-  val command = Seq("java", "-jar", h2jar)
-  streams.value.log.info(s"Running ${command.mkString(" ")}")
-  Process(command).run()
+  val cpFiles = managedClasspath.in(Compile).in(serverJVM).value.files
+  val h2jar = cpFiles.find(_.toString.contains(h2Version)).map(_.toString)
+
+  h2jar.fold {
+    sys.error(s"Could not find H2 JAR for version $h2Version")
+  } { file =>
+    val command = Seq("java", "-jar", file)
+    streams.value.log.info(s"Running ${command.mkString(" ")}")
+    Process(command).run()
+  }
 }
 
 /// commands
