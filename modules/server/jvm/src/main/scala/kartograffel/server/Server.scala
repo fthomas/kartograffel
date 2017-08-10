@@ -5,6 +5,7 @@ import eu.timepit.refined.auto._
 import fs2.{Stream, Task}
 import org.http4s.server.blaze.BlazeBuilder
 import org.http4s.util.StreamApp
+import fs2.interop.cats._
 
 object Server extends StreamApp {
   override def stream(args: List[String]): Stream[Task, Nothing] =
@@ -19,6 +20,7 @@ object Server extends StreamApp {
     BlazeBuilder
       .bindHttp(config.http.port, config.http.host)
       .mountService(Service.root)
-      .mountService(Service.api(transactor), "/api")
+      .mountService(Service.api(GraffelRepository.fromTransactor(transactor)),
+                    "/api")
       .mountService(Service.assets, s"/${BuildInfo.assetsRoot}")
 }
