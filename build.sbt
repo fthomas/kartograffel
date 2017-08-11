@@ -11,6 +11,7 @@ val h2Version = "1.4.196"
 val http4sVersion = "0.17.0-M3"
 val logbackVersion = "1.2.3"
 val refinedVersion = "0.8.2"
+val scalacheckShapelessVersion = "1.1.6"
 val scalajsDomVersion = "0.9.3"
 val scalajsJqueryVersion = "0.9.2"
 val scalaTestVersion = "3.0.1"
@@ -123,9 +124,13 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
   .configureCross(moduleCrossConfig("shared"))
   .settings(
     libraryDependencies ++= Seq(
+      "eu.timepit" %%% "refined" % refinedVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
       "io.circe" %%% "circe-refined" % circeVersion,
-      "eu.timepit" %%% "refined" % refinedVersion
+      "com.github.alexarchambault" %%% "scalacheck-shapeless_1.13" % scalacheckShapelessVersion % Test,
+      "eu.timepit" %%% "refined-scalacheck" % refinedVersion % Test,
+      "io.circe" %%% "circe-testing" % circeVersion % Test,
+      "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
     )
   )
 
