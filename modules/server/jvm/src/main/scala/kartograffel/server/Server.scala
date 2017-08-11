@@ -9,9 +9,9 @@ import org.http4s.util.StreamApp
 object Server extends StreamApp {
   override def stream(args: List[String]): Stream[Task, Nothing] =
     Stream.eval(Config.load).flatMap { config =>
-      val transactor = Storage.transactorFrom(config.db)
-      val gr = GraffelRepository.withTransactor(transactor)
-      Storage.create2(transactor)
+      val xa = Storage.transactorFrom(config.db)
+      val gr = GraffelRepository.transactional(xa)
+      Storage.create2(xa)
       blazeBuilder(config.http, gr).serve
     }
 

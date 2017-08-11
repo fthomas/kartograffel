@@ -1,8 +1,8 @@
 package kartograffel.server
 
+import cats.Monad
 import doobie.imports._
 import doobie.refined._
-import cats.Monad
 import doobie.util.transactor.Transactor
 import kartograffel.shared.model.{Entity, Graffel, Id}
 
@@ -18,15 +18,15 @@ object GraffelRepository {
       override def query(
           id: Id[Graffel]): ConnectionIO[Option[Entity[Graffel]]] = {
         val query: Query0[Entity[Graffel]] = sql"""
-          SELECT id, latitude, longitude FROM graffel WHERE id = ${id.value}
+          select id, latitude, longitude from graffel where id = ${id.value}
         """.query
         query.option
       }
 
       override def insert(graffel: Graffel): ConnectionIO[Entity[Graffel]] = {
         val update: Update0 = sql"""
-          INSERT INTO graffel (latitude, longitude)
-          VALUES (
+          insert into graffel (latitude, longitude)
+          values (
             ${graffel.position.latitude},
             ${graffel.position.longitude}
           )
@@ -37,7 +37,7 @@ object GraffelRepository {
       }
     }
 
-  def withTransactor[M[_]: Monad](xa: Transactor[M]): GraffelRepository[M] =
+  def transactional[M[_]: Monad](xa: Transactor[M]): GraffelRepository[M] =
     new GraffelRepository[M] {
       override def query(id: Id[Graffel]): M[Option[Entity[Graffel]]] =
         connectionIo.query(id).transact(xa)
