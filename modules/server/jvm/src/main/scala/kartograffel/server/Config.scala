@@ -19,7 +19,9 @@ object Config {
 
   final case class Db(
       driver: NonEmptyString,
-      url: NonEmptyString
+      url: NonEmptyString,
+      user: String,
+      password: String
   )
 
   def load: Task[Config] =
