@@ -7,6 +7,7 @@ val rootPkg = "kartograffel"
 
 val circeVersion = "0.8.0"
 val doobieVersion = "0.4.2"
+val flywayVersion = "4.2.0"
 val h2Version = "1.4.196"
 val http4sVersion = "0.17.0-M3"
 val logbackVersion = "1.2.3"
@@ -61,6 +62,7 @@ lazy val server = crossProject(JVMPlatform)
       "com.h2database" % "h2" % h2Version,
       "eu.timepit" %% "refined" % refinedVersion,
       "eu.timepit" %% "refined-pureconfig" % refinedVersion,
+      "org.flywaydb" % "flyway-core" % flywayVersion,
       "org.http4s" %% "http4s-blaze-server" % http4sVersion,
       "org.http4s" %% "http4s-circe" % http4sVersion,
       "org.http4s" %% "http4s-core" % http4sVersion,
@@ -91,6 +93,7 @@ lazy val server = crossProject(JVMPlatform)
         name,
         version,
         moduleName,
+        modulePkg,
         assetsRoot,
         assetsPath,
         BuildInfoKey.map(isDevMode.in(scalaJSPipeline)) {
@@ -141,7 +144,10 @@ lazy val sharedJVM = shared.jvm
 
 def moduleCrossConfig(name: String): CrossProject => CrossProject =
   _.in(file(s"modules/$name"))
-    .settings(moduleName := name)
+    .settings(
+      moduleName := name,
+      modulePkg := s"$rootPkg.$name"
+    )
     .settings(commonSettings)
 
 lazy val commonSettings = Def.settings(
@@ -184,7 +190,7 @@ lazy val consoleSettings = Def.settings(
     import eu.timepit.refined.auto._
     import $rootPkg.shared._
     import $rootPkg.shared.model._
-    import $rootPkg.${moduleName.value}._
+    import ${modulePkg.value}._
   """
 )
 
@@ -220,6 +226,9 @@ h2Console := {
     Process(command).run()
   }
 }
+
+lazy val modulePkg = settingKey[String]("")
+modulePkg := rootPkg
 
 /// commands
 
