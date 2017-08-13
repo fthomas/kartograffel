@@ -11,7 +11,7 @@ import org.http4s.{HttpService, MediaType}
 object Service {
   val root = HttpService {
     case GET -> Root =>
-      Ok(html.index).withType(MediaType.`text/html`)
+      Ok(Html.index).withType(MediaType.`text/html`)
   }
 
   def api(gr: GraffelRepository[Task]) = HttpService {
