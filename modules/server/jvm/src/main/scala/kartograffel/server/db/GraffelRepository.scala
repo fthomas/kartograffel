@@ -1,4 +1,4 @@
-package kartograffel.server
+package kartograffel.server.db
 
 import cats.Monad
 import doobie.imports._

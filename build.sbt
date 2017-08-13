@@ -68,6 +68,7 @@ lazy val server = crossProject(JVMPlatform)
       "org.http4s" %% "http4s-core" % http4sVersion,
       "org.http4s" %% "http4s-dsl" % http4sVersion,
       "org.tpolecat" %% "doobie-core-cats" % doobieVersion,
+      "org.tpolecat" %% "doobie-hikari-cats" % doobieVersion,
       "org.tpolecat" %% "doobie-refined-cats" % doobieVersion,
       "org.http4s" %% "http4s-testing" % http4sVersion % Test,
       "org.specs2" %% "specs2-core" % specs2Version % Test

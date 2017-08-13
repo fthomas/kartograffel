@@ -3,6 +3,7 @@ package kartograffel.server
 import eu.timepit.refined.auto._
 import fs2.interop.cats._
 import fs2.{Stream, Task}
+import kartograffel.server.db.GraffelRepository
 import org.http4s.server.blaze.BlazeBuilder
 import org.http4s.util.StreamApp
 
@@ -14,7 +15,7 @@ object Server extends StreamApp {
     for {
       config <- Config.load
       _ <- db.migrate(config.db)
-      xa = db.transactor(config.db)
+      xa <- db.transactor(config.db)
       gr = GraffelRepository.transactional(xa)
     } yield blazeBuilder(config.http, gr)
 

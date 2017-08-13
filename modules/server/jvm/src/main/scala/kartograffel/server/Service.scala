@@ -2,6 +2,7 @@ package kartograffel.server
 
 import fs2.Task
 import io.circe.syntax._
+import kartograffel.server.db.GraffelRepository
 import kartograffel.shared.model.{Graffel, Id}
 import org.http4s.circe._
 import org.http4s.dsl._

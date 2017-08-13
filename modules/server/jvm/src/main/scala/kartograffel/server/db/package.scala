@@ -1,5 +1,6 @@
 package kartograffel.server
 
+import doobie.hikari.hikaritransactor.HikariTransactor
 import doobie.imports._
 import eu.timepit.refined.auto._
 import fs2.Task
@@ -18,9 +19,9 @@ package object db {
       flyway.migrate()
     }
 
-  def transactor(db: Config.Db): Transactor[Task] =
-    Transactor.fromDriverManager(driver = db.driver,
-                                 url = db.url,
-                                 user = db.user,
-                                 pass = db.password)
+  def transactor(db: Config.Db): Task[Transactor[Task]] =
+    HikariTransactor[Task](driverClassName = db.driver,
+                           url = db.url,
+                           user = db.user,
+                           pass = db.password)
 }
