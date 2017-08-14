@@ -14,7 +14,9 @@ import scalatags.JsDom.all._
 object Client {
 
   val tagHtml = div(
-    input(id := "tagInput", `type` := "text", placeholder := "z.B. Spielplatz, Schlagloch..."),
+    input(id := "tagInput",
+          `type` := "text",
+          placeholder := "z.B. Spielplatz, Schlagloch..."),
     input(id := "tagButton", `type` := "button", value := "Los!")
   )
 
