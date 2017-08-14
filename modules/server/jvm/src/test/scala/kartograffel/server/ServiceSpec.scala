@@ -6,14 +6,9 @@ import org.specs2.mutable.Specification
 
 object ServiceSpec extends Specification with Http4sMatchers {
   "Service.api" >> {
-    "/now.json has status 200" >> {
-      val request = Request(Method.GET, Uri.uri("/now.json"))
-      val response = unsafeGetResponse(Service.api, request)
-      response must haveStatus(Status.Ok)
-    }
     "/version has MediaType application/json" >> {
       val request = Request(Method.GET, Uri.uri("/version"))
-      val response = unsafeGetResponse(Service.api, request)
+      val response = unsafeGetResponse(Service.api(null), request)
       response must haveMediaType(MediaType.`application/json`)
     }
   }

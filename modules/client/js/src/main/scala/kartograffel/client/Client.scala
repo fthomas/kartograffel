@@ -2,8 +2,8 @@ package kartograffel.client
 
 import eu.timepit.refined.api.RefType
 import io.circe.syntax._
-import kartograffel.shared.model.Position
 import kartograffel.shared.model.Position.{Latitude, Longitude}
+import kartograffel.shared.model.{Graffel, Position}
 import org.scalajs.dom
 import org.scalajs.dom.{window, Coordinates, PositionError, PositionOptions}
 import org.scalajs.jquery.jQuery
@@ -30,12 +30,10 @@ object Client {
       { pos: dom.Position =>
         val loc = locationFrom(pos.coords).get
         println("Location" + locationFrom(pos.coords))
-        println(pos)
-        jQuery.post(url = "/api/post",
-                    data = loc.asJson.spaces2,
+        jQuery.post(url = "/api/graffel",
+                    data = Graffel(loc).asJson.spaces2,
                     success = null,
                     dataType = null)
-
       }, { err: PositionError =>
         println(err.code)
         println(err.message)

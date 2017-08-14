@@ -1,31 +1,32 @@
 package kartograffel.server
 
+import fs2.Task
 import io.circe.syntax._
-import eu.timepit.refined.auto._
-import kartograffel.shared.model.Graffel.Id
-import kartograffel.shared.model.{Graffel, Position}
-import org.http4s.{HttpService, MediaType}
+import kartograffel.server.db.GraffelRepository
+import kartograffel.shared.model.{Graffel, Id}
 import org.http4s.circe._
 import org.http4s.dsl._
 import org.http4s.server.staticcontent.{webjarService, WebjarService}
+import org.http4s.{HttpService, MediaType}
 
 object Service {
   val root = HttpService {
     case GET -> Root =>
-      Ok(html.index).withType(MediaType.`text/html`)
+      Ok(Html.index).withType(MediaType.`text/html`)
   }
 
-  val api = HttpService {
-    case GET -> Root / "graffel" / id =>
-      Ok(Graffel(Id(id), Position(0.0, 0.0)).asJson)
+  def api(gr: GraffelRepository[Task]) = HttpService {
+    case GET -> Root / "graffel" / LongVar(id) =>
+      gr.query(Id(id)).flatMap {
+        case Some(entity) => Ok(entity.asJson)
+        case None => NotFound()
+      }
 
-    case req @ POST -> Root / "post" =>
-      val pos = req.as(jsonOf[Position])
-      println(pos.unsafeRun())
-      Ok("")
-
-    case GET -> Root / "now.json" =>
-      Ok(Storage.now.map(_.asJson))
+    case request @ POST -> Root / "graffel" =>
+      request
+        .as(jsonOf[Graffel])
+        .flatMap(gr.insert)
+        .flatMap(entity => Ok(entity.asJson))
 
     case GET -> Root / "version" =>
       Ok(BuildInfo.version.asJson)

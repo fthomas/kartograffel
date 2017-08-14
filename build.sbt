@@ -6,11 +6,13 @@ val projectName = "kartograffel"
 val rootPkg = "kartograffel"
 
 val circeVersion = "0.8.0"
-val doobieVersion = "0.4.1"
+val doobieVersion = "0.4.2"
+val flywayVersion = "4.2.0"
 val h2Version = "1.4.196"
 val http4sVersion = "0.17.0-M3"
 val logbackVersion = "1.2.3"
 val refinedVersion = "0.8.2"
+val scalacheckShapelessVersion = "1.1.6"
 val scalajsDomVersion = "0.9.3"
 val scalajsJqueryVersion = "0.9.2"
 val scalajsScalaTagsVersion = "0.6.5"
@@ -62,15 +64,22 @@ lazy val server = crossProject(JVMPlatform)
       "com.h2database" % "h2" % h2Version,
       "eu.timepit" %% "refined" % refinedVersion,
       "eu.timepit" %% "refined-pureconfig" % refinedVersion,
+      "org.flywaydb" % "flyway-core" % flywayVersion,
       "org.http4s" %% "http4s-blaze-server" % http4sVersion,
       "org.http4s" %% "http4s-circe" % http4sVersion,
       "org.http4s" %% "http4s-core" % http4sVersion,
       "org.http4s" %% "http4s-dsl" % http4sVersion,
       "org.tpolecat" %% "doobie-core-cats" % doobieVersion,
+      "org.tpolecat" %% "doobie-hikari-cats" % doobieVersion,
+      "org.tpolecat" %% "doobie-refined-cats" % doobieVersion,
       "org.http4s" %% "http4s-testing" % http4sVersion % Test,
       "org.specs2" %% "specs2-core" % specs2Version % Test
-    ),
-    javaOptions.in(reStart) ++= {
+    )
+  )
+  // command line options for run and reStart
+  .settings(
+    fork.in(run) := true,
+    javaOptions ++= {
       val confDirectory = sourceDirectory.in(Universal).value / "conf"
       Seq(
         s"-Dconfig.file=$confDirectory/application.conf",
@@ -87,6 +96,7 @@ lazy val server = crossProject(JVMPlatform)
         name,
         version,
         moduleName,
+        modulePkg,
         assetsRoot,
         assetsPath,
         BuildInfoKey.map(isDevMode.in(scalaJSPipeline)) {
@@ -120,9 +130,13 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
   .configureCross(moduleCrossConfig("shared"))
   .settings(
     libraryDependencies ++= Seq(
+      "eu.timepit" %%% "refined" % refinedVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
       "io.circe" %%% "circe-refined" % circeVersion,
-      "eu.timepit" %%% "refined" % refinedVersion
+      "com.github.alexarchambault" %%% "scalacheck-shapeless_1.13" % scalacheckShapelessVersion % Test,
+      "eu.timepit" %%% "refined-scalacheck" % refinedVersion % Test,
+      "io.circe" %%% "circe-testing" % circeVersion % Test,
+      "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
     )
   )
 
@@ -133,7 +147,10 @@ lazy val sharedJVM = shared.jvm
 
 def moduleCrossConfig(name: String): CrossProject => CrossProject =
   _.in(file(s"modules/$name"))
-    .settings(moduleName := name)
+    .settings(
+      moduleName := name,
+      modulePkg := s"$rootPkg.$name"
+    )
     .settings(commonSettings)
 
 lazy val commonSettings = Def.settings(
@@ -176,7 +193,7 @@ lazy val consoleSettings = Def.settings(
     import eu.timepit.refined.auto._
     import $rootPkg.shared._
     import $rootPkg.shared.model._
-    import $rootPkg.${moduleName.value}._
+    import ${modulePkg.value}._
   """
 )
 
@@ -201,10 +218,20 @@ lazy val noPublishSettings = Def.settings(
 
 lazy val h2Console = taskKey[Unit]("Runs the H2 console.")
 h2Console := {
-  val cp = managedClasspath.in(Compile).in(serverJVM).value.files
-  val h2jar = cp.find(_.toString.contains(h2Version)).get.toString
-  Fork.java(ForkOptions(), Seq("-jar", h2jar))
+  val cpFiles = managedClasspath.in(Compile).in(serverJVM).value.files
+  val h2jar = cpFiles.find(_.toString.contains(h2Version)).map(_.toString)
+
+  h2jar.fold {
+    sys.error(s"Could not find H2 JAR for version $h2Version")
+  } { file =>
+    val command = Seq("java", "-jar", file)
+    streams.value.log.info(s"Running ${command.mkString(" ")}")
+    Process(command).run()
+  }
 }
+
+lazy val modulePkg = settingKey[String]("")
+modulePkg := rootPkg
 
 /// commands
 

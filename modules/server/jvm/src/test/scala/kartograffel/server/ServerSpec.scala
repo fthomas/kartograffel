@@ -6,7 +6,8 @@ import org.specs2.mutable.Specification
 class ServerSpec extends Specification {
   "Server" >> {
     "call blazeBuilder" >> {
-      Server.blazeBuilder(Config(Http("::", 8080)))
+      val httpConfig = Config.Http("::", 8080)
+      Server.blazeBuilder(httpConfig, null)
       true
     }
     "call stream" >> {

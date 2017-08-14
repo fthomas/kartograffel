@@ -1,6 +1,6 @@
 package kartograffel.server
 
-object html {
+object Html {
   val index: String = s"""
     |<!DOCTYPE html>
     |<html>
