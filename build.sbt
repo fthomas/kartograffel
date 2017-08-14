@@ -78,12 +78,13 @@ lazy val server = crossProject(JVMPlatform)
   )
   // command line options for run and reStart
   .settings(
+    configDirectory := sourceDirectory.in(Universal).value / "conf",
+    configFile := configDirectory.value / "application.conf",
     fork.in(run) := true,
     javaOptions ++= {
-      val confDirectory = sourceDirectory.in(Universal).value / "conf"
       Seq(
-        s"-Dconfig.file=$confDirectory/application.conf",
-        s"-Dlogback.configurationFile=$confDirectory/logback.xml"
+        s"-Dconfig.file=${configFile.value}",
+        s"-Dlogback.configurationFile=${configDirectory.value}/logback.xml"
       )
     }
   )
@@ -105,7 +106,7 @@ lazy val server = crossProject(JVMPlatform)
         }
       )
     },
-    buildInfoPackage := s"$rootPkg.${moduleName.value}"
+    buildInfoPackage := modulePkg.value
   )
   // sbt-heroku settings
   .settings(
@@ -219,16 +220,35 @@ lazy val noPublishSettings = Def.settings(
 lazy val h2Console = taskKey[Unit]("Runs the H2 console.")
 h2Console := {
   val cpFiles = managedClasspath.in(Compile).in(serverJVM).value.files
-  val h2jar = cpFiles.find(_.toString.contains(h2Version)).map(_.toString)
+  val h2jar = cpFiles.find(_.toString.contains(h2Version))
 
   h2jar.fold {
     sys.error(s"Could not find H2 JAR for version $h2Version")
-  } { file =>
-    val command = Seq("java", "-jar", file)
+  } { h2File =>
+    import com.typesafe.config.ConfigFactory
+    val cfg = ConfigFactory.parseFile(configFile.in(serverJVM).value)
+
+    val command = Seq(
+      "java",
+      "-jar",
+      h2File.toString,
+      "-url",
+      cfg.getString("db.url"),
+      "-driver",
+      cfg.getString("db.driver"),
+      "-user",
+      cfg.getString("db.user"),
+      "-password",
+      cfg.getString("db.password")
+    )
     streams.value.log.info(s"Running ${command.mkString(" ")}")
     Process(command).run()
   }
 }
+
+lazy val configDirectory = settingKey[File]("")
+
+lazy val configFile = settingKey[File]("")
 
 lazy val modulePkg = settingKey[String]("")
 modulePkg := rootPkg
