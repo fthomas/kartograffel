@@ -3,7 +3,7 @@ package kartograffel.server.db.migration
 import doobie.imports._
 import kartograffel.server.db.DoobieMigration
 
-class V0001__CreateGraffel extends DoobieMigration {
+final class V0001__CreateGraffel extends DoobieMigration {
   override def migrate: ConnectionIO[_] =
     (sql"""
       CREATE TABLE graffel (

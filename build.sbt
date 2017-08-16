@@ -6,7 +6,7 @@ val projectName = "kartograffel"
 val rootPkg = "kartograffel"
 
 val circeVersion = "0.8.0"
-val doobieVersion = "0.4.2"
+val doobieVersion = "0.4.4"
 val flywayVersion = "4.2.0"
 val h2Version = "1.4.196"
 val http4sVersion = "0.17.0-M3"
