@@ -18,22 +18,19 @@ object GraffelRepository {
   val connectionIo: GraffelRepository[ConnectionIO] =
     new GraffelRepository[ConnectionIO] {
       override def query(
-          id: Id[Graffel]): ConnectionIO[Option[Entity[Graffel]]] = {
-        val query: Query0[Entity[Graffel]] = sql"""
-          select id, latitude, longitude from graffel where id = ${id.value}
-        """.query
-        query.option
-      }
+          id: Id[Graffel]): ConnectionIO[Option[Entity[Graffel]]] =
+        (sql"""
+          SELECT id, latitude, longitude FROM graffel WHERE id = ${id.value}
+        """: Fragment).query[Entity[Graffel]].option
 
-      override def insert(graffel: Graffel): ConnectionIO[Entity[Graffel]] = {
-        val update: Update0 = sql"""
-          insert into graffel (latitude, longitude)
-          values (
+      override def insert(graffel: Graffel): ConnectionIO[Entity[Graffel]] =
+        (sql"""
+          INSERT INTO graffel (latitude, longitude)
+          VALUES (
             ${graffel.position.latitude},
             ${graffel.position.longitude}
           )
-        """.update
-        update
+        """: Fragment).update
           .withUniqueGeneratedKeys[Long]("id")
           .map(Entity.from(_, graffel))
       }

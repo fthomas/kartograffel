@@ -1,7 +1,7 @@
 package kartograffel.shared.model
 
 import io.circe.testing.CodecTests
-import kartograffel.shared.model.ArbitraryInstances.implicits._
+import kartograffel.shared.model.ArbitraryInstances._
 import org.scalatest.FunSuite
 import org.typelevel.discipline.scalatest.Discipline
 

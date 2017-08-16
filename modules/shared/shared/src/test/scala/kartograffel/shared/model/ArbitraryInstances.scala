@@ -3,18 +3,15 @@ package kartograffel.shared.model
 import eu.timepit.refined.scalacheck.numeric._
 import org.scalacheck.Arbitrary
 import org.scalacheck.ScalacheckShapeless._
+import org.scalacheck.derive.MkArbitrary
 
 object ArbitraryInstances {
-  def arbitraryEntity[T: Arbitrary]: Arbitrary[Entity[T]] = implicitly
-  val arbitraryGraffel: Arbitrary[Graffel] = implicitly
-  val arbitraryPosition: Arbitrary[Position] = implicitly
+  implicit def arbitraryEntity[T: Arbitrary]: Arbitrary[Entity[T]] =
+    MkArbitrary[Entity[T]].arbitrary
 
-  object implicits {
-    implicit def arbitraryEntity[T: Arbitrary]: Arbitrary[Entity[T]] =
-      ArbitraryInstances.arbitraryEntity
-    implicit val arbitraryGraffel: Arbitrary[Graffel] =
-      ArbitraryInstances.arbitraryGraffel
-    implicit val arbitraryPosition: Arbitrary[Position] =
-      ArbitraryInstances.arbitraryPosition
-  }
+  implicit lazy val arbitraryGraffel: Arbitrary[Graffel] =
+    MkArbitrary[Graffel].arbitrary
+
+  implicit lazy val arbitraryPosition: Arbitrary[Position] =
+    MkArbitrary[Position].arbitrary
 }
