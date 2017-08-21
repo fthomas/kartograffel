@@ -53,9 +53,9 @@ object GraffelRepository {
                              * cos( radians( graffel.longitude ) - $lonRad )
                              + sin( $latRad )
                              * sin( radians( graffel.latitude ) ) ) ) AS distance
-               from graffel
+               from graffel)
                where distance < ${radius.length}
-               order by distance asc)
+               order by distance asc
              """.query
         query.list
       }
