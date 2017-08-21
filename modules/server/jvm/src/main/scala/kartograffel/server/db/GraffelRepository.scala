@@ -34,7 +34,6 @@ object GraffelRepository {
           .withUniqueGeneratedKeys[Long]("id")
           .map(Entity.from(_, graffel))
 
-      //FIXME btre: http://localhost:8080/api/graffel?lat=90.0&lon=60.0&radius=1 => org.h2.jdbc.JdbcSQLException: Column "DISTANCE" not found;
       override def findByPosition(pos: Position, radius: Radius): ConnectionIO[List[Entity[Graffel]]] = {
         val distanceUnit = radius.unit
         val factor = distanceUnit match {
