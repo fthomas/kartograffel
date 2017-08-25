@@ -19,6 +19,8 @@ val scalajsScalaTagsVersion = "0.6.5"
 val scalaTestVersion = "3.0.4"
 val specs2Version = "3.8.6"
 val webjarJqueryVersion = "2.1.4"
+val scalajsReactVersion = "1.1.0"
+val webjarReactVersion = "15.6.1"
 
 /// projects
 
@@ -42,10 +44,21 @@ lazy val client = crossProject(JSPlatform)
       "com.lihaoyi" %%% "scalatags" % scalajsScalaTagsVersion,
       // Replace with specs2 when it supports Scala.js:
       // https://github.com/etorreborre/specs2/issues/465
-      "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
+      "org.scalatest" %%% "scalatest" % scalaTestVersion % Test,
+      "com.github.japgolly.scalajs-react" %%% "core" % scalajsReactVersion
     ),
     jsDependencies ++= Seq(
-      "org.webjars" % "jquery" % webjarJqueryVersion / s"$webjarJqueryVersion/jquery.js"
+      "org.webjars" % "jquery" % webjarJqueryVersion / s"$webjarJqueryVersion/jquery.js",
+      "org.webjars.bower" % "react" % webjarReactVersion
+        /        "react-with-addons.js"
+        minified "react-with-addons.min.js"
+        commonJSName "React",
+
+      "org.webjars.bower" % "react" % webjarReactVersion
+        /         "react-dom.js"
+        minified  "react-dom.min.js"
+        dependsOn "react-with-addons.js"
+        commonJSName "ReactDOM"
     ),
     scalaJSUseMainModuleInitializer := true
   )
@@ -136,6 +149,7 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
       "eu.timepit" %%% "refined" % refinedVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
       "io.circe" %%% "circe-refined" % circeVersion,
+      "io.circe" %%% "circe-parser" % circeVersion,
       "com.github.alexarchambault" %%% "scalacheck-shapeless_1.13" % scalacheckShapelessVersion % Test,
       "eu.timepit" %%% "refined-scalacheck" % refinedVersion % Test,
       "io.circe" %%% "circe-testing" % circeVersion % Test,
