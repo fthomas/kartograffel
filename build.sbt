@@ -73,7 +73,8 @@ lazy val server = crossProject(JVMPlatform)
       "org.tpolecat" %% "doobie-hikari-cats" % doobieVersion,
       "org.tpolecat" %% "doobie-refined-cats" % doobieVersion,
       "org.http4s" %% "http4s-testing" % http4sVersion % Test,
-      "org.specs2" %% "specs2-core" % specs2Version % Test
+      "org.specs2" %% "specs2-core" % specs2Version % Test,
+      "org.tpolecat" %% "doobie-specs2-cats" % doobieVersion % Test
     )
   )
   // command line options for run and reStart

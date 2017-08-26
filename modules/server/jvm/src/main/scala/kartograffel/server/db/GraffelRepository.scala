@@ -19,9 +19,7 @@ object GraffelRepository {
     new GraffelRepository[ConnectionIO] {
       override def query(
           id: Id[Graffel]): ConnectionIO[Option[Entity[Graffel]]] =
-        (sql"""
-          SELECT id, latitude, longitude FROM graffel WHERE id = ${id.value}
-        """: Fragment).query[Entity[Graffel]].option
+        GraffelStatements.query(id).option
 
       override def insert(graffel: Graffel): ConnectionIO[Entity[Graffel]] =
         (sql"""
@@ -73,4 +71,11 @@ object GraffelRepository {
       override def findByPosition(pos: Position, radius: Radius) =
         connectionIo.findByPosition(pos, radius).transact(xa)
     }
+}
+
+object GraffelStatements {
+  def query(id: Id[Graffel]): Query0[Entity[Graffel]] =
+    sql"""
+      SELECT id, latitude, longitude FROM graffel WHERE id = ${id.value}
+    """.query
 }
