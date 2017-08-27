@@ -22,13 +22,8 @@ object GraffelRepository {
         GraffelStatements.query(id).option
 
       override def insert(graffel: Graffel): ConnectionIO[Entity[Graffel]] =
-        (sql"""
-          INSERT INTO graffel (latitude, longitude)
-          VALUES (
-            ${graffel.position.latitude},
-            ${graffel.position.longitude}
-          )
-        """: Fragment).update
+        GraffelStatements
+          .insert(graffel)
           .withUniqueGeneratedKeys[Long]("id")
           .map(Entity.from(_, graffel))
 
@@ -78,4 +73,13 @@ object GraffelStatements {
     sql"""
       SELECT id, latitude, longitude FROM graffel WHERE id = ${id.value}
     """.query
+
+  def insert(graffel: Graffel): Update0 =
+    sql"""
+      INSERT INTO graffel (latitude, longitude)
+      VALUES (
+        ${graffel.position.latitude},
+        ${graffel.position.longitude}
+      )
+    """.update
 }

@@ -6,7 +6,7 @@ import eu.timepit.refined.auto._
 import fs2.Task
 import fs2.interop.cats._
 import kartograffel.server.Config
-import kartograffel.shared.model.Id
+import kartograffel.shared.model.{Graffel, Id, Position}
 import org.specs2.mutable.Specification
 
 class GraffelStatementsSpec extends Specification with TaskChecker {
@@ -23,5 +23,6 @@ class GraffelStatementsSpec extends Specification with TaskChecker {
               password = "")).unsafeRun()
 
   check(GraffelStatements.query(Id(0L)))
+  check(GraffelStatements.insert(Graffel(Position(0.0, 0.0))))
 
 }
