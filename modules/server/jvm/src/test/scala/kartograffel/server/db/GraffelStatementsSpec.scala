@@ -2,8 +2,10 @@ package kartograffel.server.db
 
 import doobie.specs2.imports._
 import doobie.util.transactor.Transactor
+import eu.timepit.refined.auto._
 import fs2.Task
 import fs2.interop.cats._
+import kartograffel.server.Config
 import kartograffel.shared.model.Id
 import org.specs2.mutable.Specification
 
@@ -14,5 +16,12 @@ class GraffelStatementsSpec extends Specification with TaskChecker {
       driver = "org.h2.Driver",
       url = "jdbc:h2:~/.kartograffel/db/kartograffel;MODE=PostgreSQL")
 
-  //check(GraffelStatements.query(Id(0L)))
+  migrate(
+    Config.Db(driver = "org.h2.Driver",
+              url = "jdbc:h2:~/.kartograffel/db/kartograffel;MODE=PostgreSQL",
+              user = "",
+              password = "")).unsafeRun()
+
+  check(GraffelStatements.query(Id(0L)))
+
 }
