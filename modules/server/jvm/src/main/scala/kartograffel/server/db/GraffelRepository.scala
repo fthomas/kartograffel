@@ -1,17 +1,30 @@
 package kartograffel.server.db
 
-import cats.Monad
+import cats.{~>, Monad}
 import doobie.imports._
 import doobie.refined._
 import doobie.util.transactor.Transactor
 import kartograffel.shared.model._
 
-trait GraffelRepository[F[_]] {
+trait GraffelRepository[F[_]] { self =>
   def query(id: Id[Graffel]): F[Option[Entity[Graffel]]]
 
   def insert(graffel: Graffel): F[Entity[Graffel]]
 
   def findByPosition(pos: Position, radius: Radius): F[List[Entity[Graffel]]]
+
+  def mapK[G[_]](t: F ~> G): GraffelRepository[G] =
+    new GraffelRepository[G] {
+      override def query(id: Id[Graffel]): G[Option[Entity[Graffel]]] =
+        t(self.query(id))
+
+      override def insert(graffel: Graffel): G[Entity[Graffel]] =
+        t(self.insert(graffel))
+
+      override def findByPosition(pos: Position,
+                                  radius: Radius): G[List[Entity[Graffel]]] =
+        t(self.findByPosition(pos, radius))
+    }
 }
 
 object GraffelRepository {
@@ -56,16 +69,7 @@ object GraffelRepository {
     }
 
   def transactional[M[_]: Monad](xa: Transactor[M]): GraffelRepository[M] =
-    new GraffelRepository[M] {
-      override def query(id: Id[Graffel]): M[Option[Entity[Graffel]]] =
-        connectionIo.query(id).transact(xa)
-
-      override def insert(graffel: Graffel): M[Entity[Graffel]] =
-        connectionIo.insert(graffel).transact(xa)
-
-      override def findByPosition(pos: Position, radius: Radius) =
-        connectionIo.findByPosition(pos, radius).transact(xa)
-    }
+    connectionIo.mapK(xa.trans)
 }
 
 object GraffelStatements {
