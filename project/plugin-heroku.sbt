@@ -1,1 +1,1 @@
-addSbtPlugin("com.heroku" % "sbt-heroku" % "1.0.1")
+addSbtPlugin("com.heroku" % "sbt-heroku" % "2.0.0")

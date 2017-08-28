@@ -12,6 +12,12 @@ object ArbitraryInstances {
   implicit lazy val arbitraryGraffel: Arbitrary[Graffel] =
     MkArbitrary[Graffel].arbitrary
 
+  implicit def arbitraryId[T]: Arbitrary[Id[T]] =
+    MkArbitrary[Id[T]].arbitrary
+
   implicit lazy val arbitraryPosition: Arbitrary[Position] =
     MkArbitrary[Position].arbitrary
+
+  def sampleOf[T](implicit ev: Arbitrary[T]): T =
+    Stream.continually(ev.arbitrary.sample).flatten.head
 }

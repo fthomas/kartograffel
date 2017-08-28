@@ -54,7 +54,7 @@ lazy val clientJS = client.js
 
 lazy val server = crossProject(JVMPlatform)
   .configureCross(moduleCrossConfig("server"))
-  .jvmConfigure(_.dependsOn(sharedJVM))
+  .jvmConfigure(_.dependsOn(sharedJVM % "compile->compile;test->test"))
   .enablePlugins(BuildInfoPlugin)
   .enablePlugins(DebianPlugin, JavaServerAppPackaging, SystemVPlugin)
   .enablePlugins(SbtWeb)
@@ -211,8 +211,8 @@ lazy val packageSettings = Def.settings(
 )
 
 lazy val noPublishSettings = Def.settings(
-  publish := (),
-  publishLocal := (),
+  publish := {},
+  publishLocal := {},
   publishArtifact := false
 )
 
