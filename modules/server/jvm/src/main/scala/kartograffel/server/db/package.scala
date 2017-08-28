@@ -8,20 +8,20 @@ import fs2.interop.cats._
 import org.flywaydb.core.Flyway
 
 package object db {
-  def migrate(db: Config.Db): Task[Int] =
+  def migrate(dbConfig: Config.Db): Task[Int] =
     Task.delay {
       val flyway = new Flyway
       val location = classOf[migration.V0001__CreateGraffel].getPackage.getName
         .replace('.', '/')
 
-      flyway.setDataSource(db.url, db.user, db.password)
+      flyway.setDataSource(dbConfig.url, dbConfig.user, dbConfig.password)
       flyway.setLocations(location)
       flyway.migrate()
     }
 
-  def transactor(db: Config.Db): Task[Transactor[Task]] =
-    HikariTransactor[Task](driverClassName = db.driver,
-                           url = db.url,
-                           user = db.user,
-                           pass = db.password)
+  def transactor(dbConfig: Config.Db): Task[Transactor[Task]] =
+    HikariTransactor[Task](driverClassName = dbConfig.driver,
+                           url = dbConfig.url,
+                           user = dbConfig.user,
+                           pass = dbConfig.password)
 }
