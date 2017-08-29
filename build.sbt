@@ -101,6 +101,7 @@ lazy val server = crossProject(JVMPlatform)
         modulePkg,
         assetsRoot,
         assetsPath,
+        crossTarget,
         BuildInfoKey.map(isDevMode.in(scalaJSPipeline)) {
           case (_, value) =>
             "jsOptPostfix" -> (if (value) "fastopt" else "opt")

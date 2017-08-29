@@ -20,8 +20,10 @@ package object db {
     }
 
   def transactor(dbConfig: Config.Db): Task[Transactor[Task]] =
-    HikariTransactor[Task](driverClassName = dbConfig.driver,
-                           url = dbConfig.url,
-                           user = dbConfig.user,
-                           pass = dbConfig.password)
+    HikariTransactor[Task](
+      driverClassName = dbConfig.driver,
+      url = dbConfig.url,
+      user = dbConfig.user,
+      pass = dbConfig.password
+    )
 }
