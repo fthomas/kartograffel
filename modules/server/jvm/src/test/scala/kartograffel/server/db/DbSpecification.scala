@@ -20,8 +20,8 @@ trait DbSpecification extends Specification with TaskChecker {
 object DbSpecification {
   val dbConfig: Config.Db = {
     val path = s"${BuildInfo.crossTarget.toString}/h2/kartograffel"
-    val url = refineV[NonEmpty](
-      s"jdbc:h2:$path;MODE=PostgreSQL;AUTO_SERVER=TRUE").toOption.get
+    val url = refineV[NonEmpty].unsafeFrom(
+      s"jdbc:h2:$path;MODE=PostgreSQL;AUTO_SERVER=TRUE")
 
     Config.Db(
       driver = "org.h2.Driver",
