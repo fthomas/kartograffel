@@ -45,7 +45,7 @@ object GraffelRepository {
           radius: Radius): ConnectionIO[List[Entity[Graffel]]] = {
         val distanceUnit = radius.unit
         val factor = distanceUnit match {
-          case _: meter.type => 1000
+          case _: meter.type     => 1000
           case _: kilometer.type => 1
         }
         val radFactor = Math.PI / 180

@@ -45,9 +45,8 @@ object Service {
                        Either[NonEmptyList[ParseFailure], F[FROM, TO]]] =
         withParseFailure.map(_.left.map(pf => NonEmptyList(pf, Nil)))
 
-      val outerEither
-        : Either[NonEmptyList[ParseFailure],
-                 Either[NonEmptyList[ParseFailure], F[FROM, TO]]] =
+      val outerEither: Either[NonEmptyList[ParseFailure],
+                              Either[NonEmptyList[ParseFailure], F[FROM, TO]]] =
         withInnerNel.toEither
 
       val flattend: Either[NonEmptyList[ParseFailure], F[FROM, TO]] =
@@ -57,14 +56,13 @@ object Service {
     }
 
   object LatQueryParamMatcher extends QueryParamDecoderMatcher[Latitude]("lat")
-  object LonQueryParamMatcher
-      extends QueryParamDecoderMatcher[Longitude]("lon")
+  object LonQueryParamMatcher extends QueryParamDecoderMatcher[Longitude]("lon")
 
   def api(gr: GraffelRepository[Task]) = HttpService {
     case GET -> Root / "graffel" / LongVar(id) =>
       gr.query(Id(id)).flatMap {
         case Some(entity) => Ok(entity.asJson)
-        case None => NotFound()
+        case None         => NotFound()
       }
 
     case request @ POST -> Root / "graffel" =>

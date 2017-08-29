@@ -1,1 +1,1 @@
-addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.5")
+addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.0.6")

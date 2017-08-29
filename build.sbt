@@ -223,11 +223,14 @@ h2Console := {
   val cpFiles = managedClasspath.in(Compile).in(serverJVM).value.files
   val h2jar = cpFiles.find(_.toString.contains(h2Version))
 
+  val cfgFile = configFile.in(serverJVM).value
+  val log = streams.value.log
+
   h2jar.fold {
     sys.error(s"Could not find H2 JAR for version $h2Version")
   } { h2File =>
     import com.typesafe.config.ConfigFactory
-    val cfg = ConfigFactory.parseFile(configFile.in(serverJVM).value)
+    val cfg = ConfigFactory.parseFile(cfgFile)
 
     val command = Seq(
       "java",
@@ -242,8 +245,8 @@ h2Console := {
       "-password",
       cfg.getString("db.password")
     )
-    streams.value.log.info(s"Running ${command.mkString(" ")}")
-    Process(command).run()
+    log.info(s"Running ${command.mkString(" ")}")
+    scala.sys.process.Process(command).run()
   }
 }
 
