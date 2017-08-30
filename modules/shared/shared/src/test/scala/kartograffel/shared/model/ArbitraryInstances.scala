@@ -4,6 +4,7 @@ import eu.timepit.refined.scalacheck.numeric._
 import org.scalacheck.Arbitrary
 import org.scalacheck.ScalacheckShapeless._
 import org.scalacheck.derive.MkArbitrary
+import scala.annotation.tailrec
 
 object ArbitraryInstances {
   implicit def arbitraryEntity[T: Arbitrary]: Arbitrary[Entity[T]] =
@@ -18,6 +19,10 @@ object ArbitraryInstances {
   implicit lazy val arbitraryPosition: Arbitrary[Position] =
     MkArbitrary[Position].arbitrary
 
+  @tailrec
   def sampleOf[T](implicit ev: Arbitrary[T]): T =
-    Stream.continually(ev.arbitrary.sample).flatten.head
+    ev.arbitrary.sample match {
+      case Some(t) => t
+      case None    => sampleOf[T]
+    }
 }
