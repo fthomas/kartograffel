@@ -12,7 +12,7 @@ import org.http4s.dsl._
 import org.http4s.server.staticcontent.{webjarService, WebjarService}
 import org.http4s._
 import eu.timepit.refined._
-import eu.timepit.refined.api.{RefType, Validate}
+import eu.timepit.refined.api.{RefType, Refined, Validate}
 
 object Service {
   val root = HttpService {
@@ -60,7 +60,8 @@ object Service {
 
   def api(gr: GraffelRepository[Task]) = HttpService {
     case GET -> Root / "graffel" / LongVar(id) =>
-      gr.query(Id(id)).flatMap {
+      // TODO use QueryParamDecoder
+      gr.query(Id(Refined.unsafeApply(id))).flatMap {
         case Some(entity) => Ok(entity.asJson)
         case None         => NotFound()
       }

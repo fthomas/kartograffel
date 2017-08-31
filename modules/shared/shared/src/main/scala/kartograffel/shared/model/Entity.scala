@@ -2,15 +2,14 @@ package kartograffel.shared.model
 
 import cats.Eq
 import cats.syntax.eq._
+import eu.timepit.refined.types.numeric.NonNegLong
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
+import io.circe.refined._
 
 final case class Entity[T](id: Id[T], value: T)
 
 object Entity {
-  def from[T](id: Long, value: T): Entity[T] =
-    Entity(Id(id), value)
-
   implicit def entityEq[T: Eq]: Eq[Entity[T]] =
     Eq.instance((x, y) => x.id === y.id && x.value === y.value)
 
@@ -21,15 +20,15 @@ object Entity {
     deriveEncoder
 }
 
-final case class Id[T](value: Long) extends AnyVal
+final case class Id[T](value: NonNegLong)
 
 object Id {
   implicit def idEq[T]: Eq[Id[T]] =
     Eq.fromUniversalEquals
 
   implicit def idDecoder[T]: Decoder[Id[T]] =
-    Decoder.decodeLong.map(Id.apply)
+    deriveDecoder
 
   implicit def idEncoder[T]: Encoder[Id[T]] =
-    Encoder.encodeLong.contramap(_.value)
+    deriveEncoder
 }

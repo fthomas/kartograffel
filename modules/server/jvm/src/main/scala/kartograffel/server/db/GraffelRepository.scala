@@ -37,8 +37,8 @@ object GraffelRepository {
       override def insert(graffel: Graffel): ConnectionIO[Entity[Graffel]] =
         GraffelStatements
           .insert(graffel)
-          .withUniqueGeneratedKeys[Long]("id")
-          .map(Entity.from(_, graffel))
+          .withUniqueGeneratedKeys[Id[Graffel]]("id")
+          .map(Entity(_, graffel))
 
       override def findByPosition(
           pos: Position,
