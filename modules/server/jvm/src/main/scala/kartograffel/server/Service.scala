@@ -72,11 +72,11 @@ object Service {
         .flatMap(gr.insert)
         .flatMap(entity => Ok(entity.asJson))
 
-    case GET -> Root / "graffel" :? LatQueryParamMatcher(lat) +& LonQueryParamMatcher(
+    case GET -> Root / "graffel" / "tag" :? LatQueryParamMatcher(lat) +& LonQueryParamMatcher(
           lon) =>
       val length: Length = refineMV[LengthRange](100)
-      gr.findByPosition(Position(lat, lon), Radius(length, meter))
-        .flatMap(graffels => Ok(graffels.asJson))
+      gr.findTagsByPosition(Position(lat, lon), Radius(length, meter))
+        .flatMap(tags => Ok(tags.asJson))
 
     case GET -> Root / "version" =>
       Ok(BuildInfo.version.asJson)

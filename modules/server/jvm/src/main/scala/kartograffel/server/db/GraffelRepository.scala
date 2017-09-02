@@ -11,7 +11,7 @@ trait GraffelRepository[F[_]] { self =>
 
   def insert(graffel: Graffel): F[Entity[Graffel]]
 
-  def findByPosition(pos: Position, radius: Radius): F[List[Entity[Graffel]]]
+  def findTagsByPosition(pos: Position, radius: Radius): F[List[Entity[Tag]]]
 
   def mapK[G[_]](t: F ~> G): GraffelRepository[G] =
     new GraffelRepository[G] {
@@ -21,9 +21,9 @@ trait GraffelRepository[F[_]] { self =>
       override def insert(graffel: Graffel): G[Entity[Graffel]] =
         t(self.insert(graffel))
 
-      override def findByPosition(pos: Position,
-                                  radius: Radius): G[List[Entity[Graffel]]] =
-        t(self.findByPosition(pos, radius))
+      override def findTagsByPosition(pos: Position,
+                                      radius: Radius): G[List[Entity[Tag]]] =
+        t(self.findTagsByPosition(pos, radius))
     }
 }
 
@@ -40,32 +40,10 @@ object GraffelRepository {
           .withUniqueGeneratedKeys[Id[Graffel]]("id")
           .map(Entity(_, graffel))
 
-      override def findByPosition(
+      override def findTagsByPosition(
           pos: Position,
-          radius: Radius): ConnectionIO[List[Entity[Graffel]]] = {
-        val distanceUnit = radius.unit
-        val factor = distanceUnit match {
-          case _: meter.type     => 1000
-          case _: kilometer.type => 1
-        }
-        val radFactor = Math.PI / 180
-        val lonRad = pos.longitude.value * radFactor
-        val latRad = pos.latitude.value * radFactor
-        val earth = 6371.0088 * factor
-        val query: Query0[Entity[Graffel]] =
-          sql"""select id, latitude, longitude from
-               (select id, latitude, longitude,
-                      ( $earth * acos( cos( $latRad )
-                             * cos( radians( graffel.latitude ) )
-                             * cos( radians( graffel.longitude ) - $lonRad )
-                             + sin( $latRad )
-                             * sin( radians( graffel.latitude ) ) ) ) AS distance
-               from graffel)
-               where distance < ${radius.length}
-               order by distance asc
-             """.query
-        query.list
-      }
+          radius: Radius): ConnectionIO[List[Entity[Tag]]] =
+        GraffelStatements.findTagsByPosition(pos, radius).list
     }
 
   def transactional[M[_]: Monad](xa: Transactor[M]): GraffelRepository[M] =
@@ -86,4 +64,28 @@ object GraffelStatements {
         ${graffel.position.longitude}
       )
     """.update
+
+  def findTagsByPosition(pos: Position, radius: Radius): Query0[Entity[Tag]] = {
+    val distanceUnit = radius.unit
+    val factor = distanceUnit match {
+      case _: meter.type     => 1000
+      case _: kilometer.type => 1
+    }
+    val radFactor = Math.PI / 180
+    val lonRad = pos.longitude.value * radFactor
+    val latRad = pos.latitude.value * radFactor
+    val earth = 6371.0088 * factor
+    sql"""select t.id, t.name, t.graffel_id from
+               (select id,
+                      ( $earth * acos( cos( $latRad )
+                             * cos( radians( graffel.latitude ) )
+                             * cos( radians( graffel.longitude ) - $lonRad )
+                             + sin( $latRad )
+                             * sin( radians( graffel.latitude ) ) ) ) AS distance
+               from graffel) as g
+               join tag t on (t.graffel_id = g.id)
+               where g.distance < ${radius.length}
+               order by g.distance asc
+             """.query
+  }
 }

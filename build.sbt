@@ -21,6 +21,7 @@ val specs2Version = "3.8.6"
 val webjarJqueryVersion = "2.1.4"
 val scalajsReactVersion = "1.1.0"
 val webjarReactVersion = "15.6.1"
+val fs2Version = "0.9.7"
 
 /// projects
 
@@ -45,18 +46,18 @@ lazy val client = crossProject(JSPlatform)
       // Replace with specs2 when it supports Scala.js:
       // https://github.com/etorreborre/specs2/issues/465
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test,
-      "com.github.japgolly.scalajs-react" %%% "core" % scalajsReactVersion
+      "com.github.japgolly.scalajs-react" %%% "core" % scalajsReactVersion,
+      "co.fs2" %%% "fs2-core" % fs2Version
     ),
     jsDependencies ++= Seq(
       "org.webjars" % "jquery" % webjarJqueryVersion / s"$webjarJqueryVersion/jquery.js",
       "org.webjars.bower" % "react" % webjarReactVersion
-        /        "react-with-addons.js"
+        / "react-with-addons.js"
         minified "react-with-addons.min.js"
         commonJSName "React",
-
       "org.webjars.bower" % "react" % webjarReactVersion
-        /         "react-dom.js"
-        minified  "react-dom.min.js"
+        / "react-dom.js"
+        minified "react-dom.min.js"
         dependsOn "react-with-addons.js"
         commonJSName "ReactDOM"
     ),
