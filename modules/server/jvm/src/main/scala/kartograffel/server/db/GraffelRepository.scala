@@ -11,6 +11,8 @@ trait GraffelRepository[F[_]] { self =>
 
   def insert(graffel: Graffel): F[Entity[Graffel]]
 
+  def insert(tag: Tag): F[Entity[Graffel]]
+
   def findTagsByPosition(pos: Position, radius: Radius): F[List[Entity[Tag]]]
 
   def mapK[G[_]](t: F ~> G): GraffelRepository[G] =
@@ -20,6 +22,9 @@ trait GraffelRepository[F[_]] { self =>
 
       override def insert(graffel: Graffel): G[Entity[Graffel]] =
         t(self.insert(graffel))
+
+      override def insert(tag: Tag): G[Entity[Graffel]] =
+        t(self.insert(tag))
 
       override def findTagsByPosition(pos: Position,
                                       radius: Radius): G[List[Entity[Tag]]] =
@@ -39,6 +44,12 @@ object GraffelRepository {
           .insert(graffel)
           .withUniqueGeneratedKeys[Id[Graffel]]("id")
           .map(Entity(_, graffel))
+
+      override def insert(tag: Tag): ConnectionIO[Entity[Tag]] =
+        GraffelStatements
+          .insert(tag)
+          .withUniqueGeneratedKeys[Id[Tag]]("id")
+          .map(Entity(_, tag))
 
       override def findTagsByPosition(
           pos: Position,
@@ -64,6 +75,15 @@ object GraffelStatements {
         ${graffel.position.longitude}
       )
     """.update
+
+  def insert(tag: Tag): Update0 =
+    sql"""
+         INSERT INTO tag (name, graffel_id)
+         VALUES (
+          ${tag.name},
+          ${tag.graffelId}
+         )
+       """.update
 
   def findTagsByPosition(pos: Position, radius: Radius): Query0[Entity[Tag]] = {
     val distanceUnit = radius.unit
