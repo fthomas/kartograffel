@@ -18,11 +18,11 @@ object TagSubmitComponent {
           <.input(
             ^.`type` := "text",
             ^.placeholder := "Mein Lieblingsplatz...",
-            ^.onChange := props.onChange
+            ^.onChange ==> props.onChange
           ),
           <.button(
             ^.value := "",
-            ^.onClick := props.onSubmit
+            ^.onClick ==> props.onSubmit
           )
       ))
     .build
