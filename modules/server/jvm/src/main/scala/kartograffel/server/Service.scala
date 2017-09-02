@@ -76,6 +76,7 @@ object Service {
           lon) =>
       val length: Length = refineMV[LengthRange](100)
       gr.findTagsByPosition(Position(lat, lon), Radius(length, meter))
+        .map(_.map(_.value))
         .flatMap(tags => Ok(tags.asJson))
 
     case GET -> Root / "version" =>
