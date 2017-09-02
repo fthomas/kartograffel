@@ -11,7 +11,7 @@ trait GraffelRepository[F[_]] { self =>
 
   def insert(graffel: Graffel): F[Entity[Graffel]]
 
-  def insert(tag: Tag): F[Entity[Graffel]]
+  def insert(tag: Tag): F[Entity[Tag]]
 
   def findTagsByPosition(pos: Position, radius: Radius): F[List[Entity[Tag]]]
 
@@ -23,7 +23,7 @@ trait GraffelRepository[F[_]] { self =>
       override def insert(graffel: Graffel): G[Entity[Graffel]] =
         t(self.insert(graffel))
 
-      override def insert(tag: Tag): G[Entity[Graffel]] =
+      override def insert(tag: Tag): G[Entity[Tag]] =
         t(self.insert(tag))
 
       override def findTagsByPosition(pos: Position,
