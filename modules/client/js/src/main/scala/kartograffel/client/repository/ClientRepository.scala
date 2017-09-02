@@ -7,12 +7,12 @@ import eu.timepit.refined.api.RefType
 import fs2.Task
 import io.circe.parser.decode
 import kartograffel.shared.model.Position.{Latitude, Longitude}
-import kartograffel.shared.model.{Position, Tag}
+import kartograffel.shared.model.{Entity, Position, Tag}
 import org.scalajs.dom
 import org.scalajs.dom.ext.Ajax
-import org.scalajs.dom.{window, PositionError, PositionOptions}
-import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
+import org.scalajs.dom.{PositionError, PositionOptions, window}
 
+import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js
 import scalatags.JsDom.all._
 
@@ -22,6 +22,7 @@ trait ClientRepository[F[_]] { self =>
 
   def findCurrentPosition(): F[Position]
 
+  def saveTag(tag: Tag): F[]
 }
 
 object ClientRepository {
