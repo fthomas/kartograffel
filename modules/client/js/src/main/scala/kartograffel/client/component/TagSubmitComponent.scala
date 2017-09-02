@@ -2,7 +2,6 @@ package kartograffel.client.component
 
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.html_<^._
-import kartograffel.shared.model.Tag
 
 object TagSubmitComponent {
 
