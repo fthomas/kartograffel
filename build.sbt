@@ -52,13 +52,13 @@ lazy val client = crossProject(JSPlatform)
     jsDependencies ++= Seq(
       "org.webjars" % "jquery" % webjarJqueryVersion / s"$webjarJqueryVersion/jquery.js",
       "org.webjars.bower" % "react" % webjarReactVersion
-        / "react-with-addons.js"
-        minified "react-with-addons.min.js"
+        / "react.js"
+        minified "react.min.js"
         commonJSName "React",
       "org.webjars.bower" % "react" % webjarReactVersion
         / "react-dom.js"
         minified "react-dom.min.js"
-        dependsOn "react-with-addons.js"
+        dependsOn "react.js"
         commonJSName "ReactDOM"
     ),
     scalaJSUseMainModuleInitializer := true
