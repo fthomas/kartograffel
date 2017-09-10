@@ -3,11 +3,13 @@ package kartograffel.client.repository
 import cats.data.{Validated, ValidatedNel}
 import cats.syntax.all._
 import io.circe.parser._
+import io.circe.generic.auto._
+import io.circe.syntax._
 import eu.timepit.refined.api.RefType
 import fs2.Task
 import io.circe.parser.decode
 import kartograffel.shared.model.Position.{Latitude, Longitude}
-import kartograffel.shared.model.{Entity, Position, Tag}
+import kartograffel.shared.model.{Position, Tag}
 import org.scalajs.dom
 import org.scalajs.dom.ext.Ajax
 import org.scalajs.dom.{PositionError, PositionOptions, window}
@@ -22,7 +24,7 @@ trait ClientRepository[F[_]] { self =>
 
   def findCurrentPosition(): F[Position]
 
-  def saveTag(tag: Tag): F[]
+  def saveTag(tag: Tag): F[Unit]
 }
 
 object ClientRepository {
@@ -86,5 +88,18 @@ object ClientRepository {
       getCurrentPosition
         .map(convertPosition)
         .map(validationToException)
+
+    override def saveTag(tag: Tag): Task[Unit] = {
+      val url = "/api/graffel/tag"
+      val payload = tag.asJson.spaces2
+      Task.fromFuture {
+        Ajax
+          .post(
+            url = url,
+            data = payload
+          )
+          .map(_ => ())
+      }
+    }
   }
 }

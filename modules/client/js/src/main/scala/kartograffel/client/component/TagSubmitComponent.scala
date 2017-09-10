@@ -21,7 +21,7 @@ object TagSubmitComponent {
             ^.onChange ==> props.onChange
           ),
           <.button(
-            ^.value := "",
+            ^.value := "graffel!",
             ^.onClick ==> props.onSubmit
           )
       ))

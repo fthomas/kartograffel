@@ -81,6 +81,12 @@ object Service {
 
     case GET -> Root / "version" =>
       Ok(BuildInfo.version.asJson)
+
+    case request @ POST -> Root / "graffel" / "tag" =>
+      request
+        .as(jsonOf[Tag])
+        .flatMap(gr.insert)
+        .flatMap(_ => Ok())
   }
 
   val assets: HttpService =

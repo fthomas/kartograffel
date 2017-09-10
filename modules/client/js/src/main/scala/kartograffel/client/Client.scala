@@ -4,10 +4,11 @@ import eu.timepit.refined.api.RefType
 import io.circe.syntax._
 import kartograffel.client.component.TagsComponent
 import kartograffel.shared.model.Position.{Latitude, Longitude}
-import kartograffel.shared.model.{Graffel, Position}
+import kartograffel.shared.model.{Graffel, Position, Tag}
 import org.scalajs.dom
-import org.scalajs.dom.{window, Coordinates, PositionError, PositionOptions}
+import org.scalajs.dom.{Coordinates, PositionError, PositionOptions, window}
 import org.scalajs.jquery.jQuery
+
 import scala.scalajs.js
 import kartograffel.client.repository.ClientRepository.task._
 
@@ -23,7 +24,7 @@ object Client {
         .renderIntoDOM(window.document.body)
     }
 
-    program.unsafeRunAsync _
+    program.unsafeRunSync
 
     val opts = js.Object().asInstanceOf[PositionOptions]
     opts.timeout = 50000
