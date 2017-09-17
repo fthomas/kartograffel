@@ -39,6 +39,9 @@ lazy val client = crossProject(JSPlatform)
   .jsConfigure(_.dependsOn(sharedJS))
   .enablePlugins(ScalaJSWeb)
   .settings(
+    // Disabling coverage because of:
+    // https://github.com/fthomas/kartograffel/pull/5
+    coverageEnabled := false,
     libraryDependencies ++= Seq(
       "be.doeraene" %%% "scalajs-jquery" % scalajsJqueryVersion,
       "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,

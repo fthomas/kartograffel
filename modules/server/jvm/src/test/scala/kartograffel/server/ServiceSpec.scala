@@ -13,6 +13,7 @@ object ServiceSpec extends Specification with Http4sMatchers {
     }
   }
 
+  /*
   "Service.assets" >> {
     "/client-opt.js contains 'Hello, world!'" >> {
       val path = s"/${BuildInfo.moduleName}/${BuildInfo.version}/client-opt.js"
@@ -21,6 +22,7 @@ object ServiceSpec extends Specification with Http4sMatchers {
       response must haveBody(contain("Hello, world!"))
     }
   }
+   */
 
   def unsafeGetResponse(service: HttpService, request: Request): Response =
     service.run(request).unsafeRun().orNotFound
