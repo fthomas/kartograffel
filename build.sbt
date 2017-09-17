@@ -8,20 +8,20 @@ val rootPkg = "kartograffel"
 val circeVersion = "0.8.0"
 val doobieVersion = "0.4.4"
 val flywayVersion = "4.2.0"
+val fs2Version = "0.9.7"
 val h2Version = "1.4.196"
 val http4sVersion = "0.17.0"
 val logbackVersion = "1.2.3"
-val refinedVersion = "0.8.2"
+val refinedVersion = "0.8.3"
 val scalacheckShapelessVersion = "1.1.6"
 val scalajsDomVersion = "0.9.3"
 val scalajsJqueryVersion = "0.9.2"
+val scalajsReactVersion = "1.1.0"
 val scalajsScalaTagsVersion = "0.6.5"
 val scalaTestVersion = "3.0.4"
 val specs2Version = "3.8.6"
 val webjarJqueryVersion = "2.1.4"
-val scalajsReactVersion = "1.1.0"
 val webjarReactVersion = "15.6.1"
-val fs2Version = "0.9.7"
 
 /// projects
 
@@ -44,13 +44,14 @@ lazy val client = crossProject(JSPlatform)
     coverageEnabled := false,
     libraryDependencies ++= Seq(
       "be.doeraene" %%% "scalajs-jquery" % scalajsJqueryVersion,
-      "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,
+      "co.fs2" %%% "fs2-core" % fs2Version,
+      "com.github.japgolly.scalajs-react" %%% "core" % scalajsReactVersion,
       "com.lihaoyi" %%% "scalatags" % scalajsScalaTagsVersion,
+      "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,
+      /// test dependencies
       // Replace with specs2 when it supports Scala.js:
       // https://github.com/etorreborre/specs2/issues/465
-      "org.scalatest" %%% "scalatest" % scalaTestVersion % Test,
-      "com.github.japgolly.scalajs-react" %%% "core" % scalajsReactVersion,
-      "co.fs2" %%% "fs2-core" % fs2Version
+      "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
     ),
     jsDependencies ++= Seq(
       "org.webjars" % "jquery" % webjarJqueryVersion / s"$webjarJqueryVersion/jquery.js",
@@ -89,6 +90,7 @@ lazy val server = crossProject(JVMPlatform)
       "org.tpolecat" %% "doobie-core-cats" % doobieVersion,
       "org.tpolecat" %% "doobie-hikari-cats" % doobieVersion,
       "org.tpolecat" %% "doobie-refined-cats" % doobieVersion,
+      /// test dependencies
       "org.http4s" %% "http4s-testing" % http4sVersion % Test,
       "org.specs2" %% "specs2-core" % specs2Version % Test,
       "org.tpolecat" %% "doobie-specs2-cats" % doobieVersion % Test
@@ -154,6 +156,7 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
       "io.circe" %%% "circe-generic" % circeVersion,
       "io.circe" %%% "circe-refined" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,
+      /// test dependencies
       "com.github.alexarchambault" %%% "scalacheck-shapeless_1.13" % scalacheckShapelessVersion % Test,
       "eu.timepit" %%% "refined-scalacheck" % refinedVersion % Test,
       "io.circe" %%% "circe-testing" % circeVersion % Test,
