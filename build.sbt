@@ -39,6 +39,7 @@ lazy val client = crossProject(JSPlatform)
   .jsConfigure(_.dependsOn(sharedJS))
   .enablePlugins(ScalaJSWeb)
   .settings(
+    coverageEnabled := false,
     libraryDependencies ++= Seq(
       "be.doeraene" %%% "scalajs-jquery" % scalajsJqueryVersion,
       "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,
