@@ -15,8 +15,8 @@ object Server extends StreamApp[IO] {
   def prepare: IO[BlazeBuilder[IO]] =
     for {
       config <- Config.load[IO]
-      _ <- db.migrate(config.db)
-      xa <- db.transactor(config.db)
+      _ <- db.migrate[IO](config.db)
+      xa <- db.transactor[IO](config.db)
       gr = GraffelRepository.transactional(xa)
     } yield blazeBuilder(config.http, gr)
 

@@ -1,14 +1,15 @@
 package kartograffel.server
 
-import cats.effect.IO
+import cats.effect.{Async, Sync}
+import cats.syntax.functor._
+import doobie.Transactor
 import doobie.hikari.HikariTransactor
-import doobie.imports._
 import eu.timepit.refined.auto._
 import org.flywaydb.core.Flyway
 
 package object db {
-  def migrate(dbConfig: Config.Db): IO[Int] =
-    IO {
+  def migrate[F[_]](dbConfig: Config.Db)(implicit F: Sync[F]): F[Int] =
+    F.delay {
       val flyway = new Flyway
       val location = classOf[migration.V0001__CreateGraffel].getPackage.getName
         .replace('.', '/')
@@ -18,11 +19,11 @@ package object db {
       flyway.migrate()
     }
 
-  def transactor(dbConfig: Config.Db): IO[Transactor[IO]] =
-    HikariTransactor[IO](
+  def transactor[F[_]: Async](dbConfig: Config.Db): F[Transactor[F]] =
+    HikariTransactor[F](
       driverClassName = dbConfig.driver,
       url = dbConfig.url,
       user = dbConfig.user,
       pass = dbConfig.password
-    )
+    ).widen
 }
