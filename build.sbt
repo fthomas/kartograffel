@@ -5,12 +5,12 @@ import sbtcrossproject.{crossProject, CrossProject}
 val projectName = "kartograffel"
 val rootPkg = "kartograffel"
 
-val circeVersion = "0.8.0"
-val doobieVersion = "0.4.4"
+val circeVersion = "0.9.0-M1"
+val doobieVersion = "0.5.0-M7"
 val flywayVersion = "4.2.0"
 val fs2Version = "0.9.7"
 val h2Version = "1.4.196"
-val http4sVersion = "0.17.1"
+val http4sVersion = "0.18.0-M1"
 val logbackVersion = "1.2.3"
 val refinedVersion = "0.8.3"
 val scalacheckShapelessVersion = "1.1.6"
@@ -87,13 +87,13 @@ lazy val server = crossProject(JVMPlatform)
       "org.http4s" %% "http4s-circe" % http4sVersion,
       "org.http4s" %% "http4s-core" % http4sVersion,
       "org.http4s" %% "http4s-dsl" % http4sVersion,
-      "org.tpolecat" %% "doobie-core-cats" % doobieVersion,
-      "org.tpolecat" %% "doobie-hikari-cats" % doobieVersion,
-      "org.tpolecat" %% "doobie-refined-cats" % doobieVersion,
+      "org.tpolecat" %% "doobie-core" % doobieVersion,
+      "org.tpolecat" %% "doobie-hikari" % doobieVersion,
+      "org.tpolecat" %% "doobie-refined" % doobieVersion,
       /// test dependencies
       "org.http4s" %% "http4s-testing" % http4sVersion % Test,
       "org.specs2" %% "specs2-core" % specs2Version % Test,
-      "org.tpolecat" %% "doobie-specs2-cats" % doobieVersion % Test
+      "org.tpolecat" %% "doobie-specs2" % doobieVersion % Test
     )
   )
   // command line options for run and reStart

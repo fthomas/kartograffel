@@ -1,7 +1,7 @@
 package kartograffel.server
 
 import cats.data.{NonEmptyList, Validated, ValidatedNel}
-import fs2.Task
+import cats.effect.IO
 import io.circe.syntax._
 import kartograffel.server.db.GraffelRepository
 import kartograffel.shared.model.Position.{Latitude, Longitude}
@@ -15,7 +15,7 @@ import eu.timepit.refined._
 import eu.timepit.refined.api.{RefType, Refined, Validate}
 
 object Service {
-  val root = HttpService {
+  val root: HttpService[IO] = HttpService {
     case GET -> Root =>
       Ok(Html.index).withType(MediaType.`text/html`)
   }
@@ -58,7 +58,7 @@ object Service {
   object LatQueryParamMatcher extends QueryParamDecoderMatcher[Latitude]("lat")
   object LonQueryParamMatcher extends QueryParamDecoderMatcher[Longitude]("lon")
 
-  def api(gr: GraffelRepository[Task]) = HttpService {
+  def api(gr: GraffelRepository[IO]): HttpService[IO] = HttpService {
     case GET -> Root / "graffel" / LongVar(id) =>
       // TODO use QueryParamDecoder
       gr.query(Id(Refined.unsafeApply(id))).flatMap {
@@ -68,7 +68,7 @@ object Service {
 
     case request @ POST -> Root / "graffel" =>
       request
-        .as(jsonOf[Graffel])
+        .as(implicitly, jsonOf[IO, Graffel])
         .flatMap(gr.insert)
         .flatMap(entity => Ok(entity.asJson))
 
@@ -82,6 +82,6 @@ object Service {
       Ok(BuildInfo.version.asJson)
   }
 
-  val assets: HttpService =
+  val assets: HttpService[IO] =
     webjarService(WebjarService.Config())
 }
