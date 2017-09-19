@@ -61,7 +61,7 @@ object ClientRepository {
         validated: ValidatedNel[String, Position]): Position =
       validated.toEither.left
         .map(msgNel =>
-          new RuntimeException((msgNel.foldLeft("")((a, b) => a + "\n" + b))))
+          new RuntimeException(msgNel.foldLeft("")((a, b) => a + "\n" + b)))
         .toTry
         .get
 
@@ -78,7 +78,7 @@ object ClientRepository {
         }, { err: PositionError =>
           window.console.warn(
             s"position error: code = ${err.code}, msg = ${err.message}")
-          promise.failure(new PositionException(err.message))
+          promise.failure(PositionException(err.message))
         }
       )
       promise.future

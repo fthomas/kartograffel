@@ -30,22 +30,20 @@ object Client {
     }
 
     component
-      .onComplete(result =>
-        result match {
-          case Success(comp) => comp.renderIntoDOM(window.document.body)
-          case Failure(error) =>
-            error match {
-              case _: PositionException =>
-                PositionNotFoundComponent
-                  .component()
-                  .renderIntoDOM(window.document.body)
-              case error: Throwable => {
-                error.printStackTrace()
-                UnexpectedErrorComponent
-                  .component()
-                  .renderIntoDOM(window.document.body)
-              }
-            }
-      })
+      .onComplete {
+        case Success(comp) => comp.renderIntoDOM(window.document.body)
+        case Failure(error) =>
+          error match {
+            case _: PositionException =>
+              PositionNotFoundComponent
+                .component()
+                .renderIntoDOM(window.document.body)
+            case error: Throwable =>
+              error.printStackTrace()
+              UnexpectedErrorComponent
+                .component()
+                .renderIntoDOM(window.document.body)
+          }
+      }
   }
 }
