@@ -25,6 +25,8 @@ trait ClientRepository[F[_]] { self =>
   def findCurrentPosition(): F[Position]
 
   def saveTag(tag: Tag): F[Unit]
+
+  case class PositionException(msg: String) extends RuntimeException(msg)
 }
 
 object ClientRepository {
@@ -59,7 +61,7 @@ object ClientRepository {
         validated: ValidatedNel[String, Position]): Position =
       validated.toEither.left
         .map(msgNel =>
-          new RuntimeException(msgNel.foldLeft("")((a, b) => a + "\n" + b)))
+          new RuntimeException((msgNel.foldLeft("")((a, b) => a + "\n" + b))))
         .toTry
         .get
 
@@ -76,7 +78,7 @@ object ClientRepository {
         }, { err: PositionError =>
           window.console.warn(
             s"position error: code = ${err.code}, msg = ${err.message}")
-          promise.failure(new RuntimeException(err.message))
+          promise.failure(new PositionException(err.message))
         }
       )
       promise.future
