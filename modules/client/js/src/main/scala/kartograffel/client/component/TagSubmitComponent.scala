@@ -12,18 +12,17 @@ object TagSubmitComponent {
 
   val component = ScalaComponent
     .builder[Props]("TagSubmitComponent")
-    .render_P(
-      props =>
-        <.div(
-          <.input(
-            ^.`type` := "text",
-            ^.placeholder := "Mein Lieblingsplatz...",
-            ^.onChange ==> props.onChange
-          ),
-          <.button(
-            ^.value := "graffel!",
-            ^.onClick ==> props.onSubmit
-          )
-      ))
+    .render_P(props =>
+      <.div(
+        <.input(
+          ^.`type` := "text",
+          ^.placeholder := "Mein Lieblingsplatz...",
+          ^.onChange ==> props.onChange
+        ),
+        <.button(
+          ^.value := "graffel!",
+          ^.onClick ==> props.onSubmit
+        )
+    ))
     .build
 }
