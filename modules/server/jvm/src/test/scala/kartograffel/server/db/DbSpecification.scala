@@ -1,19 +1,18 @@
 package kartograffel.server.db
 
-import doobie.specs2.imports.TaskChecker
+import cats.effect.IO
+import doobie.specs2.IOChecker
 import doobie.util.transactor.Transactor
 import eu.timepit.refined.auto._
 import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.refineV
-import fs2.Task
-import fs2.interop.cats._
 import kartograffel.server.{BuildInfo, Config}
 import org.specs2.mutable.Specification
 
-trait DbSpecification extends Specification with TaskChecker {
+trait DbSpecification extends Specification with IOChecker {
   DbSpecification.runMigrationOnce
 
-  override def transactor: Transactor[Task] =
+  override def transactor: Transactor[IO] =
     DbSpecification.transactor
 }
 
@@ -32,10 +31,10 @@ object DbSpecification {
   }
 
   lazy val runMigrationOnce: Unit =
-    migrate(dbConfig).map(_ => ()).unsafeRun()
+    migrate[IO](dbConfig).map(_ => ()).unsafeRunSync()
 
-  val transactor: Transactor[Task] =
-    Transactor.fromDriverManager[Task](
+  val transactor: Transactor[IO] =
+    Transactor.fromDriverManager[IO](
       driver = dbConfig.driver,
       url = dbConfig.url,
       user = dbConfig.user,
