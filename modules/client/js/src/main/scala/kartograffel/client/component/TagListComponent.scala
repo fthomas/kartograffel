@@ -11,7 +11,7 @@ object TagsComponent {
   case class Props(tags: List[Tag])
 
   val component = ScalaComponent
-    .builder[Props]("Tags")
+    .builder[Props]("TagsComponent")
     .render_P(
       props =>
         <.div(
