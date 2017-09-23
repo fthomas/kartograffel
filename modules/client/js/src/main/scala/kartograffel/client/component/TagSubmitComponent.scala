@@ -8,7 +8,10 @@ object TagSubmitComponent {
   type OnChange = (ReactEventFromInput) => Callback
   type OnSubmit = (ReactEventFromInput) => Callback
 
-  case class Props(onChange: OnChange, onSubmit: OnSubmit)
+  case class Props(onChange: OnChange,
+                   onSubmit: OnSubmit,
+                   inputText: String,
+                   enabled: Boolean)
 
   val component = ScalaComponent
     .builder[Props]("TagSubmitComponent")
@@ -17,11 +20,14 @@ object TagSubmitComponent {
         <.input(
           ^.`type` := "text",
           ^.placeholder := "Mein Lieblingsplatz...",
-          ^.onChange ==> props.onChange
+          ^.value := props.inputText,
+          ^.onChange ==> props.onChange,
+          ^.disabled := !props.enabled
         ),
         <.button(
           ^.value := "graffel!",
-          ^.onClick ==> props.onSubmit
+          ^.onClick ==> props.onSubmit,
+          ^.disabled := !props.enabled || props.inputText.isEmpty
         )
     ))
     .build

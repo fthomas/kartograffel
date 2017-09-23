@@ -2,7 +2,7 @@ package kartograffel.client
 
 import kartograffel.client.component.{
   PositionNotFoundComponent,
-  TagsComponent,
+  TagListComponent,
   UnexpectedErrorComponent
 }
 import kartograffel.shared.model.Tag
@@ -25,8 +25,8 @@ object Client {
     }
 
     val component = tags.map { tags =>
-      TagsComponent
-        .component(TagsComponent.Props(tags))
+      TagListComponent
+        .component(TagListComponent.Props(tags))
     }
 
     component

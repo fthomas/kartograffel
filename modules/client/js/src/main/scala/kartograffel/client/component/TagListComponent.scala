@@ -6,7 +6,7 @@ import japgolly.scalajs.react._
 
 import japgolly.scalajs.react.vdom.html_<^._
 
-object TagsComponent {
+object TagListComponent {
 
   case class Props(tags: List[Tag])
 
