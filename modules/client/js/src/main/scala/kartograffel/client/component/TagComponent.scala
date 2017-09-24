@@ -8,7 +8,6 @@ import kartograffel.shared.model.{Entity, Graffel, Tag}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
 
 object TagComponent {
 
@@ -32,29 +31,24 @@ object TagComponent {
         val modStateSubmittingTag = scope.modState(_.copy(submittingTag = true))
         val modStateFinishedSubmitting =
           scope.modState(_.copy(tagInput = "", submittingTag = false))
-        def loadTagsByGraffel(graffel: Option[Entity[Graffel]]) =
-          state.currentGraffel
+
+        def loadTagsByGraffel(graffel: Option[Entity[Graffel]]): Future[List[Tag]] =
+          graffel
             .map(entity =>
               ClientRepository.future.findTags(entity.value.position))
-            .getOrElse(Nil)
-        def saveNewTag() =
+            .getOrElse(Future.successful(Nil))
+
+        def saveNewTag(): Future[Unit] =
           state.currentGraffel
             .map(entity => Tag(state.tagInput, entity.id))
             .map(ClientRepository.future.saveTag)
             .getOrElse(Future.successful(()))
 
         val io = CallbackTo.future {
-          val result = for {
+          for {
             _ <- saveNewTag()
             loadedTags <- loadTagsByGraffel(state.currentGraffel)
           } yield scope.modState(_.copy(tags = loadedTags))
-
-          result.onComplete {
-            case Success(_) => ()
-            case Failure(throwable) =>
-              throwable.printStackTrace() //Todo render that error happened
-          }
-          result
         }
 
         modStateSubmittingTag >> io >> modStateFinishedSubmitting
@@ -87,9 +81,16 @@ object TagComponent {
     .componentDidMount(onComponentDidMount)
     .build
 
-  private def onComponentDidMount(
-      cdm: ComponentDidMount[Unit, State, Backend]): Callback =
-    cdm.modState(state => {
-      ???
-    })
+  private def onComponentDidMount(cdm: ComponentDidMount[Unit, State, Backend]): Callback = {
+    def getGraffel(): Future[Entity[Graffel]] =
+      for {
+        position <- ClientRepository.future.findCurrentPosition()
+        graffel <- ClientRepository.future.findOrCreateGraffel(Graffel(position))
+      } yield graffel
+
+    CallbackTo.future(
+      getGraffel().map(graffelEntity => cdm.modState(_.copy(currentGraffel = Some(graffelEntity))))
+    )
+  }.void
 }
+

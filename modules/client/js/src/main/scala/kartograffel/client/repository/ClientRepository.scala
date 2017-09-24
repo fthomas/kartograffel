@@ -8,10 +8,10 @@ import io.circe.syntax._
 import eu.timepit.refined.api.RefType
 import io.circe.parser.decode
 import kartograffel.shared.model.Position.{Latitude, Longitude}
-import kartograffel.shared.model.{Position, Tag}
+import kartograffel.shared.model.{Entity, Graffel, Position, Tag}
 import org.scalajs.dom
 import org.scalajs.dom.ext.Ajax
-import org.scalajs.dom.{window, PositionError, PositionOptions}
+import org.scalajs.dom.{PositionError, PositionOptions, window}
 
 import scala.concurrent.{Future, Promise}
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
@@ -25,6 +25,8 @@ trait ClientRepository[F[_]] { self =>
   def findCurrentPosition(): F[Position]
 
   def saveTag(tag: Tag): F[Unit]
+
+  def findOrCreateGraffel(graffel: Graffel): F[Entity[Graffel]]
 
   case class PositionException(msg: String) extends RuntimeException(msg)
 }
@@ -98,6 +100,18 @@ object ClientRepository {
           data = payload
         )
         .map(_ => ())
+    }
+
+    override def findOrCreateGraffel(graffel: Graffel): Future[Entity[Graffel]] = {
+      val url = "/api/graffel"
+      val payload = graffel.asJson.spaces2
+      Ajax
+          .put(
+            url = url,
+            data = payload
+          )
+        .map(req => decode[Entity[Graffel]](req.responseText))
+        .map(_.toTry.get)
     }
   }
 }
