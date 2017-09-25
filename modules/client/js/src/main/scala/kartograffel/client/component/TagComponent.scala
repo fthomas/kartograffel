@@ -54,8 +54,9 @@ object TagComponent {
         modStateSubmittingTag >> io >> modStateFinishedSubmitting
       }
 
-      def onChange(e: ReactEventFromInput): Callback =
-        scope.modState(_.copy(tagInput = e.target.value))
+      def onChange(e: ReactEventFromInput): Callback = {
+        e.extract(_.target.value)(value => scope.modState(_.copy(tagInput = value)))
+      }
 
       TagSubmitComponent.component(
         TagSubmitComponent.Props(

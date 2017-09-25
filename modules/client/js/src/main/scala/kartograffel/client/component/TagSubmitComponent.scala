@@ -24,8 +24,9 @@ object TagSubmitComponent {
           ^.onChange ==> props.onChange,
           ^.disabled := !props.enabled
         ),
-        <.button(
+        <.input(
           ^.value := "graffel!",
+          ^.`type` := "button",
           ^.onClick ==> props.onSubmit,
           ^.disabled := !props.enabled || props.inputText.isEmpty
         )
