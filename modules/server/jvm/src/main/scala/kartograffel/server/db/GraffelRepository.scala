@@ -61,7 +61,8 @@ object GraffelRepository {
           radius: Radius): ConnectionIO[List[Entity[Tag]]] =
         GraffelStatements.findTagsByPosition(pos, radius).list
 
-      override def findGraffelByPosition(position: Position): ConnectionIO[Option[Entity[Graffel]]] =
+      override def findGraffelByPosition(
+          position: Position): ConnectionIO[Option[Entity[Graffel]]] =
         GraffelStatements.findGraffelByPosition(position).option
     }
 
@@ -117,8 +118,6 @@ object GraffelStatements {
              """.query
   }
 
-  def findGraffelByPosition(pos: Position): Query0[Entity[Graffel]] = {
-    sql"""select from graffel where latitude = ${pos.latitude} and longitude = ${pos.longitude}"""
-      .query
-  }
+  def findGraffelByPosition(pos: Position): Query0[Entity[Graffel]] =
+    sql"""select from graffel where latitude = ${pos.latitude} and longitude = ${pos.longitude}""".query
 }

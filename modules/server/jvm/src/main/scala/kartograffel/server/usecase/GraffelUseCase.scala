@@ -2,7 +2,7 @@ package kartograffel.server.usecase
 
 import kartograffel.server.db.GraffelRepository
 import kartograffel.shared.model.{Entity, Graffel, Position}
-import cats.{Monad, ~>}
+import cats.{~>, Monad}
 import cats.implicits._
 import doobie.imports._
 import doobie.util.transactor.Transactor
@@ -21,7 +21,8 @@ trait GraffelUseCase[F[_]] { self =>
     val optF: F[Option[F[Entity[Graffel]]]] =
       monadF.map(maybeGraffel)(opt => opt.map(pure(_)))
 
-    val result: F[Entity[Graffel]] = monadF.flatMap(optF)(_.getOrElse(gr.insert(Graffel(position))))
+    val result: F[Entity[Graffel]] =
+      monadF.flatMap(optF)(_.getOrElse(gr.insert(Graffel(position))))
 
     result
   }
@@ -30,7 +31,8 @@ trait GraffelUseCase[F[_]] { self =>
 
     override val gr: GraffelRepository[G] = implicitly[GraffelRepository[G]]
 
-    override def findByPositionOrCreate(position: Position): G[Entity[Graffel]] =
+    override def findByPositionOrCreate(
+        position: Position): G[Entity[Graffel]] =
       t(self.findByPositionOrCreate(position))
   }
 
@@ -38,7 +40,8 @@ trait GraffelUseCase[F[_]] { self =>
 
 object GraffelUseCase {
   val connectionIO = new GraffelUseCase[ConnectionIO] {
-    override val gr: GraffelRepository[ConnectionIO] = implicitly[GraffelRepository[ConnectionIO]]
+    override val gr: GraffelRepository[ConnectionIO] =
+      implicitly[GraffelRepository[ConnectionIO]]
   }
 
   def transactional[M[_]: Monad](xa: Transactor[M]): GraffelUseCase[M] =

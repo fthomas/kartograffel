@@ -32,7 +32,8 @@ object TagComponent {
         val modStateFinishedSubmitting =
           scope.modState(_.copy(tagInput = "", submittingTag = false))
 
-        def loadTagsByGraffel(graffel: Option[Entity[Graffel]]): Future[List[Tag]] =
+        def loadTagsByGraffel(
+            graffel: Option[Entity[Graffel]]): Future[List[Tag]] =
           graffel
             .map(entity =>
               ClientRepository.future.findTags(entity.value.position))
@@ -54,9 +55,9 @@ object TagComponent {
         modStateSubmittingTag >> io >> modStateFinishedSubmitting
       }
 
-      def onChange(e: ReactEventFromInput): Callback = {
-        e.extract(_.target.value)(value => scope.modState(_.copy(tagInput = value)))
-      }
+      def onChange(e: ReactEventFromInput): Callback =
+        e.extract(_.target.value)(value =>
+          scope.modState(_.copy(tagInput = value)))
 
       TagSubmitComponent.component(
         TagSubmitComponent.Props(
@@ -82,16 +83,18 @@ object TagComponent {
     .componentDidMount(onComponentDidMount)
     .build
 
-  private def onComponentDidMount(cdm: ComponentDidMount[Unit, State, Backend]): Callback = {
+  private def onComponentDidMount(
+      cdm: ComponentDidMount[Unit, State, Backend]): Callback = {
     def getGraffel(): Future[Entity[Graffel]] =
       for {
         position <- ClientRepository.future.findCurrentPosition()
-        graffel <- ClientRepository.future.findOrCreateGraffel(Graffel(position))
+        graffel <- ClientRepository.future.findOrCreateGraffel(
+          Graffel(position))
       } yield graffel
 
     CallbackTo.future(
-      getGraffel().map(graffelEntity => cdm.modState(_.copy(currentGraffel = Some(graffelEntity))))
+      getGraffel().map(graffelEntity =>
+        cdm.modState(_.copy(currentGraffel = Some(graffelEntity))))
     )
   }.void
 }
-

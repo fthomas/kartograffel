@@ -11,7 +11,7 @@ import kartograffel.shared.model.Position.{Latitude, Longitude}
 import kartograffel.shared.model.{Entity, Graffel, Position, Tag}
 import org.scalajs.dom
 import org.scalajs.dom.ext.Ajax
-import org.scalajs.dom.{PositionError, PositionOptions, window}
+import org.scalajs.dom.{window, PositionError, PositionOptions}
 
 import scala.concurrent.{Future, Promise}
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
@@ -102,14 +102,15 @@ object ClientRepository {
         .map(_ => ())
     }
 
-    override def findOrCreateGraffel(graffel: Graffel): Future[Entity[Graffel]] = {
+    override def findOrCreateGraffel(
+        graffel: Graffel): Future[Entity[Graffel]] = {
       val url = "/api/graffel"
       val payload = graffel.asJson.spaces2
       Ajax
-          .put(
-            url = url,
-            data = payload
-          )
+        .put(
+          url = url,
+          data = payload
+        )
         .map(req => decode[Entity[Graffel]](req.responseText))
         .map(_.toTry.get)
     }

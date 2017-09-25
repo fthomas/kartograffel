@@ -9,7 +9,7 @@ import kartograffel.shared.model.Radius.{Length, LengthRange}
 import kartograffel.shared.model._
 import org.http4s.circe._
 import org.http4s.dsl._
-import org.http4s.server.staticcontent.{WebjarService, webjarService}
+import org.http4s.server.staticcontent.{webjarService, WebjarService}
 import org.http4s._
 import eu.timepit.refined._
 import eu.timepit.refined.api.{RefType, Refined, Validate}
@@ -59,36 +59,37 @@ object Service {
   object LatQueryParamMatcher extends QueryParamDecoderMatcher[Latitude]("lat")
   object LonQueryParamMatcher extends QueryParamDecoderMatcher[Longitude]("lon")
 
-  def api(gr: GraffelRepository[Task], gUC: GraffelUseCase[Task]) = HttpService {
-    case GET -> Root / "graffel" / LongVar(id) =>
-      // TODO use QueryParamDecoder
-      gr.query(Id(Refined.unsafeApply(id))).flatMap {
-        case Some(entity) => Ok(entity.asJson)
-        case None         => NotFound()
-      }
+  def api(gr: GraffelRepository[Task], gUC: GraffelUseCase[Task]) =
+    HttpService {
+      case GET -> Root / "graffel" / LongVar(id) =>
+        // TODO use QueryParamDecoder
+        gr.query(Id(Refined.unsafeApply(id))).flatMap {
+          case Some(entity) => Ok(entity.asJson)
+          case None         => NotFound()
+        }
 
-    case request @ PUT -> Root / "graffel" =>
-      request
-        .as(jsonOf[Graffel])
-        .flatMap(graffel => gUC.findByPositionOrCreate(graffel.position))
-        .flatMap(entity => Ok(entity.asJson))
+      case request @ PUT -> Root / "graffel" =>
+        request
+          .as(jsonOf[Graffel])
+          .flatMap(graffel => gUC.findByPositionOrCreate(graffel.position))
+          .flatMap(entity => Ok(entity.asJson))
 
-    case GET -> Root / "graffel" / "tag" :? LatQueryParamMatcher(lat) +& LonQueryParamMatcher(
-          lon) =>
-      val length: Length = refineMV[LengthRange](100)
-      gr.findTagsByPosition(Position(lat, lon), Radius(length, meter))
-        .map(_.map(_.value))
-        .flatMap(tags => Ok(tags.asJson))
+      case GET -> Root / "graffel" / "tag" :? LatQueryParamMatcher(lat) +& LonQueryParamMatcher(
+            lon) =>
+        val length: Length = refineMV[LengthRange](100)
+        gr.findTagsByPosition(Position(lat, lon), Radius(length, meter))
+          .map(_.map(_.value))
+          .flatMap(tags => Ok(tags.asJson))
 
-    case GET -> Root / "version" =>
-      Ok(BuildInfo.version.asJson)
+      case GET -> Root / "version" =>
+        Ok(BuildInfo.version.asJson)
 
-    case request @ POST -> Root / "graffel" / "tag" =>
-      request
-        .as(jsonOf[Tag])
-        .flatMap(gr.insert)
-        .flatMap(_ => Ok())
-  }
+      case request @ POST -> Root / "graffel" / "tag" =>
+        request
+          .as(jsonOf[Tag])
+          .flatMap(gr.insert)
+          .flatMap(_ => Ok())
+    }
 
   val assets: HttpService =
     webjarService(WebjarService.Config())
