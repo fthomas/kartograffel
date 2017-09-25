@@ -9,6 +9,8 @@ import kartograffel.shared.model._
 trait GraffelRepository[F[_]] { self =>
   def query(id: Id[Graffel]): F[Option[Entity[Graffel]]]
 
+  def findGraffelByPosition(position: Position): F[Option[Entity[Graffel]]]
+
   def insert(graffel: Graffel): F[Entity[Graffel]]
 
   def insert(tag: Tag): F[Entity[Tag]]
@@ -29,6 +31,9 @@ trait GraffelRepository[F[_]] { self =>
       override def findTagsByPosition(pos: Position,
                                       radius: Radius): G[List[Entity[Tag]]] =
         t(self.findTagsByPosition(pos, radius))
+
+      override def findGraffelByPosition(position: Position) =
+        t(self.findGraffelByPosition(position))
     }
 }
 
@@ -55,6 +60,9 @@ object GraffelRepository {
           pos: Position,
           radius: Radius): ConnectionIO[List[Entity[Tag]]] =
         GraffelStatements.findTagsByPosition(pos, radius).list
+
+      override def findGraffelByPosition(position: Position): ConnectionIO[Option[Entity[Graffel]]] =
+        GraffelStatements.findGraffelByPosition(position).option
     }
 
   def transactional[M[_]: Monad](xa: Transactor[M]): GraffelRepository[M] =
@@ -107,5 +115,10 @@ object GraffelStatements {
                where g.distance < ${radius.length}
                order by g.distance asc
              """.query
+  }
+
+  def findGraffelByPosition(pos: Position): Query0[Entity[Graffel]] = {
+    sql"""select from graffel where latitude = ${pos.latitude} and longitude = ${pos.longitude}"""
+      .query
   }
 }

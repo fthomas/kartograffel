@@ -9,10 +9,11 @@ import kartograffel.shared.model.Radius.{Length, LengthRange}
 import kartograffel.shared.model._
 import org.http4s.circe._
 import org.http4s.dsl._
-import org.http4s.server.staticcontent.{webjarService, WebjarService}
+import org.http4s.server.staticcontent.{WebjarService, webjarService}
 import org.http4s._
 import eu.timepit.refined._
 import eu.timepit.refined.api.{RefType, Refined, Validate}
+import kartograffel.server.usecase.GraffelUseCase
 
 object Service {
   val root = HttpService {
@@ -58,7 +59,7 @@ object Service {
   object LatQueryParamMatcher extends QueryParamDecoderMatcher[Latitude]("lat")
   object LonQueryParamMatcher extends QueryParamDecoderMatcher[Longitude]("lon")
 
-  def api(gr: GraffelRepository[Task]) = HttpService {
+  def api(gr: GraffelRepository[Task], gUC: GraffelUseCase[Task]) = HttpService {
     case GET -> Root / "graffel" / LongVar(id) =>
       // TODO use QueryParamDecoder
       gr.query(Id(Refined.unsafeApply(id))).flatMap {
@@ -66,10 +67,10 @@ object Service {
         case None         => NotFound()
       }
 
-    case request @ POST -> Root / "graffel" =>
+    case request @ PUT -> Root / "graffel" =>
       request
         .as(jsonOf[Graffel])
-        .flatMap(gr.insert)
+        .flatMap(graffel => gUC.findByPositionOrCreate(graffel.position))
         .flatMap(entity => Ok(entity.asJson))
 
     case GET -> Root / "graffel" / "tag" :? LatQueryParamMatcher(lat) +& LonQueryParamMatcher(
