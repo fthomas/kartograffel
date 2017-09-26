@@ -13,7 +13,6 @@ import org.http4s.server.staticcontent.{webjarService, WebjarService}
 import org.http4s._
 import eu.timepit.refined._
 import eu.timepit.refined.api.{RefType, Refined, Validate}
-import kartograffel.server.usecase.GraffelUseCase
 
 object Service {
   val root = HttpService {
@@ -59,7 +58,7 @@ object Service {
   object LatQueryParamMatcher extends QueryParamDecoderMatcher[Latitude]("lat")
   object LonQueryParamMatcher extends QueryParamDecoderMatcher[Longitude]("lon")
 
-  def api(gr: GraffelRepository[Task], gUC: GraffelUseCase[Task]) =
+  def api(gr: GraffelRepository[Task]) =
     HttpService {
       case GET -> Root / "graffel" / LongVar(id) =>
         // TODO use QueryParamDecoder
@@ -71,7 +70,7 @@ object Service {
       case request @ PUT -> Root / "graffel" =>
         request
           .as(jsonOf[Graffel])
-          .flatMap(graffel => gUC.findByPositionOrCreate(graffel.position))
+          .flatMap(graffel => gr.findByPositionOrCreate(graffel.position))
           .flatMap(entity => Ok(entity.asJson))
 
       case GET -> Root / "graffel" / "tag" :? LatQueryParamMatcher(lat) +& LonQueryParamMatcher(

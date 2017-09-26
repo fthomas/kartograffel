@@ -1,6 +1,7 @@
 package kartograffel.server.db
 
 import cats.{~>, Monad}
+import cats.implicits._
 import doobie.imports._
 import doobie.refined._
 import doobie.util.transactor.Transactor
@@ -16,6 +17,8 @@ trait GraffelRepository[F[_]] { self =>
   def insert(tag: Tag): F[Entity[Tag]]
 
   def findTagsByPosition(pos: Position, radius: Radius): F[List[Entity[Tag]]]
+
+  def findByPositionOrCreate(position: Position): F[Entity[Graffel]]
 
   def mapK[G[_]](t: F ~> G): GraffelRepository[G] =
     new GraffelRepository[G] {
@@ -34,6 +37,9 @@ trait GraffelRepository[F[_]] { self =>
 
       override def findGraffelByPosition(position: Position) =
         t(self.findGraffelByPosition(position))
+
+      override def findByPositionOrCreate(position: Position) =
+        t(self.findByPositionOrCreate(position))
     }
 }
 
@@ -64,6 +70,19 @@ object GraffelRepository {
       override def findGraffelByPosition(
           position: Position): ConnectionIO[Option[Entity[Graffel]]] =
         GraffelStatements.findGraffelByPosition(position).option
+
+      override def findByPositionOrCreate(position: Position): ConnectionIO[Entity[Graffel]] = {
+        val maybeGraffel: ConnectionIO[Option[Entity[Graffel]]] =
+          findGraffelByPosition(position)
+
+        val optF: ConnectionIO[Option[ConnectionIO[Entity[Graffel]]]] =
+          maybeGraffel.map(opt => opt.map(_.pure[ConnectionIO]))
+
+        val result: ConnectionIO[Entity[Graffel]] =
+          optF.flatMap(_.getOrElse(insert(Graffel(position))))
+
+        result
+      }
     }
 
   def transactional[M[_]: Monad](xa: Transactor[M]): GraffelRepository[M] =
