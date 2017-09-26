@@ -71,7 +71,8 @@ object GraffelRepository {
           position: Position): ConnectionIO[Option[Entity[Graffel]]] =
         GraffelStatements.findGraffelByPosition(position).option
 
-      override def findByPositionOrCreate(position: Position): ConnectionIO[Entity[Graffel]] = {
+      override def findByPositionOrCreate(
+          position: Position): ConnectionIO[Entity[Graffel]] = {
         val maybeGraffel: ConnectionIO[Option[Entity[Graffel]]] =
           findGraffelByPosition(position)
 
