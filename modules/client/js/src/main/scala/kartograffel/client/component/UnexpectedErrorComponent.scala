@@ -9,11 +9,11 @@ object UnexpectedErrorComponent {
 
   val component = ScalaComponent
     .builder[Props]("UnexpectedErrorComponent")
-    .render_P(props =>
-      <.div(
-        if (props.visible) ^.visibility.visible else ^.visibility.hidden,
-        <.h4("Hoppla! Da ist wohl etwas schief gegangen...")
-      )
-    )
+    .render_P(
+      props =>
+        <.div(
+          if (props.visible) ^.visibility.visible else ^.visibility.hidden,
+          <.h4("Hoppla! Da ist wohl etwas schief gegangen...")
+      ))
     .build
 }

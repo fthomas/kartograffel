@@ -63,11 +63,11 @@ object TagComponent {
           (for {
             _ <- saveNewTag()
             loadedTags <- loadTagsByGraffel(state.currentGraffel)
-          } yield scope.modState(_.copy(tags = loadedTags))
-            )
-          .recover{
-            case e:Exception => scope.modState(_.copy(unexpectedError = Some(e)))
-          }
+          } yield scope.modState(_.copy(tags = loadedTags)))
+            .recover {
+              case e: Exception =>
+                scope.modState(_.copy(unexpectedError = Some(e)))
+            }
         }
 
         modStateSubmittingTag >> io >> modStateFinishedSubmitting
@@ -115,11 +115,11 @@ object TagComponent {
     CallbackTo.future(
       getGraffel()
         .map(graffelEntity =>
-          cdm.modState(_.copy(currentGraffel = Some(graffelEntity)))
-        )
-        .recover{
-          case pe: PositionException => cdm.modState(_.copy(positionNotFound = Some(pe)))
-          case e:Exception => cdm.modState(_.copy(unexpectedError = Some(e)))
+          cdm.modState(_.copy(currentGraffel = Some(graffelEntity))))
+        .recover {
+          case pe: PositionException =>
+            cdm.modState(_.copy(positionNotFound = Some(pe)))
+          case e: Exception => cdm.modState(_.copy(unexpectedError = Some(e)))
         }
     )
   }.void

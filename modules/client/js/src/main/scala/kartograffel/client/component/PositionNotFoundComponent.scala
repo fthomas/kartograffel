@@ -9,10 +9,11 @@ object PositionNotFoundComponent {
 
   val component = ScalaComponent
     .builder[Props]("PositionNotFoundComponent")
-    .render_P( props =>
-      <.div(
-        if (props.visible) ^.visibility.visible else ^.visibility.hidden,
-        <.h4("leider konnten wir deine Position nicht ermitteln!")
-      )
-    ).build
+    .render_P(
+      props =>
+        <.div(
+          if (props.visible) ^.visibility.visible else ^.visibility.hidden,
+          <.h4("leider konnten wir deine Position nicht ermitteln!")
+      ))
+    .build
 }

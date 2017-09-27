@@ -7,11 +7,11 @@ import io.circe.generic.auto._
 import io.circe.syntax._
 import eu.timepit.refined.api.RefType
 import io.circe.parser.decode
-import kartograffel.shared.model.{Tag, Position, Graffel, Entity}
+import kartograffel.shared.model.{Entity, Graffel, Position, Tag}
 import kartograffel.shared.model.Position.{Latitude, Longitude}
 import org.scalajs.dom
 import org.scalajs.dom.ext.Ajax
-import org.scalajs.dom.{PositionError, PositionOptions, window}
+import org.scalajs.dom.{window, PositionError, PositionOptions}
 
 import scala.concurrent.{Future, Promise}
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
@@ -78,7 +78,8 @@ object ClientRepository {
         }, { err: PositionError =>
           window.console.warn(
             s"position error: code = ${err.code}, msg = ${err.message}")
-          promise.failure(kartograffel.shared.model.PositionException(err.message))
+          promise.failure(
+            kartograffel.shared.model.PositionException(err.message))
         }
       )
       promise.future
