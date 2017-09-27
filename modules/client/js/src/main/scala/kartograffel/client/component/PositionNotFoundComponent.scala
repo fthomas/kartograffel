@@ -5,10 +5,14 @@ import japgolly.scalajs.react.vdom.html_<^._
 
 object PositionNotFoundComponent {
 
+  case class Props(visible: Boolean)
+
   val component = ScalaComponent
-    .static("PositionNotFoundComponent")(
+    .builder[Props]("PositionNotFoundComponent")
+    .render_P( props =>
       <.div(
+        if (props.visible) ^.visibility.visible else ^.visibility.hidden,
         <.h4("leider konnten wir deine Position nicht ermitteln!")
       )
-    )
+    ).build
 }
