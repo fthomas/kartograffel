@@ -42,7 +42,8 @@ object TagComponent {
 
     private def tagSubmit(state: State) = {
       def onSubmit(state: State): Callback = {
-        val modStateSubmittingTag = scope.modState(_.copy(submittingTag = true))
+        val modStateSubmittingTag =
+          scope.modState(_.copy(submittingTag = true))
         val modStateFinishedSubmitting =
           scope.modState(_.copy(tagInput = "", submittingTag = false))
 
@@ -77,12 +78,17 @@ object TagComponent {
         e.extract(_.target.value)(value =>
           scope.modState(_.copy(tagInput = value)))
 
+      def tagSubmitComponentEnabled =
+        !state.submittingTag &&
+          state.positionNotFound.isEmpty &&
+          state.unexpectedError.isEmpty
+
       TagSubmitComponent.component(
         TagSubmitComponent.Props(
           onChange = onChange,
           onSubmit = _ => onSubmit(state),
           inputText = state.tagInput,
-          enabled = !state.submittingTag && state.positionNotFound.isEmpty
+          enabled = tagSubmitComponentEnabled
         )
       )
     }

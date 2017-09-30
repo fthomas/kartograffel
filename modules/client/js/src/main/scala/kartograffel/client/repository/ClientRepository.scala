@@ -67,7 +67,7 @@ object ClientRepository {
 
     private def getCurrentPosition: Future[dom.Position] = {
       val opts = js.Object().asInstanceOf[PositionOptions]
-      opts.timeout = 10000
+      opts.timeout = 30000
       opts.enableHighAccuracy = true
       val promise: Promise[dom.Position] = Promise()
       window.navigator.geolocation.getCurrentPosition(
