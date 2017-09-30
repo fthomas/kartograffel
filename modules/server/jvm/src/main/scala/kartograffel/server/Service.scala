@@ -87,7 +87,7 @@ object Service {
         request
           .as(jsonOf[Tag])
           .flatMap(gr.insert)
-          .flatMap(_ => Ok())
+          .flatMap(_ => Ok(""))
     }
 
   val assets: HttpService =
