@@ -139,5 +139,5 @@ object GraffelStatements {
   }
 
   def findGraffelByPosition(pos: Position): Query0[Entity[Graffel]] =
-    sql"""select from graffel where latitude = ${pos.latitude} and longitude = ${pos.longitude}""".query
+    sql"""select * from graffel where latitude = ${pos.latitude} and longitude = ${pos.longitude}""".query
 }
