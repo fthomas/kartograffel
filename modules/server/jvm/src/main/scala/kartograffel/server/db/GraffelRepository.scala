@@ -1,8 +1,9 @@
 package kartograffel.server.db
 
 import cats.{~>, Monad}
-import doobie.imports._
-import doobie.refined._
+import doobie._
+import doobie.implicits._
+import doobie.refined.implicits._
 import doobie.util.transactor.Transactor
 import kartograffel.shared.model._
 

@@ -1,7 +1,7 @@
 package kartograffel.client
 
 import cats.data.{Validated, ValidatedNel}
-import cats.syntax.all._
+import cats.syntax.apply._
 import eu.timepit.refined.api.RefType
 import fs2.Task
 import io.circe.parser._
@@ -48,7 +48,7 @@ object Client {
       )
       .toValidatedNel
 
-    (refLat |@| refLon).map(Position(_, _))
+    (refLat, refLon).mapN(Position(_, _))
   }
 
   private def validationToException(
