@@ -18,7 +18,7 @@ trait GraffelRepository[F[_]] { self =>
 
   def findTagsByPosition(pos: Position, radius: Radius): F[List[Entity[Tag]]]
 
-  def findTagsByGraffel(id: Id[Graffel]): F[List[Tag]]
+  def findTagsByGraffel(id: Id[Graffel]): F[List[Entity[Tag]]]
 
   def findByPositionOrCreate(position: Position): F[Entity[Graffel]]
 
@@ -90,7 +90,8 @@ object GraffelRepository {
         result
       }
 
-      override def findTagsByGraffel(id: Id[Graffel]): ConnectionIO[List[Tag]] =
+      override def findTagsByGraffel(
+          id: Id[Graffel]): ConnectionIO[List[Entity[Tag]]] =
         GraffelStatements.findTagsByGraffel(id).list
     }
 
@@ -149,7 +150,7 @@ object GraffelStatements {
   def findGraffelByPosition(pos: Position): Query0[Entity[Graffel]] =
     sql"""select * from graffel where latitude = ${pos.latitude} and longitude = ${pos.longitude}""".query
 
-  def findTagsByGraffel(id: Id[Graffel]): Query0[Tag] =
+  def findTagsByGraffel(id: Id[Graffel]): Query0[Entity[Tag]] =
     sql"""select * from tag where graffel_id = ${id.value}""".query
 
 }

@@ -59,8 +59,7 @@ object TagComponent {
           } yield {
             println(s"loaded tags: $loadedTags")
             scope.modState(_.copy(tags = loadedTags))
-          })
-            .recover {
+          }).recover {
               case e: Exception =>
                 scope.modState(_.copy(unexpectedError = Some(e)))
             }
@@ -91,11 +90,11 @@ object TagComponent {
 
   def loadTagsByGraffel(graffel: Option[Entity[Graffel]]): Future[List[Tag]] =
     graffel
-      .map(entity =>
-        ClientRepository.future.findTags(entity.value.position))
+      .map(entity => ClientRepository.future.findTags(entity.value.position))
       .getOrElse(Future.successful(Nil))
 
-  def onComponentDidMount(cdm: ComponentDidMount[Unit, State, Backend]): Callback = {
+  def onComponentDidMount(
+      cdm: ComponentDidMount[Unit, State, Backend]): Callback = {
     def getGraffel(): Future[Entity[Graffel]] =
       for {
         position <- ClientRepository.future.findCurrentPosition()
@@ -103,17 +102,18 @@ object TagComponent {
           Graffel(position))
       } yield graffel
 
-    def getGraffelWithTags(): Future[(Entity[Graffel], List[Tag])] = {
-      getGraffel().flatMap( entity =>
-        loadTagsByGraffel(Some(entity)).map(tags => (entity, tags))
-      )
-    }
+    def getGraffelWithTags(): Future[(Entity[Graffel], List[Tag])] =
+      getGraffel().flatMap(entity =>
+        loadTagsByGraffel(Some(entity)).map(tags => (entity, tags)))
 
     CallbackTo.future(
       getGraffelWithTags()
-        .map{case (graffelEntity, tags) =>
-          println(s"componentDidMount: currentGraffel=$graffelEntity, tags=$tags")
-          cdm.modState(_.copy(currentGraffel = Some(graffelEntity), tags = tags))
+        .map {
+          case (graffelEntity, tags) =>
+            println(
+              s"componentDidMount: currentGraffel=$graffelEntity, tags=$tags")
+            cdm.modState(
+              _.copy(currentGraffel = Some(graffelEntity), tags = tags))
         }
         .recover {
           case pe: PositionException =>

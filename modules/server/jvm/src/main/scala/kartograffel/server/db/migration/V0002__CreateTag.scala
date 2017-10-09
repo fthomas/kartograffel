@@ -8,7 +8,7 @@ final class V0002__CreateTag extends DoobieMigration {
     (sql"""
       CREATE TABLE tag (
         id BIGSERIAL PRIMARY KEY,
-        name VARCHAR NOT NULL,
+        name VARCHAR(255) NOT NULL,
         graffel_id BIGSERIAL REFERENCES graffel (id)
       )
     """: Fragment).update.run
