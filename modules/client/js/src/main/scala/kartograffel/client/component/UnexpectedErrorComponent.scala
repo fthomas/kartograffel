@@ -12,7 +12,7 @@ object UnexpectedErrorComponent {
     .render_P(
       props =>
         <.div(
-          if (props.visible) ^.visibility.visible else ^.visibility.hidden,
+          if (props.visible) ^.visibility.visible else ^.visibility.collapse,
           <.h4("Hoppla! Da ist wohl etwas schief gegangen...")
       ))
     .build

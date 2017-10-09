@@ -12,7 +12,7 @@ object PositionNotFoundComponent {
     .render_P(
       props =>
         <.div(
-          if (props.visible) ^.visibility.visible else ^.visibility.hidden,
+          if (props.visible) ^.visibility.visible else ^.visibility.collapse,
           <.h4("leider konnten wir deine Position nicht ermitteln!")
       ))
     .build
