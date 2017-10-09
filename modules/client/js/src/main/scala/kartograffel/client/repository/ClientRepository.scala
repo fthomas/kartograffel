@@ -24,7 +24,7 @@ trait ClientRepository[F[_]] { self =>
 
   def findCurrentPosition(): F[Position]
 
-  def saveTag(tag: Tag): F[Unit]
+  def saveTag(tag: Tag): F[List[Tag]]
 
   def findOrCreateGraffel(graffel: Graffel): F[Entity[Graffel]]
 }
@@ -90,7 +90,7 @@ object ClientRepository {
         .map(convertPosition)
         .map(validationToException)
 
-    override def saveTag(tag: Tag): Future[Unit] = {
+    override def saveTag(tag: Tag): Future[List[Tag]] = {
       val url = "/api/graffel/tag"
       val payload = tag.asJson.spaces2
       Ajax
@@ -98,7 +98,8 @@ object ClientRepository {
           url = url,
           data = payload
         )
-        .map(_ => ())
+        .map(req => decode[List[Tag]](req.responseText))
+        .map(_.toTry.get)
     }
 
     override def findOrCreateGraffel(

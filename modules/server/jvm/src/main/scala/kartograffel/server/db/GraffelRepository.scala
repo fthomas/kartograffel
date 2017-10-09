@@ -18,6 +18,8 @@ trait GraffelRepository[F[_]] { self =>
 
   def findTagsByPosition(pos: Position, radius: Radius): F[List[Entity[Tag]]]
 
+  def findTagsByGraffel(id: Id[Graffel]): F[List[Tag]]
+
   def findByPositionOrCreate(position: Position): F[Entity[Graffel]]
 
   def mapK[G[_]](t: F ~> G): GraffelRepository[G] =
@@ -40,6 +42,9 @@ trait GraffelRepository[F[_]] { self =>
 
       override def findByPositionOrCreate(position: Position) =
         t(self.findByPositionOrCreate(position))
+
+      override def findTagsByGraffel(id: Id[Graffel]) =
+        t(self.findTagsByGraffel(id))
     }
 }
 
@@ -84,6 +89,9 @@ object GraffelRepository {
 
         result
       }
+
+      override def findTagsByGraffel(id: Id[Graffel]): ConnectionIO[List[Tag]] =
+        GraffelStatements.findTagsByGraffel(id).list
     }
 
   def transactional[M[_]: Monad](xa: Transactor[M]): GraffelRepository[M] =
@@ -140,4 +148,8 @@ object GraffelStatements {
 
   def findGraffelByPosition(pos: Position): Query0[Entity[Graffel]] =
     sql"""select * from graffel where latitude = ${pos.latitude} and longitude = ${pos.longitude}""".query
+
+  def findTagsByGraffel(id: Id[Graffel]): Query0[Tag] =
+    sql"""select * from tag where graffel_id = ${id.value}""".query
+
 }

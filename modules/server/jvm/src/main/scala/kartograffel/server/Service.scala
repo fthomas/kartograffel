@@ -87,7 +87,9 @@ object Service {
         request
           .as(jsonOf[Tag])
           .flatMap(gr.insert)
-          .flatMap(_ => Ok(""))
+          .flatMap(newTag =>
+            gr.findTagsByGraffel(newTag.value.graffelId)
+            .flatMap(tags => Ok(tags.asJson)))
     }
 
   val assets: HttpService =

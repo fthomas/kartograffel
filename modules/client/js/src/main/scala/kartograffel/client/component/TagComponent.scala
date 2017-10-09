@@ -4,7 +4,7 @@ import japgolly.scalajs.react._
 import japgolly.scalajs.react.component.builder.Lifecycle.ComponentDidMount
 import japgolly.scalajs.react.vdom.html_<^._
 import kartograffel.client.repository.ClientRepository
-import kartograffel.shared.model.{Entity, Graffel, PositionException, Tag}
+import kartograffel.shared.model._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -47,24 +47,19 @@ object TagComponent {
         val modStateFinishedSubmitting =
           scope.modState(_.copy(tagInput = "", submittingTag = false))
 
-        def loadTagsByGraffel(
-            graffel: Option[Entity[Graffel]]): Future[List[Tag]] =
-          graffel
-            .map(entity =>
-              ClientRepository.future.findTags(entity.value.position))
-            .getOrElse(Future.successful(Nil))
-
-        def saveNewTag(): Future[Unit] =
+        def saveNewTag(): Future[List[Tag]] =
           state.currentGraffel
             .map(entity => Tag(state.tagInput, entity.id))
             .map(ClientRepository.future.saveTag)
-            .getOrElse(Future.successful(()))
+            .getOrElse(Future.successful(Nil))
 
         val io = CallbackTo.future {
           (for {
-            _ <- saveNewTag()
-            loadedTags <- loadTagsByGraffel(state.currentGraffel)
-          } yield scope.modState(_.copy(tags = loadedTags)))
+            loadedTags <- saveNewTag()
+          } yield {
+            println(s"loaded tags: $loadedTags")
+            scope.modState(_.copy(tags = loadedTags))
+          })
             .recover {
               case e: Exception =>
                 scope.modState(_.copy(unexpectedError = Some(e)))
@@ -94,6 +89,40 @@ object TagComponent {
     }
   }
 
+  def loadTagsByGraffel(graffel: Option[Entity[Graffel]]): Future[List[Tag]] =
+    graffel
+      .map(entity =>
+        ClientRepository.future.findTags(entity.value.position))
+      .getOrElse(Future.successful(Nil))
+
+  def onComponentDidMount(cdm: ComponentDidMount[Unit, State, Backend]): Callback = {
+    def getGraffel(): Future[Entity[Graffel]] =
+      for {
+        position <- ClientRepository.future.findCurrentPosition()
+        graffel <- ClientRepository.future.findOrCreateGraffel(
+          Graffel(position))
+      } yield graffel
+
+    def getGraffelWithTags(): Future[(Entity[Graffel], List[Tag])] = {
+      getGraffel().flatMap( entity =>
+        loadTagsByGraffel(Some(entity)).map(tags => (entity, tags))
+      )
+    }
+
+    CallbackTo.future(
+      getGraffelWithTags()
+        .map{case (graffelEntity, tags) =>
+          println(s"componentDidMount: currentGraffel=$graffelEntity, tags=$tags")
+          cdm.modState(_.copy(currentGraffel = Some(graffelEntity), tags = tags))
+        }
+        .recover {
+          case pe: PositionException =>
+            cdm.modState(_.copy(positionNotFound = Some(pe)))
+          case e: Exception => cdm.modState(_.copy(unexpectedError = Some(e)))
+        }
+    )
+  }.void
+
   val component = ScalaComponent
     .builder[Unit]("TagComponent")
     .initialState(
@@ -108,25 +137,4 @@ object TagComponent {
     .renderBackend[Backend]
     .componentDidMount(onComponentDidMount)
     .build
-
-  private def onComponentDidMount(
-      cdm: ComponentDidMount[Unit, State, Backend]): Callback = {
-    def getGraffel(): Future[Entity[Graffel]] =
-      for {
-        position <- ClientRepository.future.findCurrentPosition()
-        graffel <- ClientRepository.future.findOrCreateGraffel(
-          Graffel(position))
-      } yield graffel
-
-    CallbackTo.future(
-      getGraffel()
-        .map(graffelEntity =>
-          cdm.modState(_.copy(currentGraffel = Some(graffelEntity))))
-        .recover {
-          case pe: PositionException =>
-            cdm.modState(_.copy(positionNotFound = Some(pe)))
-          case e: Exception => cdm.modState(_.copy(unexpectedError = Some(e)))
-        }
-    )
-  }.void
 }
