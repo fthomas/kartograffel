@@ -287,7 +287,7 @@ def addCommandsAlias(name: String, cmds: Seq[String]) =
 addCommandsAlias("validate",
                  Seq(
                    "clean",
-                   "scalafmtTest",
+                   //"scalafmtTest",
                    "coverageOn",
                    "test",
                    "coverageReport",
