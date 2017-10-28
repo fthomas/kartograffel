@@ -60,9 +60,9 @@ object TagComponent {
             println(s"loaded tags: $loadedTags")
             scope.modState(_.copy(tags = loadedTags))
           }).recover {
-              case e: Exception =>
-                scope.modState(_.copy(unexpectedError = Some(e)))
-            }
+            case e: Exception =>
+              scope.modState(_.copy(unexpectedError = Some(e)))
+          }
         }
 
         modStateSubmittingTag >> io >> modStateFinishedSubmitting
