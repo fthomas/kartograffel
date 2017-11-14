@@ -54,7 +54,7 @@ object ClientRepository {
           RefType.applyRef[Longitude](lon)
         )
         .toValidatedNel
-      (refLat |@| refLon).map(Position(_, _))
+      (refLat, refLon).mapN(Position(_, _))
     }
 
     private def validationToException(

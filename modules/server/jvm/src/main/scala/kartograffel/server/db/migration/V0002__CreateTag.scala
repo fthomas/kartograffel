@@ -1,6 +1,7 @@
 package kartograffel.server.db.migration
 
-import doobie.imports._
+import doobie._
+import doobie.implicits._
 import kartograffel.server.db.DoobieMigration
 
 final class V0002__CreateTag extends DoobieMigration {

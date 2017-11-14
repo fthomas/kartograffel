@@ -1,9 +1,9 @@
 package kartograffel.server
 
+import cats.effect.IO
 import eu.timepit.refined.pureconfig._
 import eu.timepit.refined.types.net.PortNumber
 import eu.timepit.refined.types.string.NonEmptyString
-import fs2.Task
 import kartograffel.server.Config.{Db, Http}
 
 final case class Config(
@@ -24,6 +24,6 @@ object Config {
       password: String
   )
 
-  def load: Task[Config] =
-    Task.delay(pureconfig.loadConfigOrThrow[Config])
+  def load: IO[Config] =
+    IO(pureconfig.loadConfigOrThrow[Config])
 }

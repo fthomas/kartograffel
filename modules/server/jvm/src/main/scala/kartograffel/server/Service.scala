@@ -1,23 +1,26 @@
 package kartograffel.server
 
 import cats.data.{NonEmptyList, Validated, ValidatedNel}
-import fs2.Task
+import cats.effect.IO
 import io.circe.syntax._
 import kartograffel.server.db.GraffelRepository
 import kartograffel.shared.model.Position.{Latitude, Longitude}
 import kartograffel.shared.model.Radius.{Length, LengthRange}
 import kartograffel.shared.model._
 import org.http4s.circe._
-import org.http4s.dsl._
+import org.http4s.dsl.Http4sDsl
 import org.http4s.server.staticcontent.{webjarService, WebjarService}
 import org.http4s._
 import eu.timepit.refined._
 import eu.timepit.refined.api.{RefType, Refined, Validate}
 
 object Service {
-  val root = HttpService {
+  val dsl = Http4sDsl[IO]
+  import dsl._
+
+  val root: HttpService[IO] = HttpService {
     case GET -> Root =>
-      Ok(Html.index).withType(MediaType.`text/html`)
+      Ok(Html.index).map(_.withType(MediaType.`text/html`))
   }
 
   //TODO btre: make pull-request to http4s?
@@ -58,7 +61,7 @@ object Service {
   object LatQueryParamMatcher extends QueryParamDecoderMatcher[Latitude]("lat")
   object LonQueryParamMatcher extends QueryParamDecoderMatcher[Longitude]("lon")
 
-  def api(gr: GraffelRepository[Task]) =
+  def api(gr: GraffelRepository[IO]): HttpService[IO] =
     HttpService {
       case GET -> Root / "graffel" / LongVar(id) =>
         // TODO use QueryParamDecoder
@@ -69,7 +72,7 @@ object Service {
 
       case request @ PUT -> Root / "graffel" =>
         request
-          .as(jsonOf[Graffel])
+          .as(implicitly, jsonOf[IO, Graffel])
           .flatMap(graffel => gr.findByPositionOrCreate(graffel.position))
           .flatMap(entity => Ok(entity.asJson))
 
@@ -85,7 +88,7 @@ object Service {
 
       case request @ POST -> Root / "graffel" / "tag" =>
         request
-          .as(jsonOf[Tag])
+          .as(implicitly, jsonOf[IO, Tag])
           .flatMap(gr.insert)
           .flatMap(
             newTag =>
@@ -93,6 +96,6 @@ object Service {
                 .flatMap(tagEntities => Ok(tagEntities.map(_.value).asJson)))
     }
 
-  val assets: HttpService =
+  val assets: HttpService[IO] =
     webjarService(WebjarService.Config())
 }
