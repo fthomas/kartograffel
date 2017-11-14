@@ -1,5 +1,6 @@
 package kartograffel.server
 
+import cats.effect.IO
 import eu.timepit.refined.auto._
 import org.specs2.mutable.Specification
 
@@ -11,7 +12,7 @@ class ServerSpec extends Specification {
       true
     }
     "call stream" >> {
-      Server.stream(List.empty)
+      Server.stream(List.empty, IO(()))
       true
     }
   }
