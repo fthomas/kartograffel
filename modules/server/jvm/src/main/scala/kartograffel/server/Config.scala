@@ -1,6 +1,6 @@
 package kartograffel.server
 
-import cats.effect.IO
+import cats.effect.Sync
 import eu.timepit.refined.pureconfig._
 import eu.timepit.refined.types.net.PortNumber
 import eu.timepit.refined.types.string.NonEmptyString
@@ -24,6 +24,6 @@ object Config {
       password: String
   )
 
-  def load: IO[Config] =
-    IO(pureconfig.loadConfigOrThrow[Config])
+  def load[F[_]](implicit F: Sync[F]): F[Config] =
+    F.delay(pureconfig.loadConfigOrThrow[Config])
 }

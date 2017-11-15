@@ -31,7 +31,7 @@ object DbSpecification {
   }
 
   lazy val runMigrationOnce: Unit =
-    migrate(dbConfig).map(_ => ()).unsafeRunSync()
+    migrate[IO](dbConfig).map(_ => ()).unsafeRunSync()
 
   val transactor: Transactor[IO] =
     Transactor.fromDriverManager[IO](
