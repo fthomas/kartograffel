@@ -3,6 +3,8 @@ scala:
 - 2.12.4
 jdk:
 - oraclejdk8
+git:
+  depth: 9999
 sudo: false
 addons:
   apt:
