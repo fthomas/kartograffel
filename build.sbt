@@ -153,6 +153,7 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
   .settings(
     libraryDependencies ++= Seq(
       "eu.timepit" %%% "refined" % refinedVersion,
+      "eu.timepit" %%% "refined-cats" % refinedVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
       "io.circe" %%% "circe-refined" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,
