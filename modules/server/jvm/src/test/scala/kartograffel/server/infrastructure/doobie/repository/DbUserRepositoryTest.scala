@@ -14,6 +14,16 @@ class DbUserRepositoryTest extends DbSpecification {
     prg.yolo.value should_=== alice
   }
 
+  "findById" >> {
+    val fred = User(Username("fred"))
+    val prg = for {
+      _ <- DbUserRepository.deleteAll
+      entity <- DbUserRepository.create(fred)
+      user <- DbUserRepository.findById(entity.id)
+    } yield user
+    prg.yolo.map(_.value) should_=== Some(fred)
+  }
+
   "findByName" >> {
     val bob = User(Username("bob"))
     val prg = for {
