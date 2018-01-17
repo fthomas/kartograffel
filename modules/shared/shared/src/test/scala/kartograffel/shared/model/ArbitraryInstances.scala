@@ -9,7 +9,6 @@ import kartograffel.shared.domain.model.Username
 import org.scalacheck.Arbitrary
 import org.scalacheck.ScalacheckShapeless._
 import org.scalacheck.derive.MkArbitrary
-
 import scala.annotation.tailrec
 
 object ArbitraryInstances {

@@ -2,8 +2,9 @@ package kartograffel.server.db
 
 import cats.effect.IO
 import cats.implicits._
+import doobie.{ConnectionIO, Transactor}
+import doobie.implicits._
 import doobie.specs2.analysisspec.IOChecker
-import doobie.util.transactor.Transactor
 import eu.timepit.refined.auto._
 import eu.timepit.refined.types.string.NonEmptyString
 import kartograffel.server.{BuildInfo, Config}
@@ -14,6 +15,10 @@ trait DbSpecification extends Specification with IOChecker {
 
   override def transactor: Transactor[IO] =
     DbSpecification.transactor
+
+  implicit class ConnectionIoOps[A](val self: ConnectionIO[A]) {
+    def yolo: A = self.transact(transactor).unsafeRunSync()
+  }
 }
 
 object DbSpecification {
