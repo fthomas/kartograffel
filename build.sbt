@@ -12,7 +12,7 @@ val fs2Version = "0.10.0-M8"
 val h2Version = "1.4.196"
 val http4sVersion = "0.18.0-M5"
 val logbackVersion = "1.2.3"
-val refinedVersion = "0.8.4"
+val refinedVersion = "0.8.6"
 val scalacheckShapelessVersion = "1.1.6"
 val scalajsDomVersion = "0.9.3"
 val scalajsJqueryVersion = "0.9.2"
@@ -153,7 +153,6 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
   .settings(
     libraryDependencies ++= Seq(
       "eu.timepit" %%% "refined" % refinedVersion,
-      "eu.timepit" %%% "refined-cats" % refinedVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
       "io.circe" %%% "circe-refined" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,

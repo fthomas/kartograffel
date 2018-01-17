@@ -8,7 +8,7 @@ import kartograffel.shared.model.{Entity, Id}
 
 object UserStatements extends DoobieInstances {
   def findById(id: Id[User]): Query0[Entity[User]] =
-    sql"SELECT * FROM user WHERE id = ${id.value}".query
+    sql"SELECT * FROM user WHERE id = $id".query
 
   def findByName(name: Username): Query0[Entity[User]] =
     sql"SELECT * FROM user WHERE name = $name".query

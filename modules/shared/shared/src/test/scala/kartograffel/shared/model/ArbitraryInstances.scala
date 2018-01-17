@@ -1,10 +1,15 @@
 package kartograffel.shared.model
 
+import eu.timepit.refined.api.Refined
+import eu.timepit.refined.collection.NonEmpty
+import eu.timepit.refined.scalacheck.any.arbitraryFromValidate
 import eu.timepit.refined.scalacheck.numeric._
+import eu.timepit.refined.types.string.NonEmptyString
 import kartograffel.shared.domain.model.Username
 import org.scalacheck.Arbitrary
 import org.scalacheck.ScalacheckShapeless._
 import org.scalacheck.derive.MkArbitrary
+
 import scala.annotation.tailrec
 
 object ArbitraryInstances {
@@ -19,6 +24,9 @@ object ArbitraryInstances {
 
   implicit lazy val arbitraryPosition: Arbitrary[Position] =
     MkArbitrary[Position].arbitrary
+
+  implicit lazy val nonEmptyStringArbitrary: Arbitrary[NonEmptyString] =
+    arbitraryFromValidate[Refined, String, NonEmpty]
 
   implicit lazy val usernameArbitrary: Arbitrary[Username] =
     MkArbitrary[Username].arbitrary

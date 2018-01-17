@@ -6,7 +6,9 @@ import kartograffel.shared.model.ArbitraryInstances._
 import kartograffel.shared.model.Id
 
 class UserStatementsTest extends DbSpecification {
-  check(UserStatements.findById(sampleOf[Id[User]]))
+  "findById" >>
+    check(UserStatements.findById(sampleOf[Id[User]]))
 
-  check(UserStatements.findByName(sampleOf[Username]))
+  "findByName" >>
+    check(UserStatements.findByName(sampleOf[Username]))
 }
