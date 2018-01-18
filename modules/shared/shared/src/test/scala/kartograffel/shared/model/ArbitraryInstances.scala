@@ -28,6 +28,12 @@ object ArbitraryInstances {
   implicit lazy val positionArbitrary: Arbitrary[Position] =
     MkArbitrary[Position].arbitrary
 
+  implicit lazy val radiusArbitrary: Arbitrary[Radius] =
+    MkArbitrary[Radius].arbitrary
+
+  implicit lazy val tagArbitrary: Arbitrary[Tag] =
+    MkArbitrary[Tag].arbitrary
+
   implicit lazy val userArbitrary: Arbitrary[User] =
     MkArbitrary[User].arbitrary
 
