@@ -101,6 +101,7 @@ lazy val server = crossProject(JVMPlatform)
     configDirectory := sourceDirectory.in(Universal).value / "conf",
     configFile := configDirectory.value / "application.conf",
     fork.in(run) := true,
+    fork.in(Test) := true,
     javaOptions ++= {
       Seq(
         s"-Dconfig.file=${configFile.value}",
