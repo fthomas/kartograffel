@@ -13,20 +13,20 @@ import org.scalacheck.derive.MkArbitrary
 import scala.annotation.tailrec
 
 object ArbitraryInstances {
-  implicit def arbitraryEntity[T: Arbitrary]: Arbitrary[Entity[T]] =
+  implicit def entityArbitrary[T: Arbitrary]: Arbitrary[Entity[T]] =
     MkArbitrary[Entity[T]].arbitrary
 
-  implicit lazy val arbitraryGraffel: Arbitrary[Graffel] =
+  implicit lazy val graffelArbitrary: Arbitrary[Graffel] =
     MkArbitrary[Graffel].arbitrary
 
-  implicit def arbitraryId[T]: Arbitrary[Id[T]] =
+  implicit def idArbitrary[T]: Arbitrary[Id[T]] =
     MkArbitrary[Id[T]].arbitrary
-
-  implicit lazy val arbitraryPosition: Arbitrary[Position] =
-    MkArbitrary[Position].arbitrary
 
   implicit lazy val nonEmptyStringArbitrary: Arbitrary[NonEmptyString] =
     arbitraryFromValidate[Refined, String, NonEmpty]
+
+  implicit lazy val positionArbitrary: Arbitrary[Position] =
+    MkArbitrary[Position].arbitrary
 
   implicit lazy val userArbitrary: Arbitrary[User] =
     MkArbitrary[User].arbitrary
