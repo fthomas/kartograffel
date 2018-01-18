@@ -7,6 +7,7 @@ import doobie.implicits._
 import doobie.specs2.analysisspec.IOChecker
 import eu.timepit.refined.auto._
 import eu.timepit.refined.types.string.NonEmptyString
+import kartograffel.server.infrastructure.doobie.DoobieMigration
 import kartograffel.server.{BuildInfo, Config}
 import org.specs2.mutable.Specification
 
@@ -36,7 +37,7 @@ object DbSpecification {
   }
 
   lazy val runMigrationOnce: Unit =
-    migrate[IO](dbConfig).void.unsafeRunSync()
+    DoobieMigration.run[IO](dbConfig).void.unsafeRunSync()
 
   val transactor: Transactor[IO] =
     Transactor.fromDriverManager[IO](
