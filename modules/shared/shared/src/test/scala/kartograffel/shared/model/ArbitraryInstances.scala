@@ -1,12 +1,14 @@
 package kartograffel.shared.model
 
+import java.time._
+
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.scalacheck.any.arbitraryFromValidate
 import eu.timepit.refined.scalacheck.numeric._
 import eu.timepit.refined.types.string.NonEmptyString
 import kartograffel.shared.domain.model.{User, Username}
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.ScalacheckShapeless._
 import org.scalacheck.derive.MkArbitrary
 
@@ -21,6 +23,34 @@ object ArbitraryInstances {
 
   implicit def idArbitrary[T]: Arbitrary[Id[T]] =
     MkArbitrary[Id[T]].arbitrary
+
+  implicit lazy val localDateArbitrary: Arbitrary[LocalDate] =
+    Arbitrary {
+      for {
+        year <- Gen.chooseNum(1, 9999)
+        month <- Gen.chooseNum(1, 12)
+        maxDaysInMonth = Month.of(month).length(Year.of(year).isLeap)
+        day <- Gen.chooseNum(1, maxDaysInMonth)
+      } yield LocalDate.of(year, month, day)
+    }
+
+  implicit lazy val localTimeArbitrary: Arbitrary[LocalTime] =
+    Arbitrary {
+      for {
+        hour <- Gen.chooseNum(0, 23)
+        minute <- Gen.chooseNum(0, 59)
+        second <- Gen.chooseNum(0, 59)
+        nanoOfSecond <- Gen.chooseNum(0, 999999999)
+      } yield LocalTime.of(hour, minute, second, nanoOfSecond)
+    }
+
+  implicit lazy val localDateTimeArbitrary: Arbitrary[LocalDateTime] =
+    Arbitrary {
+      for {
+        date <- localDateArbitrary.arbitrary
+        time <- localTimeArbitrary.arbitrary
+      } yield LocalDateTime.of(date, time)
+    }
 
   implicit lazy val nonEmptyStringArbitrary: Arbitrary[NonEmptyString] =
     arbitraryFromValidate[Refined, String, NonEmpty]

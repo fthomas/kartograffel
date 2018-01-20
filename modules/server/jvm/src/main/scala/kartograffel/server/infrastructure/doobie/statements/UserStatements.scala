@@ -8,7 +8,10 @@ import kartograffel.shared.model.{Entity, Id}
 
 object UserStatements extends DoobieInstances {
   def create(user: User): Update0 =
-    sql"INSERT INTO user (name) VALUES (${user.name})".update
+    sql"""
+      INSERT INTO user (name, created_at)
+      VALUES (${user.name}, ${user.createdAt})
+    """.update
 
   def deleteAll: Update0 =
     sql"DELETE FROM user".update

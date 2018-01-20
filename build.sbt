@@ -156,6 +156,7 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
       "eu.timepit" %%% "refined" % refinedVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
       "io.circe" %%% "circe-refined" % circeVersion,
+      "io.circe" %%% "circe-java8" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,
       /// test dependencies
       "com.github.alexarchambault" %%% "scalacheck-shapeless_1.13" % scalacheckShapelessVersion % Test,
@@ -218,7 +219,12 @@ lazy val consoleSettings = Def.settings(
     import eu.timepit.refined.auto._
     import $rootPkg.shared._
     import $rootPkg.shared.model._
+    import $rootPkg.shared.domain.model._
     import ${modulePkg.value}._
+  """,
+  initialCommands in Test += s"""
+    import org.scalacheck.Arbitrary
+    import $rootPkg.shared.model.ArbitraryInstances._
   """
 )
 
