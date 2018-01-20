@@ -291,19 +291,23 @@ modulePkg := rootPkg
 def addCommandsAlias(name: String, cmds: Seq[String]) =
   addCommandAlias(name, cmds.mkString(";", ";", ""))
 
-addCommandsAlias("validate",
-                 Seq(
-                   "clean",
-                   "scalafmtTest",
-                   "coverageOn",
-                   "test",
-                   "coverageReport",
-                   "coverageOff",
-                   "doc",
-                   "package",
-                   "packageSrc",
-                   "debian:packageBin"
-                 ))
+addCommandsAlias(
+  "validate",
+  Seq(
+    "clean",
+    "scalafmtCheck",
+    "scalafmtSbtCheck",
+    "test:scalafmtCheck",
+    "coverageOn",
+    "test",
+    "coverageReport",
+    "coverageOff",
+    "doc",
+    "package",
+    "packageSrc",
+    "debian:packageBin"
+  )
+)
 
 addCommandsAlias("deployHerokuCmds",
                  Seq(
