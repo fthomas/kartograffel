@@ -2,11 +2,11 @@ package kartograffel.server
 
 import cats.effect.IO
 import eu.timepit.refined.auto._
-import fs2.Stream
+import fs2.StreamApp.ExitCode
+import fs2.{Stream, StreamApp}
 import kartograffel.server.db.GraffelRepository
 import kartograffel.server.infrastructure.doobie.DoobieMigration
 import org.http4s.server.blaze.BlazeBuilder
-import org.http4s.util.{ExitCode, StreamApp}
 
 object Server extends StreamApp[IO] {
   override def stream(args: List[String],
