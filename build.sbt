@@ -1,4 +1,5 @@
 import sbtcrossproject.{crossProject, CrossProject}
+import scala.sys.process.Process
 
 /// variables
 
@@ -146,6 +147,12 @@ lazy val server = crossProject(JVMPlatform)
     scalaJSProjects := Seq(clientJS),
     pipelineStages.in(Assets) := Seq(scalaJSPipeline)
   )
+  // HTTPS settings
+  .settings(
+    resourceGenerators in Compile += Def.task {
+      Seq(makeKeystore((resourceManaged in Compile).value))
+    }.taskValue
+  )
 
 lazy val serverJVM = server.jvm
 
@@ -275,7 +282,7 @@ h2Console := {
       cfg.getString("db.password")
     )
     log.info(s"Running ${command.mkString(" ")}")
-    scala.sys.process.Process(command).run()
+    Process(command).run()
   }
 }
 
@@ -315,3 +322,31 @@ addCommandsAlias("deployHerokuCmds",
                    "serverJVM/stage",
                    "serverJVM/deployHeroku"
                  ))
+
+///
+
+def makeKeystore(path: File): File = {
+  val keystore = path / "keystore.p12"
+  path.mkdirs()
+  if (!keystore.exists()) {
+    Process(
+      Seq(
+        "keytool",
+        "-genkey",
+        "-noprompt",
+        "-alias",
+        "selfsigned",
+        "-dname",
+        s"CN=localhost, OU=$projectName, O=$projectName, L=, S=, C=",
+        "-keypass",
+        "password",
+        "-keystore",
+        keystore.absolutePath,
+        "-storepass",
+        "password",
+        "-storetype",
+        "pkcs12"
+      )).run()
+  }
+  keystore
+}
