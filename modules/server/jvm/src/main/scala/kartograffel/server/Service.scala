@@ -2,17 +2,18 @@ package kartograffel.server
 
 import cats.data.{NonEmptyList, Validated, ValidatedNel}
 import cats.effect.IO
+import eu.timepit.refined._
+import eu.timepit.refined.api.{RefType, Validate}
 import io.circe.syntax._
 import kartograffel.server.db.GraffelRepository
+import kartograffel.server.infrastructure.http4s.NonNegLongVar
 import kartograffel.shared.domain.model.{Latitude, Longitude}
 import kartograffel.shared.model.Radius.{Length, LengthRange}
 import kartograffel.shared.model._
+import org.http4s._
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.staticcontent.{webjarService, WebjarService}
-import org.http4s._
-import eu.timepit.refined._
-import eu.timepit.refined.api.{RefType, Refined, Validate}
 
 object Service {
   val dsl = Http4sDsl[IO]
@@ -63,9 +64,8 @@ object Service {
 
   def api(gr: GraffelRepository[IO]): HttpService[IO] =
     HttpService {
-      case GET -> Root / "graffel" / LongVar(id) =>
-        // TODO use QueryParamDecoder
-        gr.query(Id(Refined.unsafeApply(id))).flatMap {
+      case GET -> Root / "graffel" / NonNegLongVar(id) =>
+        gr.query(Id(id)).flatMap {
           case Some(entity) => Ok(entity.asJson)
           case None         => NotFound()
         }
