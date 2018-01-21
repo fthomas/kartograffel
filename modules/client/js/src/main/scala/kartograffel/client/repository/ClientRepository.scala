@@ -5,10 +5,9 @@ import cats.syntax.all._
 import io.circe.parser._
 import io.circe.generic.auto._
 import io.circe.syntax._
-import eu.timepit.refined.api.RefType
 import io.circe.parser.decode
+import kartograffel.shared.domain.model.{Latitude, Longitude}
 import kartograffel.shared.model.{Entity, Graffel, Position, Tag}
-import kartograffel.shared.model.Position.{Latitude, Longitude}
 import org.scalajs.dom
 import org.scalajs.dom.ext.Ajax
 import org.scalajs.dom.{window, PositionError, PositionOptions}
@@ -45,14 +44,10 @@ object ClientRepository {
       val lat = in.coords.latitude
       val lon = in.coords.longitude
       val refLat: ValidatedNel[String, Latitude] = Validated
-        .fromEither(
-          RefType.applyRef[Latitude](lat)
-        )
+        .fromEither(Latitude.from(lat))
         .toValidatedNel
       val refLon: ValidatedNel[String, Longitude] = Validated
-        .fromEither(
-          RefType.applyRef[Longitude](lon)
-        )
+        .fromEither(Longitude.from(lon))
         .toValidatedNel
       (refLat, refLon).mapN(Position(_, _))
     }

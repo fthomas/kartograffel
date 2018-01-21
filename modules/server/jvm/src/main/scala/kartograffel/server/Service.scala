@@ -4,7 +4,7 @@ import cats.data.{NonEmptyList, Validated, ValidatedNel}
 import cats.effect.IO
 import io.circe.syntax._
 import kartograffel.server.db.GraffelRepository
-import kartograffel.shared.model.Position.{Latitude, Longitude}
+import kartograffel.shared.domain.model.{Latitude, Longitude}
 import kartograffel.shared.model.Radius.{Length, LengthRange}
 import kartograffel.shared.model._
 import org.http4s.circe._
