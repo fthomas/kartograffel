@@ -6,11 +6,7 @@ import kartograffel.server.infrastructure.doobie.repository.DbGraffelRepository
 import kartograffel.shared.model._
 
 trait GraffelRepository[F[_]] extends EntityRepository[F, Graffel] { self =>
-  def findById(id: Id[Graffel]): F[Option[Entity[Graffel]]]
-
   def findGraffelByPosition(position: Position): F[Option[Entity[Graffel]]]
-
-  def create(graffel: Graffel): F[Entity[Graffel]]
 
   def insert(tag: Tag): F[Entity[Tag]]
 

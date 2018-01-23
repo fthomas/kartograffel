@@ -6,7 +6,7 @@ import kartograffel.shared.domain.model.{User, Username}
 import kartograffel.shared.model.{Entity, Id}
 
 object UserStatements extends EntityStatements[User] {
-  def create(user: User): Update0 =
+  override def create(user: User): Update0 =
     sql"""
       INSERT INTO user (name, created_at)
       VALUES (${user.name}, ${user.createdAt})
@@ -15,7 +15,7 @@ object UserStatements extends EntityStatements[User] {
   def deleteAll: Update0 =
     sql"DELETE FROM user".update
 
-  def findById(id: Id[User]): Query0[Entity[User]] =
+  override def findById(id: Id[User]): Query0[Entity[User]] =
     sql"SELECT * FROM user WHERE id = $id".query
 
   def findByName(name: Username): Query0[Entity[User]] =
