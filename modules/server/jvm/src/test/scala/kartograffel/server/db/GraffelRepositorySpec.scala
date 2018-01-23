@@ -1,5 +1,6 @@
 package kartograffel.server.db
 
+import kartograffel.server.domain.repository.GraffelRepository
 import kartograffel.shared.model.ArbitraryInstances._
 import kartograffel.shared.model.Graffel
 
@@ -9,8 +10,8 @@ class GraffelRepositorySpec extends DbSpecification {
   "GraffelRepository" >> {
     "insert and query" >> {
       val graffel = sampleOf[Graffel]
-      val inserted = gr.insert(graffel).unsafeRunSync()
-      val queried = gr.query(inserted.id).unsafeRunSync()
+      val inserted = gr.create(graffel).unsafeRunSync()
+      val queried = gr.findById(inserted.id).unsafeRunSync()
       Option(inserted) must_=== queried
     }
   }

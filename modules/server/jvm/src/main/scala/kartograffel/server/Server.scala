@@ -4,7 +4,7 @@ import cats.effect.IO
 import eu.timepit.refined.auto._
 import fs2.StreamApp.ExitCode
 import fs2.{Stream, StreamApp}
-import kartograffel.server.db.GraffelRepository
+import kartograffel.server.domain.repository.GraffelRepository
 import kartograffel.server.infrastructure.doobie.DoobieMigration
 import org.http4s.server.blaze.BlazeBuilder
 

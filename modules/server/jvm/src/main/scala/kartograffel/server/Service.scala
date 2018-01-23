@@ -5,7 +5,7 @@ import cats.effect.IO
 import eu.timepit.refined._
 import eu.timepit.refined.api.{RefType, Validate}
 import io.circe.syntax._
-import kartograffel.server.db.GraffelRepository
+import kartograffel.server.domain.repository.GraffelRepository
 import kartograffel.server.infrastructure.http4s.NonNegLongVar
 import kartograffel.shared.domain.model.{Latitude, Longitude}
 import kartograffel.shared.model.Radius.{Length, LengthRange}
@@ -65,7 +65,7 @@ object Service {
   def api(gr: GraffelRepository[IO]): HttpService[IO] =
     HttpService {
       case GET -> Root / "graffel" / NonNegLongVar(id) =>
-        gr.query(Id(id)).flatMap {
+        gr.findById(Id(id)).flatMap {
           case Some(entity) => Ok(entity.asJson)
           case None         => NotFound()
         }

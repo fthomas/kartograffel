@@ -2,11 +2,10 @@ package kartograffel.server.infrastructure.doobie.statements
 
 import doobie._
 import doobie.implicits._
-import kartograffel.server.infrastructure.doobie.DoobieInstances
 import kartograffel.shared.domain.model.{User, Username}
 import kartograffel.shared.model.{Entity, Id}
 
-object UserStatements extends DoobieInstances {
+object UserStatements extends EntityStatements[User] {
   def create(user: User): Update0 =
     sql"""
       INSERT INTO user (name, created_at)
