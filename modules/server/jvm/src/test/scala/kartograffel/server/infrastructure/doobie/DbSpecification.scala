@@ -1,13 +1,12 @@
-package kartograffel.server.db
+package kartograffel.server.infrastructure.doobie
 
 import cats.effect.IO
 import cats.implicits._
-import doobie.{ConnectionIO, Transactor}
 import doobie.implicits._
 import doobie.specs2.analysisspec.IOChecker
+import doobie.{ConnectionIO, Transactor}
 import eu.timepit.refined.auto._
 import eu.timepit.refined.types.string.NonEmptyString
-import kartograffel.server.infrastructure.doobie.DoobieMigration
 import kartograffel.server.{BuildInfo, Config}
 import org.specs2.mutable.Specification
 

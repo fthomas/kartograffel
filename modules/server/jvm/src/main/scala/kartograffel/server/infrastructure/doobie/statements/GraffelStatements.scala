@@ -2,16 +2,10 @@ package kartograffel.server.infrastructure.doobie.statements
 
 import doobie._
 import doobie.implicits._
-import kartograffel.server.infrastructure.doobie.DoobieInstances
 import kartograffel.shared.model._
 
-object GraffelStatements extends DoobieInstances {
-  def query(id: Id[Graffel]): Query0[Entity[Graffel]] =
-    sql"""
-      SELECT id, latitude, longitude FROM graffel WHERE id = ${id.value}
-    """.query
-
-  def insert(graffel: Graffel): Update0 =
+object GraffelStatements extends EntityStatements[Graffel] {
+  override def create(graffel: Graffel): Update0 =
     sql"""
       INSERT INTO graffel (latitude, longitude)
       VALUES (
@@ -19,6 +13,14 @@ object GraffelStatements extends DoobieInstances {
         ${graffel.position.longitude}
       )
     """.update
+
+  override def findById(id: Id[Graffel]): Query0[Entity[Graffel]] =
+    sql"""
+      SELECT id, latitude, longitude FROM graffel WHERE id = $id
+    """.query
+
+  override def deleteAll: Update0 =
+    sql"DELETE FROM graffel".update
 
   def insert(tag: Tag): Update0 =
     sql"""

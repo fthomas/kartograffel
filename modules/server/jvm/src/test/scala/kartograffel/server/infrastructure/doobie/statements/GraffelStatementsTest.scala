@@ -1,6 +1,6 @@
 package kartograffel.server.infrastructure.doobie.statements
 
-import kartograffel.server.db.DbSpecification
+import kartograffel.server.infrastructure.doobie.DbSpecification
 import kartograffel.shared.model.ArbitraryInstances._
 import kartograffel.shared.model._
 
@@ -18,12 +18,12 @@ class GraffelStatementsTest extends DbSpecification {
                                            sampleOf[Radius]))
    */
 
-  "insert(Graffel)" >>
-    check(GraffelStatements.insert(sampleOf[Graffel]))
+  "create" >>
+    check(GraffelStatements.create(sampleOf[Graffel]))
 
-  "insert(Tag)" >>
+  "insert" >>
     check(GraffelStatements.insert(sampleOf[Tag]))
 
-  "query" >>
-    check(GraffelStatements.query(sampleOf[Id[Graffel]]))
+  "findById" >>
+    check(GraffelStatements.findById(sampleOf[Id[Graffel]]))
 }

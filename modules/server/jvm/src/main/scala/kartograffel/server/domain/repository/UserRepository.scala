@@ -1,14 +1,8 @@
 package kartograffel.server.domain.repository
 
 import kartograffel.shared.domain.model.{User, Username}
-import kartograffel.shared.model.{Entity, Id}
+import kartograffel.shared.model.Entity
 
-trait UserRepository[F[_]] {
-  def create(user: User): F[Entity[User]]
-
-  def deleteAll: F[Unit]
-
-  def findById(id: Id[User]): F[Option[Entity[User]]]
-
+trait UserRepository[F[_]] extends EntityRepository[F, User] {
   def findByName(name: Username): F[Option[Entity[User]]]
 }
