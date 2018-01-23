@@ -39,10 +39,5 @@ object DbSpecification {
     DoobieMigration.run[IO](dbConfig).void.unsafeRunSync()
 
   val transactor: Transactor[IO] =
-    Transactor.fromDriverManager[IO](
-      driver = dbConfig.driver,
-      url = dbConfig.url,
-      user = dbConfig.user,
-      pass = dbConfig.password
-    )
+    DoobieUtils.transactor[IO](dbConfig).unsafeRunSync()
 }

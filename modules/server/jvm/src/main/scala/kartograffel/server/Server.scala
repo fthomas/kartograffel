@@ -5,7 +5,7 @@ import eu.timepit.refined.auto._
 import fs2.StreamApp.ExitCode
 import fs2.{Stream, StreamApp}
 import kartograffel.server.domain.repository.GraffelRepository
-import kartograffel.server.infrastructure.doobie.DoobieMigration
+import kartograffel.server.infrastructure.doobie.{DoobieMigration, DoobieUtils}
 import org.http4s.server.blaze.BlazeBuilder
 
 object Server extends StreamApp[IO] {
@@ -17,7 +17,7 @@ object Server extends StreamApp[IO] {
     for {
       config <- Config.load[IO]
       _ <- DoobieMigration.run[IO](config.db)
-      xa <- db.transactor[IO](config.db)
+      xa <- DoobieUtils.transactor[IO](config.db)
       gr = GraffelRepository.transactional(xa)
     } yield blazeBuilder(config.http, gr)
 
