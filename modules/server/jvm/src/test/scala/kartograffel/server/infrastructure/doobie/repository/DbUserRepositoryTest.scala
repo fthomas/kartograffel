@@ -1,28 +1,16 @@
 package kartograffel.server.infrastructure.doobie.repository
 
-import kartograffel.server.db.DbSpecification
 import kartograffel.shared.domain.model.User
-import kartograffel.shared.model.ArbitraryInstances._
+import kartograffel.shared.model.ArbitraryInstances
+import kartograffel.shared.model.ArbitraryInstances.sampleOf
+import org.scalacheck.Arbitrary
 
-class DbUserRepositoryTest extends DbSpecification {
-  "create" >> {
-    val user = sampleOf[User]
-    val prg = for {
-      _ <- DbUserRepository.deleteAll
-      user1 <- DbUserRepository.create(user)
-    } yield user1
-    prg.yolo.value should_=== user
-  }
+class DbUserRepositoryTest extends DbEntityRepositoryTest[User] {
+  override implicit def arbitraryT: Arbitrary[User] =
+    ArbitraryInstances.userArbitrary
 
-  "findById" >> {
-    val user = sampleOf[User]
-    val prg = for {
-      _ <- DbUserRepository.deleteAll
-      entity <- DbUserRepository.create(user)
-      user1 <- DbUserRepository.findById(entity.id)
-    } yield user1
-    prg.yolo.map(_.value) should_=== Some(user)
-  }
+  override def repository: DbEntityRepository[User] =
+    DbUserRepository
 
   "findByName" >> {
     val user = sampleOf[User]

@@ -1,6 +1,6 @@
 package kartograffel.server.infrastructure.doobie.statements
 
-import kartograffel.server.db.DbSpecification
+import kartograffel.server.infrastructure.doobie.DbSpecification
 import kartograffel.shared.model.ArbitraryInstances._
 import kartograffel.shared.model._
 
