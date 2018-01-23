@@ -13,9 +13,6 @@ object DbUserRepository
   override def statements: UserStatements.type =
     UserStatements
 
-  override def deleteAll: ConnectionIO[Unit] =
-    UserStatements.deleteAll.run.map(_ => ())
-
   override def findByName(name: Username): ConnectionIO[Option[Entity[User]]] =
     UserStatements.findByName(name).option
 }

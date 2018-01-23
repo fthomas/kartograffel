@@ -24,6 +24,9 @@ trait GraffelRepository[F[_]] extends EntityRepository[F, Graffel] { self =>
       override def create(graffel: Graffel): G[Entity[Graffel]] =
         t(self.create(graffel))
 
+      override def deleteAll: G[Unit] =
+        t(self.deleteAll)
+
       override def insert(tag: Tag): G[Entity[Tag]] =
         t(self.insert(tag))
 

@@ -1,6 +1,8 @@
 package kartograffel.server.infrastructure.doobie.repository
 
-import doobie.free.connection.ConnectionIO
+import cats.implicits._
+import doobie._
+import doobie.implicits._
 import kartograffel.server.domain.repository.EntityRepository
 import kartograffel.server.infrastructure.doobie.DoobieInstances
 import kartograffel.server.infrastructure.doobie.statements.EntityStatements
@@ -17,6 +19,9 @@ trait DbEntityRepository[T]
       .create(value)
       .withUniqueGeneratedKeys[Id[T]]("id")
       .map(id => Entity(id, value))
+
+  override def deleteAll: ConnectionIO[Unit] =
+    statements.deleteAll.run.void
 
   override def findById(id: Id[T]): ConnectionIO[Option[Entity[T]]] =
     statements.findById(id).option

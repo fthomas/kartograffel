@@ -19,6 +19,9 @@ object GraffelStatements extends EntityStatements[Graffel] {
       SELECT id, latitude, longitude FROM graffel WHERE id = $id
     """.query
 
+  override def deleteAll: Update0 =
+    sql"DELETE FROM graffel".update
+
   def insert(tag: Tag): Update0 =
     sql"""
          INSERT INTO tag (name, graffel_id)
