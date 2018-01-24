@@ -1,6 +1,7 @@
 package kartograffel.server.infrastructure.http4s
 
 import eu.timepit.refined.types.numeric.NonNegLong
+import kartograffel.server.infrastructure.http4s.refined.NonNegLongVar
 import org.specs2.matcher.Matchers
 import org.specs2.mutable.Specification
 
