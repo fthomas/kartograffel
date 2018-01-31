@@ -7,7 +7,7 @@ import eu.timepit.refined.auto._
 
 object DoobieUtils {
   def transactor[F[_]: Async](dbConfig: Config.Db): F[HikariTransactor[F]] =
-    HikariTransactor[F](
+    HikariTransactor.newHikariTransactor[F](
       driverClassName = dbConfig.driver,
       url = dbConfig.url,
       user = dbConfig.user,

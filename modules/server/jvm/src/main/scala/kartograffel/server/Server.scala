@@ -7,6 +7,7 @@ import fs2.{Stream, StreamApp}
 import kartograffel.server.domain.repository.GraffelRepository
 import kartograffel.server.infrastructure.doobie.{DoobieMigration, DoobieUtils}
 import org.http4s.server.blaze.BlazeBuilder
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object Server extends StreamApp[IO] {
   override def stream(args: List[String],
