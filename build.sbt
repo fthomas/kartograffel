@@ -315,6 +315,3 @@ addCommandsAlias("deployHerokuCmds",
                    "serverJVM/stage",
                    "serverJVM/deployHeroku"
                  ))
-
-// run dependencyUpdates on start-up
-onLoad in Global := { s => "dependencyUpdates" :: s }
