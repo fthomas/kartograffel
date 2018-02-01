@@ -12,7 +12,7 @@ object UserStatements extends EntityStatements[User] {
       VALUES (${user.name}, ${user.createdAt})
     """.update
 
-  def deleteAll: Update0 =
+  override def deleteAll: Update0 =
     sql"DELETE FROM user".update
 
   override def findById(id: Id[User]): Query0[Entity[User]] =
