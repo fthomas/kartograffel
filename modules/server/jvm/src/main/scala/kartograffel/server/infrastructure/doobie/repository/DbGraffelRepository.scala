@@ -1,6 +1,6 @@
 package kartograffel.server.infrastructure.doobie.repository
 
-import cats.implicits._
+import cats.data.OptionT
 import doobie._
 import doobie.implicits._
 import kartograffel.server.domain.repository.GraffelRepository
@@ -30,18 +30,9 @@ object DbGraffelRepository
     GraffelStatements.findGraffelByPosition(position).option
 
   override def findByPositionOrCreate(
-      position: Position): ConnectionIO[Entity[Graffel]] = {
-    val maybeGraffel: ConnectionIO[Option[Entity[Graffel]]] =
-      findGraffelByPosition(position)
-
-    val optF: ConnectionIO[Option[ConnectionIO[Entity[Graffel]]]] =
-      maybeGraffel.map(opt => opt.map(_.pure[ConnectionIO]))
-
-    val result: ConnectionIO[Entity[Graffel]] =
-      optF.flatMap(_.getOrElse(create(Graffel(position))))
-
-    result
-  }
+      position: Position): ConnectionIO[Entity[Graffel]] =
+    OptionT(findGraffelByPosition(position))
+      .getOrElseF(create(Graffel(position)))
 
   override def findTagsByGraffel(
       id: Id[Graffel]): ConnectionIO[List[Entity[Tag]]] =
