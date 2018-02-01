@@ -6,9 +6,7 @@ import kartograffel.server.infrastructure.doobie.statements.UserStatements
 import kartograffel.shared.domain.model.{User, Username}
 import kartograffel.shared.model.Entity
 
-object DbUserRepository
-    extends UserRepository[ConnectionIO]
-    with DbEntityRepository[User] {
+object DbUserRepository extends UserRepository[ConnectionIO] with DbEntityRepository[User] {
 
   override def statements: UserStatements.type =
     UserStatements

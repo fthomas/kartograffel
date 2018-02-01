@@ -10,8 +10,7 @@ import org.http4s.server.blaze.BlazeBuilder
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object Server extends StreamApp[IO] {
-  override def stream(args: List[String],
-                      requestShutdown: IO[Unit]): Stream[IO, ExitCode] =
+  override def stream(args: List[String], requestShutdown: IO[Unit]): Stream[IO, ExitCode] =
     Stream.eval(prepare).flatMap(_.serve)
 
   def prepare: IO[BlazeBuilder[IO]] =
@@ -22,8 +21,7 @@ object Server extends StreamApp[IO] {
       gr = GraffelRepository.transactional(xa)
     } yield blazeBuilder(config.http, gr)
 
-  def blazeBuilder(httpConfig: Config.Http,
-                   gr: GraffelRepository[IO]): BlazeBuilder[IO] =
+  def blazeBuilder(httpConfig: Config.Http, gr: GraffelRepository[IO]): BlazeBuilder[IO] =
     BlazeBuilder[IO]
       .bindHttp(httpConfig.port, httpConfig.host)
       .mountService(Service.root)

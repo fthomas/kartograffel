@@ -8,9 +8,7 @@ import kartograffel.server.infrastructure.doobie.DoobieInstances
 import kartograffel.server.infrastructure.doobie.statements.EntityStatements
 import kartograffel.shared.model.{Entity, Id}
 
-trait DbEntityRepository[T]
-    extends EntityRepository[ConnectionIO, T]
-    with DoobieInstances {
+trait DbEntityRepository[T] extends EntityRepository[ConnectionIO, T] with DoobieInstances {
 
   def statements: EntityStatements[T]
 

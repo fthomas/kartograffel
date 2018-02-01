@@ -69,8 +69,7 @@ object TagComponent {
       }
 
       def onChange(e: ReactEventFromInput): Callback =
-        e.extract(_.target.value)(value =>
-          scope.modState(_.copy(tagInput = value)))
+        e.extract(_.target.value)(value => scope.modState(_.copy(tagInput = value)))
 
       def tagSubmitComponentEnabled =
         !state.submittingTag &&
@@ -93,27 +92,22 @@ object TagComponent {
       .map(entity => ClientRepository.future.findTags(entity.value.position))
       .getOrElse(Future.successful(Nil))
 
-  def onComponentDidMount(
-      cdm: ComponentDidMount[Unit, State, Backend]): Callback = {
+  def onComponentDidMount(cdm: ComponentDidMount[Unit, State, Backend]): Callback = {
     def getGraffel(): Future[Entity[Graffel]] =
       for {
         position <- ClientRepository.future.findCurrentPosition()
-        graffel <- ClientRepository.future.findOrCreateGraffel(
-          Graffel(position))
+        graffel <- ClientRepository.future.findOrCreateGraffel(Graffel(position))
       } yield graffel
 
     def getGraffelWithTags(): Future[(Entity[Graffel], List[Tag])] =
-      getGraffel().flatMap(entity =>
-        loadTagsByGraffel(Some(entity)).map(tags => (entity, tags)))
+      getGraffel().flatMap(entity => loadTagsByGraffel(Some(entity)).map(tags => (entity, tags)))
 
     CallbackTo.future(
       getGraffelWithTags()
         .map {
           case (graffelEntity, tags) =>
-            println(
-              s"componentDidMount: currentGraffel=$graffelEntity, tags=$tags")
-            cdm.modState(
-              _.copy(currentGraffel = Some(graffelEntity), tags = tags))
+            println(s"componentDidMount: currentGraffel=$graffelEntity, tags=$tags")
+            cdm.modState(_.copy(currentGraffel = Some(graffelEntity), tags = tags))
         }
         .recover {
           case pe: PositionException =>

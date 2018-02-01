@@ -25,7 +25,6 @@ object ServiceSpec extends Specification with Http4sMatchers {
   }
    */
 
-  def unsafeGetResponse(service: HttpService[IO],
-                        request: Request[IO]): Response[IO] =
+  def unsafeGetResponse(service: HttpService[IO], request: Request[IO]): Response[IO] =
     service.run(request).cata(???, identity).unsafeRunSync()
 }

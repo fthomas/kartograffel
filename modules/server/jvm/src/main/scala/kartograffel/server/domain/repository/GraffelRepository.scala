@@ -30,8 +30,7 @@ trait GraffelRepository[F[_]] extends EntityRepository[F, Graffel] { self =>
       override def insert(tag: Tag): G[Entity[Tag]] =
         t(self.insert(tag))
 
-      override def findTagsByPosition(pos: Position,
-                                      radius: Radius): G[List[Entity[Tag]]] =
+      override def findTagsByPosition(pos: Position, radius: Radius): G[List[Entity[Tag]]] =
         t(self.findTagsByPosition(pos, radius))
 
       override def findGraffelByPosition(position: Position) =

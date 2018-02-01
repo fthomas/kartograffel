@@ -230,8 +230,7 @@ lazy val consoleSettings = Def.settings(
 
 lazy val metadataSettings = Def.settings(
   name := projectName,
-  licenses := Seq(
-    "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
+  licenses := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
   startYear := Some(2017)
 )
 

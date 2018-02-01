@@ -39,8 +39,7 @@ object ClientRepository {
         .map(_.toTry.get)
     }
 
-    private def convertPosition(
-        in: dom.Position): ValidatedNel[String, Position] = {
+    private def convertPosition(in: dom.Position): ValidatedNel[String, Position] = {
       val lat = in.coords.latitude
       val lon = in.coords.longitude
       val refLat: ValidatedNel[String, Latitude] = Validated
@@ -52,11 +51,9 @@ object ClientRepository {
       (refLat, refLon).mapN(Position(_, _))
     }
 
-    private def validationToException(
-        validated: ValidatedNel[String, Position]): Position =
+    private def validationToException(validated: ValidatedNel[String, Position]): Position =
       validated.toEither.left
-        .map(msgNel =>
-          new RuntimeException(msgNel.foldLeft("")((a, b) => a + "\n" + b)))
+        .map(msgNel => new RuntimeException(msgNel.foldLeft("")((a, b) => a + "\n" + b)))
         .toTry
         .get
 
@@ -67,14 +64,11 @@ object ClientRepository {
       val promise: Promise[dom.Position] = Promise()
       window.navigator.geolocation.getCurrentPosition(
         { pos: dom.Position =>
-          window.console.info(
-            s"found position ${pos.coords.latitude}, ${pos.coords.longitude}")
+          window.console.info(s"found position ${pos.coords.latitude}, ${pos.coords.longitude}")
           promise.success(pos)
         }, { err: PositionError =>
-          window.console.warn(
-            s"position error: code = ${err.code}, msg = ${err.message}")
-          promise.failure(
-            kartograffel.shared.model.PositionException(err.message))
+          window.console.warn(s"position error: code = ${err.code}, msg = ${err.message}")
+          promise.failure(kartograffel.shared.model.PositionException(err.message))
         }
       )
       promise.future
@@ -97,8 +91,7 @@ object ClientRepository {
         .map(_.toTry.get)
     }
 
-    override def findOrCreateGraffel(
-        graffel: Graffel): Future[Entity[Graffel]] = {
+    override def findOrCreateGraffel(graffel: Graffel): Future[Entity[Graffel]] = {
       val url = "/api/graffel"
       val payload = graffel.asJson.spaces2
       Ajax

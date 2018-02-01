@@ -20,21 +20,15 @@ object DbGraffelRepository
       .withUniqueGeneratedKeys[Id[Tag]]("id")
       .map(Entity(_, tag))
 
-  override def findTagsByPosition(
-      pos: Position,
-      radius: Radius): ConnectionIO[List[Entity[Tag]]] =
+  override def findTagsByPosition(pos: Position, radius: Radius): ConnectionIO[List[Entity[Tag]]] =
     GraffelStatements.findTagsByPosition(pos, radius).list
 
-  override def findGraffelByPosition(
-      position: Position): ConnectionIO[Option[Entity[Graffel]]] =
+  override def findGraffelByPosition(position: Position): ConnectionIO[Option[Entity[Graffel]]] =
     GraffelStatements.findGraffelByPosition(position).option
 
-  override def findByPositionOrCreate(
-      position: Position): ConnectionIO[Entity[Graffel]] =
-    OptionT(findGraffelByPosition(position))
-      .getOrElseF(create(Graffel(position)))
+  override def findByPositionOrCreate(position: Position): ConnectionIO[Entity[Graffel]] =
+    OptionT(findGraffelByPosition(position)).getOrElseF(create(Graffel(position)))
 
-  override def findTagsByGraffel(
-      id: Id[Graffel]): ConnectionIO[List[Entity[Tag]]] =
+  override def findTagsByGraffel(id: Id[Graffel]): ConnectionIO[List[Entity[Tag]]] =
     GraffelStatements.findTagsByGraffel(id).list
 }

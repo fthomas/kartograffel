@@ -24,8 +24,7 @@ trait DbSpecification extends Specification with IOChecker {
 object DbSpecification {
   val dbConfig: Config.Db = {
     val path = s"${BuildInfo.crossTarget.toString}/h2/kartograffel"
-    val url = NonEmptyString.unsafeFrom(
-      s"jdbc:h2:$path;MODE=PostgreSQL;AUTO_SERVER=TRUE")
+    val url = NonEmptyString.unsafeFrom(s"jdbc:h2:$path;MODE=PostgreSQL;AUTO_SERVER=TRUE")
 
     Config.Db(
       driver = "org.h2.Driver",

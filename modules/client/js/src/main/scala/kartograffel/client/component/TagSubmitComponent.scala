@@ -8,10 +8,7 @@ object TagSubmitComponent {
   type OnChange = (ReactEventFromInput) => Callback
   type OnSubmit = (ReactEventFromInput) => Callback
 
-  case class Props(onChange: OnChange,
-                   onSubmit: OnSubmit,
-                   inputText: String,
-                   enabled: Boolean)
+  case class Props(onChange: OnChange, onSubmit: OnSubmit, inputText: String, enabled: Boolean)
 
   val component = ScalaComponent
     .builder[Props]("TagSubmitComponent")
