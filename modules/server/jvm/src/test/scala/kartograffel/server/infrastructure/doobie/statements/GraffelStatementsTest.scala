@@ -1,10 +1,11 @@
 package kartograffel.server.infrastructure.doobie.statements
 
-import kartograffel.server.infrastructure.doobie.DbSpecification
 import kartograffel.shared.model.ArbitraryInstances._
 import kartograffel.shared.model._
 
-class GraffelStatementsTest extends DbSpecification {
+class GraffelStatementsTest
+    extends EntityStatementsTest(GraffelStatements, sampleOf[Graffel], sampleOf[Id[Graffel]]) {
+
   "findGraffelByPosition" >>
     check(GraffelStatements.findGraffelByPosition(sampleOf[Position]))
 
@@ -18,12 +19,6 @@ class GraffelStatementsTest extends DbSpecification {
                                            sampleOf[Radius]))
    */
 
-  "create" >>
-    check(GraffelStatements.create(sampleOf[Graffel]))
-
   "insert" >>
     check(GraffelStatements.insert(sampleOf[Tag]))
-
-  "findById" >>
-    check(GraffelStatements.findById(sampleOf[Id[Graffel]]))
 }
