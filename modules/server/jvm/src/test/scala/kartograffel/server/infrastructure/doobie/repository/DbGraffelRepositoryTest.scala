@@ -1,12 +1,5 @@
 package kartograffel.server.infrastructure.doobie.repository
 
-import kartograffel.shared.model.{ArbitraryInstances, Graffel}
-import org.scalacheck.Arbitrary
+import kartograffel.shared.model.ArbitraryInstances._
 
-class DbGraffelRepositoryTest extends DbEntityRepositoryTest[Graffel] {
-  override implicit def arbitraryT: Arbitrary[Graffel] =
-    ArbitraryInstances.graffelArbitrary
-
-  override def repository: DbEntityRepository[Graffel] =
-    DbGraffelRepository
-}
+class DbGraffelRepositoryTest extends DbEntityRepositoryTest(DbGraffelRepository)

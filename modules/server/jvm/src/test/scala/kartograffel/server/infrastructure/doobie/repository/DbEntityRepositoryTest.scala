@@ -4,10 +4,8 @@ import kartograffel.server.infrastructure.doobie.DbSpecification
 import kartograffel.shared.model.ArbitraryInstances.sampleOf
 import org.scalacheck.Arbitrary
 
-trait DbEntityRepositoryTest[T] extends DbSpecification {
-  implicit def arbitraryT: Arbitrary[T]
-
-  def repository: DbEntityRepository[T]
+abstract class DbEntityRepositoryTest[T: Arbitrary](repository: DbEntityRepository[T])
+    extends DbSpecification {
 
   "create" >> {
     val value = sampleOf[T]
