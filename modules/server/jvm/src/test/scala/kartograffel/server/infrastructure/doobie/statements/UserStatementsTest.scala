@@ -1,12 +1,9 @@
 package kartograffel.server.infrastructure.doobie.statements
 
-import kartograffel.shared.domain.model.{User, Username}
+import kartograffel.shared.domain.model.Username
 import kartograffel.shared.model.ArbitraryInstances._
-import kartograffel.shared.model.Id
 
-class UserStatementsTest
-    extends EntityStatementsTest(UserStatements, sampleOf[User], sampleOf[Id[User]]) {
-
+class UserStatementsTest extends EntityStatementsTest(UserStatements) {
   "findByName" >>
     check(UserStatements.findByName(sampleOf[Username]))
 }

@@ -3,9 +3,7 @@ package kartograffel.server.infrastructure.doobie.statements
 import kartograffel.shared.model.ArbitraryInstances._
 import kartograffel.shared.model._
 
-class GraffelStatementsTest
-    extends EntityStatementsTest(GraffelStatements, sampleOf[Graffel], sampleOf[Id[Graffel]]) {
-
+class GraffelStatementsTest extends EntityStatementsTest(GraffelStatements) {
   "findGraffelByPosition" >>
     check(GraffelStatements.findGraffelByPosition(sampleOf[Position]))
 
