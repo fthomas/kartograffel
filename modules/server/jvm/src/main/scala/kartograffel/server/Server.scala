@@ -4,7 +4,7 @@ import cats.effect.IO
 import eu.timepit.refined.auto._
 import fs2.StreamApp.ExitCode
 import fs2.{Stream, StreamApp}
-import kartograffel.server.application.Context
+import kartograffel.server.application.{Config, Context}
 import kartograffel.server.domain.repository.GraffelRepository
 import org.http4s.server.blaze.BlazeBuilder
 import scala.concurrent.ExecutionContext.Implicits.global

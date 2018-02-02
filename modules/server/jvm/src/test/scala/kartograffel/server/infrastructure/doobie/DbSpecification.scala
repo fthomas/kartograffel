@@ -7,7 +7,8 @@ import doobie.specs2.analysisspec.IOChecker
 import doobie.{ConnectionIO, Transactor}
 import eu.timepit.refined.auto._
 import eu.timepit.refined.types.string.NonEmptyString
-import kartograffel.server.{BuildInfo, Config}
+import kartograffel.server.BuildInfo
+import kartograffel.server.application.Config
 import org.specs2.mutable.Specification
 
 trait DbSpecification extends Specification with IOChecker {

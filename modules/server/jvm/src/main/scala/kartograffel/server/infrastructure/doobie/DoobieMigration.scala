@@ -6,7 +6,7 @@ import cats.effect.{IO, Sync}
 import doobie._
 import doobie.implicits._
 import eu.timepit.refined.auto._
-import kartograffel.server.Config
+import kartograffel.server.application.Config
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.migration.jdbc.JdbcMigration
 

@@ -2,6 +2,7 @@ package kartograffel.server
 
 import cats.effect.IO
 import eu.timepit.refined.auto._
+import kartograffel.server.application.Config
 import org.specs2.mutable.Specification
 
 class ServerSpec extends Specification {

@@ -3,7 +3,6 @@ package kartograffel.server.application
 import cats.effect.Async
 import doobie.Transactor
 import fs2.Stream
-import kartograffel.server.Config
 import kartograffel.server.infrastructure.doobie.{DoobieMigration, DoobieUtils}
 
 final case class Context[F[_]](
