@@ -6,6 +6,7 @@ import fs2.StreamApp.ExitCode
 import fs2.{Stream, StreamApp}
 import kartograffel.server.application.{Config, Context}
 import kartograffel.server.domain.repository.GraffelRepository
+import kartograffel.server.infrastructure.http4s.Assets
 import org.http4s.server.blaze.BlazeBuilder
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -20,5 +21,5 @@ object Server extends StreamApp[IO] {
       .bindHttp(httpConfig.port, httpConfig.host)
       .mountService(Service.root)
       .mountService(Service.api(gr), "/api")
-      .mountService(Service.assets, s"/${BuildInfo.assetsRoot}")
+      .mountService(Assets.service, Assets.prefix)
 }

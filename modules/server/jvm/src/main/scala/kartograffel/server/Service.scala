@@ -11,7 +11,6 @@ import kartograffel.shared.model._
 import org.http4s._
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
-import org.http4s.server.staticcontent.{webjarService, WebjarService}
 
 object Service {
   val dsl = Http4sDsl[IO]
@@ -58,7 +57,4 @@ object Service {
               gr.findTagsByGraffel(newTag.value.graffelId)
                 .flatMap(tagEntities => Ok(tagEntities.map(_.value).asJson)))
     }
-
-  val assets: HttpService[IO] =
-    webjarService(WebjarService.Config())
 }
