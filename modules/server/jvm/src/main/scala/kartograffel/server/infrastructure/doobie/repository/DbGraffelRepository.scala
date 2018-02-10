@@ -21,7 +21,7 @@ object DbGraffelRepository
       .map(Entity(_, tag))
 
   override def findTagsByPosition(pos: Position, radius: Radius): ConnectionIO[List[Entity[Tag]]] =
-    GraffelStatements.findTagsByPosition(pos, radius).list
+    GraffelStatements.findTagsByPosition(pos, radius).to[List]
 
   override def findGraffelByPosition(position: Position): ConnectionIO[Option[Entity[Graffel]]] =
     GraffelStatements.findGraffelByPosition(position).option
@@ -30,5 +30,5 @@ object DbGraffelRepository
     OptionT(findGraffelByPosition(position)).getOrElseF(create(Graffel(position)))
 
   override def findTagsByGraffel(id: Id[Graffel]): ConnectionIO[List[Entity[Tag]]] =
-    GraffelStatements.findTagsByGraffel(id).list
+    GraffelStatements.findTagsByGraffel(id).to[List]
 }
