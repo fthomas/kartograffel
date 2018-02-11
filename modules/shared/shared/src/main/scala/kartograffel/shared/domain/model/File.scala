@@ -2,9 +2,8 @@ package kartograffel.shared.domain.model
 
 import java.time.LocalDateTime
 
-final case class FileF[A](
-    graffel: A,
+final case class File(
     mimeType: String,
-    createdAt: LocalDateTime,
+    uploadedAt: LocalDateTime,
     content: Array[Byte]
 )

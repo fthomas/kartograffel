@@ -9,9 +9,8 @@ class V0004__CreateFile extends DoobieMigration {
     sql"""
       CREATE TABLE file (
         id BIGSERIAL PRIMARY KEY,
-        graffel_id BIGSERIAL REFERENCES graffel (id),
         mime_type VARCHAR(255) NOT NULL,
-        created_at TIMESTAMP NOT NULL,
+        uploaded_at TIMESTAMP NOT NULL,
         content BYTEA NOT NULL
       )
     """.update.run
