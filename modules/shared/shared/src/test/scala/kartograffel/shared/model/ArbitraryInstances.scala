@@ -7,7 +7,7 @@ import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.scalacheck.any.arbitraryFromValidate
 import eu.timepit.refined.scalacheck.numeric._
 import eu.timepit.refined.types.string.NonEmptyString
-import kartograffel.shared.domain.model.{User, Username}
+import kartograffel.shared.domain.model.{File, User, Username}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.ScalacheckShapeless._
 import org.scalacheck.derive.MkArbitrary
@@ -17,6 +17,9 @@ import scala.annotation.tailrec
 object ArbitraryInstances {
   implicit def entityArbitrary[T: Arbitrary]: Arbitrary[Entity[T]] =
     MkArbitrary[Entity[T]].arbitrary
+
+  implicit lazy val fileArbitrary: Arbitrary[File] =
+    MkArbitrary[File].arbitrary
 
   implicit lazy val graffelArbitrary: Arbitrary[Graffel] =
     MkArbitrary[Graffel].arbitrary
