@@ -1,4 +1,4 @@
-package kartograffel.server.infrastructure.doobie.repository
+//package kartograffel.server.infrastructure.doobie.repository
 
 //import kartograffel.shared.model.ArbitraryInstances._
 
