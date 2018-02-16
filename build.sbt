@@ -20,8 +20,9 @@ val scalajsReactVersion = "1.1.0"
 val scalajsScalaTagsVersion = "0.6.5"
 val scalaTestVersion = "3.0.5"
 val specs2Version = "4.0.2"
-val webjarJqueryVersion = "2.1.4"
+val webjarJqueryVersion = "3.3.1"
 val webjarReactVersion = "15.6.1"
+val webjarBootstrapVersion = "4.0.0"
 
 /// projects
 
@@ -48,13 +49,12 @@ lazy val client = crossProject(JSPlatform)
       "com.github.japgolly.scalajs-react" %%% "core" % scalajsReactVersion,
       "com.lihaoyi" %%% "scalatags" % scalajsScalaTagsVersion,
       "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,
-      /// test dependencies
+/// test dependencies
       // Replace with specs2 when it supports Scala.js:
       // https://github.com/etorreborre/specs2/issues/465
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
     ),
     jsDependencies ++= Seq(
-      "org.webjars" % "jquery" % webjarJqueryVersion / s"$webjarJqueryVersion/jquery.js",
       "org.webjars.bower" % "react" % webjarReactVersion
         / "react.js"
         minified "react.min.js"
@@ -63,7 +63,10 @@ lazy val client = crossProject(JSPlatform)
         / "react-dom.js"
         minified "react-dom.min.js"
         dependsOn "react.js"
-        commonJSName "ReactDOM"
+        commonJSName "ReactDOM",
+      "org.webjars.bower" % "jquery" % webjarJqueryVersion
+        / "dist/jquery.slim.js"
+        minified "dist/jquery.slim.js"
     ),
     scalaJSUseMainModuleInitializer := true
   )
@@ -90,6 +93,8 @@ lazy val server = crossProject(JVMPlatform)
       "org.tpolecat" %% "doobie-core" % doobieVersion,
       "org.tpolecat" %% "doobie-hikari" % doobieVersion,
       "org.tpolecat" %% "doobie-refined" % doobieVersion,
+      "org.webjars" % "bootstrap" % webjarBootstrapVersion,
+      "org.webjars" % "jquery" % webjarJqueryVersion,
       /// test dependencies
       "org.http4s" %% "http4s-testing" % http4sVersion % Test,
       "org.specs2" %% "specs2-core" % specs2Version % Test,
