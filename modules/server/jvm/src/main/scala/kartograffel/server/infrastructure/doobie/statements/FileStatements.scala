@@ -8,10 +8,11 @@ import kartograffel.shared.model.{Entity, Id}
 object FileStatements extends EntityStatements[File] {
   override def create(file: File): Update0 =
     sql"""
-      INSERT INTO file (mime_type, uploaded_at, content)
+      INSERT INTO file (mime_type, uploaded_at, uploaded_by, content)
       VALUES (
         ${file.mimeType},
         ${file.uploadedAt},
+        ${file.uploadedBy},
         ${file.content}
       )
     """.update

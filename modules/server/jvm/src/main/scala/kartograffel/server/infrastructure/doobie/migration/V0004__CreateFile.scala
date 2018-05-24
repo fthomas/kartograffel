@@ -11,6 +11,7 @@ class V0004__CreateFile extends DoobieMigration {
         id          BIGSERIAL    PRIMARY KEY,
         mime_type   VARCHAR(255) NOT NULL,
         uploaded_at TIMESTAMP    NOT NULL,
+        uploaded_by BIGSERIAL    REFERENCES user (id),
         content     BYTEA        NOT NULL
       )
     """.update.run

@@ -15,7 +15,7 @@ object AttachmentStatements extends DoobieInstances {
 
   def findFilesByGraffel(id: Id[Graffel]): Query0[Entity[File]] =
     sql"""
-      SELECT id, mime_type, uploaded_at, content FROM file
+      SELECT id, mime_type, uploaded_at, uploaded_by, content FROM file
       INNER JOIN attachment ON attachment.file_id = file.id
       WHERE attachment.graffel_id = $id
     """.query
