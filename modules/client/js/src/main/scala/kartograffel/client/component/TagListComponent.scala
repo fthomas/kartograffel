@@ -1,10 +1,8 @@
 package kartograffel.client.component
 
-import kartograffel.shared.model.Tag
-
 import japgolly.scalajs.react._
-
 import japgolly.scalajs.react.vdom.html_<^._
+import kartograffel.shared.domain.model.Tag
 
 object TagListComponent {
 

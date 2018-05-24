@@ -5,7 +5,7 @@ import eu.timepit.refined._
 import io.circe.syntax._
 import kartograffel.server.domain.repository.GraffelRepository
 import kartograffel.server.infrastructure.http4s.refined._
-import kartograffel.shared.domain.model.{Latitude, Longitude}
+import kartograffel.shared.domain.model.{Latitude, Longitude, Tag}
 import kartograffel.shared.model.Radius.{Length, LengthRange}
 import kartograffel.shared.model._
 import org.http4s._

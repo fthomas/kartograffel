@@ -6,8 +6,8 @@ import io.circe.parser._
 import io.circe.generic.auto._
 import io.circe.syntax._
 import io.circe.parser.decode
-import kartograffel.shared.domain.model.{Latitude, Longitude}
-import kartograffel.shared.model.{Entity, Graffel, Position, Tag}
+import kartograffel.shared.domain.model.{Latitude, Longitude, Tag}
+import kartograffel.shared.model.{Entity, Graffel, Position}
 import org.scalajs.dom
 import org.scalajs.dom.ext.Ajax
 import org.scalajs.dom.{window, PositionError, PositionOptions}

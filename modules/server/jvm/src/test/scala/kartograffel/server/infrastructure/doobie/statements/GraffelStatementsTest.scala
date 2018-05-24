@@ -1,5 +1,6 @@
 package kartograffel.server.infrastructure.doobie.statements
 
+import kartograffel.shared.domain.model.Tag
 import kartograffel.shared.model.ArbitraryInstances._
 import kartograffel.shared.model._
 

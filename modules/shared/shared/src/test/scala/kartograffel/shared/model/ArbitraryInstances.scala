@@ -7,7 +7,7 @@ import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.scalacheck.any.arbitraryFromValidate
 import eu.timepit.refined.scalacheck.numeric._
 import eu.timepit.refined.types.string.NonEmptyString
-import kartograffel.shared.domain.model.{File, User, Username}
+import kartograffel.shared.domain.model.{File, Tag, User, Username}
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.ScalacheckShapeless._
 import org.scalacheck.derive.MkArbitrary

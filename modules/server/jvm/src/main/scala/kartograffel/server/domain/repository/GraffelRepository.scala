@@ -3,6 +3,7 @@ package kartograffel.server.domain.repository
 import cats.{~>, Monad}
 import doobie._
 import kartograffel.server.infrastructure.doobie.repository.DbGraffelRepository
+import kartograffel.shared.domain.model.Tag
 import kartograffel.shared.model._
 
 trait GraffelRepository[F[_]] extends EntityRepository[F, Graffel] { self =>

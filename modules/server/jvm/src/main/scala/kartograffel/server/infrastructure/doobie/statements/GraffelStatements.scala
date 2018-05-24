@@ -2,6 +2,7 @@ package kartograffel.server.infrastructure.doobie.statements
 
 import doobie._
 import doobie.implicits._
+import kartograffel.shared.domain.model.Tag
 import kartograffel.shared.model._
 
 object GraffelStatements extends EntityStatements[Graffel] {

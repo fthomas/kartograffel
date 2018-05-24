@@ -1,8 +1,9 @@
-package kartograffel.shared.model
+package kartograffel.shared.domain.model
 
 import cats.Eq
-import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder}
+import kartograffel.shared.model.{Graffel, Id}
 
 case class Tag(name: String, graffelId: Id[Graffel])
 

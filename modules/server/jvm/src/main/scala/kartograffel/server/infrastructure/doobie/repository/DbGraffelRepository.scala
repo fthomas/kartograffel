@@ -5,6 +5,7 @@ import doobie._
 import doobie.implicits._
 import kartograffel.server.domain.repository.GraffelRepository
 import kartograffel.server.infrastructure.doobie.statements.GraffelStatements
+import kartograffel.shared.domain.model.Tag
 import kartograffel.shared.model._
 
 object DbGraffelRepository

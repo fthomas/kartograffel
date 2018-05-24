@@ -4,6 +4,7 @@ import japgolly.scalajs.react._
 import japgolly.scalajs.react.component.builder.Lifecycle.ComponentDidMount
 import japgolly.scalajs.react.vdom.html_<^._
 import kartograffel.client.repository.ClientRepository
+import kartograffel.shared.domain.model.Tag
 import kartograffel.shared.model._
 
 import scala.concurrent.ExecutionContext.Implicits.global
