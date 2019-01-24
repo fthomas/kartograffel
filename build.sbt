@@ -19,7 +19,7 @@ val scalajsJqueryVersion = "0.9.4"
 val scalajsReactVersion = "1.3.1"
 val scalajsScalaTagsVersion = "0.6.7"
 val scalaTestVersion = "3.0.5"
-val specs2Version = "4.3.6"
+val specs2Version = "4.4.0"
 val webjarJqueryVersion = "3.3.1"
 val webjarReactVersion = "15.6.1"
 
