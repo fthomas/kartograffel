@@ -21,7 +21,7 @@ val scalajsScalaTagsVersion = "0.6.7"
 val scalaTestVersion = "3.0.7"
 val specs2Version = "4.4.1"
 val webjarJqueryVersion = "3.3.1"
-val webjarReactVersion = "15.6.1"
+val webjarReactVersion = "16.7.0"
 
 /// projects
 
@@ -46,6 +46,7 @@ lazy val client = crossProject(JSPlatform)
       "be.doeraene" %%% "scalajs-jquery" % scalajsJqueryVersion,
       "co.fs2" %%% "fs2-core" % fs2Version,
       "com.github.japgolly.scalajs-react" %%% "core" % scalajsReactVersion,
+      "com.github.japgolly.scalajs-react" %%% "extra" % scalajsReactVersion,
       "com.lihaoyi" %%% "scalatags" % scalajsScalaTagsVersion,
       "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,
       /// test dependencies
@@ -55,16 +56,24 @@ lazy val client = crossProject(JSPlatform)
     ),
     jsDependencies ++= Seq(
       "org.webjars" % "jquery" % webjarJqueryVersion / s"$webjarJqueryVersion/jquery.js",
-      "org.webjars.bower" % "react" % webjarReactVersion
-        / "react.js"
-        minified "react.min.js"
+      
+      "org.webjars.npm" % "react" % webjarReactVersion
+        /        "umd/react.development.js"
+        minified "umd/react.production.min.js"
         commonJSName "React",
-      "org.webjars.bower" % "react" % webjarReactVersion
-        / "react-dom.js"
-        minified "react-dom.min.js"
-        dependsOn "react.js"
+
+      "org.webjars.npm" % "react-dom" % webjarReactVersion
+        /         "umd/react-dom.development.js"
+        minified  "umd/react-dom.production.min.js"
+        dependsOn "umd/react.development.js"
         commonJSName "ReactDOM"
     ),
+    
+    dependencyOverrides ++= Seq(
+      "org.webjars.npm" % "js-tokens" % "4.0.0",
+      "org.webjars.npm" % "scheduler" % "0.11.0"
+    ),
+    
     scalaJSUseMainModuleInitializer := true
   )
 
