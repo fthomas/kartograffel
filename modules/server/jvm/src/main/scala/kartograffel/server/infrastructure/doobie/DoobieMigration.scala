@@ -24,11 +24,7 @@ object DoobieMigration {
   def run[F[_]](dbConfig: Config.Db)(implicit F: Sync[F]): F[Int] =
     F.delay {
       val flyway = new Flyway
-      val location = classOf[migration.V0001__CreateGraffel].getPackage.getName
-        .replace('.', '/')
-
       flyway.setDataSource(dbConfig.url, dbConfig.user, dbConfig.password)
-      flyway.setLocations(location)
       flyway.migrate()
     }
 }
