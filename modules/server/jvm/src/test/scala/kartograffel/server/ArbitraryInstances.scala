@@ -1,32 +1,17 @@
-package kartograffel.shared.model
-
+package kartograffel.server
 import java.time._
 
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.scalacheck.any.arbitraryFromValidate
-import eu.timepit.refined.scalacheck.numeric._
 import eu.timepit.refined.types.string.NonEmptyString
-import kartograffel.shared.domain.model.{File, Tag, User, Username}
-import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.ScalacheckShapeless._
+import kartograffel.server.domain.model.{Position, Radius, Tag}
 import org.scalacheck.derive.MkArbitrary
+import org.scalacheck.{Arbitrary, Gen}
 
 import scala.annotation.tailrec
 
 object ArbitraryInstances {
-  implicit def entityArbitrary[T: Arbitrary]: Arbitrary[Entity[T]] =
-    MkArbitrary[Entity[T]].arbitrary
-
-  implicit lazy val fileArbitrary: Arbitrary[File] =
-    MkArbitrary[File].arbitrary
-
-  implicit lazy val graffelArbitrary: Arbitrary[Graffel] =
-    MkArbitrary[Graffel].arbitrary
-
-  implicit def idArbitrary[T]: Arbitrary[Id[T]] =
-    MkArbitrary[Id[T]].arbitrary
-
   implicit lazy val localDateArbitrary: Arbitrary[LocalDate] =
     Arbitrary {
       for {
@@ -66,12 +51,6 @@ object ArbitraryInstances {
 
   implicit lazy val tagArbitrary: Arbitrary[Tag] =
     MkArbitrary[Tag].arbitrary
-
-  implicit lazy val userArbitrary: Arbitrary[User] =
-    MkArbitrary[User].arbitrary
-
-  implicit lazy val usernameArbitrary: Arbitrary[Username] =
-    MkArbitrary[Username].arbitrary
 
   @tailrec
   def sampleOf[T](implicit ev: Arbitrary[T]): T =

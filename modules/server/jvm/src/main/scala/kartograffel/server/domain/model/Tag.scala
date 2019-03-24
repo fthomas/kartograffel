@@ -1,11 +1,10 @@
-package kartograffel.shared.domain.model
+package kartograffel.server.domain.model
 
 import cats.Eq
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
-import kartograffel.shared.model.{Graffel, Id}
 
-case class Tag(name: String, graffelId: Id[Graffel])
+case class Tag(name: String, graffelId: GraffelId)
 
 object Tag {
   implicit val tagEq: Eq[Tag] =

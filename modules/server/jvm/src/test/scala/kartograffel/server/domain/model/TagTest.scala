@@ -1,9 +1,7 @@
-package kartograffel.shared.model
+package kartograffel.server.domain.model
 
 import io.circe.testing.CodecTests
 import io.circe.testing.instances._
-import kartograffel.shared.domain.model.Tag
-import kartograffel.shared.model.ArbitraryInstances._
 import org.scalatest.FunSuite
 import org.typelevel.discipline.scalatest.Discipline
 

@@ -1,7 +1,7 @@
 package kartograffel.server.infrastructure.doobie.repository
 
 import kartograffel.server.infrastructure.doobie.DbSpecification
-import kartograffel.shared.model.ArbitraryInstances.sampleOf
+import kartograffel.server.ArbitraryInstances.sampleOf
 import org.scalacheck.Arbitrary
 
 abstract class DbEntityRepositoryTest[T: Arbitrary](repository: DbEntityRepository[T])

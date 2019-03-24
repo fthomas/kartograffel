@@ -1,10 +1,8 @@
-package kartograffel.shared.model
+package kartograffel.server.domain.model
 
 import cats.Eq
 import io.circe.generic.semiauto._
 import io.circe.{Decoder, Encoder}
-import io.circe.refined._
-import kartograffel.shared.domain.model.{Latitude, Longitude}
 
 final case class Position(
     latitude: Latitude,

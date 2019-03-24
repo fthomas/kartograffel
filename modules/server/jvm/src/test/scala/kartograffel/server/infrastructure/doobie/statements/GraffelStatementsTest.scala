@@ -1,7 +1,8 @@
 package kartograffel.server.infrastructure.doobie.statements
 
-import kartograffel.shared.domain.model.Tag
-import kartograffel.shared.model.ArbitraryInstances._
+import kartograffel.server.domain.model.{Graffel, Position, Tag}
+import kartograffel.shared.domain.model.{Position, Tag}
+import kartograffel.server.ArbitraryInstances._
 import kartograffel.shared.model._
 
 class GraffelStatementsTest extends EntityStatementsTest(GraffelStatements) {

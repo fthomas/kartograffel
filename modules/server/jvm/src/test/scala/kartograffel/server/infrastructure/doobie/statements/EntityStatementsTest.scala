@@ -1,7 +1,7 @@
 package kartograffel.server.infrastructure.doobie.statements
 
 import kartograffel.server.infrastructure.doobie.DbSpecification
-import kartograffel.shared.model.ArbitraryInstances._
+import kartograffel.server.ArbitraryInstances._
 import kartograffel.shared.model.Id
 import org.scalacheck.Arbitrary
 

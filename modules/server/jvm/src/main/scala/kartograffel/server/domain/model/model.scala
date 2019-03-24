@@ -1,5 +1,4 @@
-package kartograffel.shared.domain
-
+package kartograffel.server.domain
 import eu.timepit.refined.W
 import eu.timepit.refined.api.{Refined, RefinedTypeOps}
 import eu.timepit.refined.numeric.Interval

@@ -1,7 +1,7 @@
 package kartograffel.server.infrastructure.doobie.repository
 
 import kartograffel.shared.domain.model.User
-import kartograffel.shared.model.ArbitraryInstances._
+import kartograffel.server.ArbitraryInstances._
 
 class DbUserRepositoryTest extends DbEntityRepositoryTest(DbUserRepository) {
   "findByName" >> {

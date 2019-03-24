@@ -1,5 +1,5 @@
 package kartograffel.server.infrastructure.doobie.repository
 
-import kartograffel.shared.model.ArbitraryInstances._
+import kartograffel.server.ArbitraryInstances._
 
 class DbGraffelRepositoryTest extends DbEntityRepositoryTest(DbGraffelRepository)
