@@ -213,7 +213,6 @@ lazy val compileSettings = Def.settings(
     "-Ywarn-unused:implicits",
     "-Ywarn-unused:imports",
     "-Ywarn-unused:locals",
-    "-Ywarn-unused:params",
     "-Ywarn-unused:patvars",
     "-Ywarn-unused:privates",
     "-Ywarn-numeric-widen",
