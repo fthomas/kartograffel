@@ -5,14 +5,15 @@ import japgolly.scalajs.react.component.Scala.Unmounted
 import japgolly.scalajs.react.vdom.VdomElement
 import japgolly.scalajs.react.vdom.html_<^._
 import kartograffel.client.leaflet.Leaflet
-import kartograffel.shared.model.{Graffel, Position}
+import kartograffel.shared.domain.model.Position
+import kartograffel.shared.ui.model.TagView
 
 import scala.scalajs.js
 
 object LeafletComponent {
   final case class Props(width: Int,
                          height: Int,
-                         graffels: List[Graffel],
+                         graffels: List[TagView],
                          currentPosition: Position)
 
   final case class Backend($ : BackendScope[Props, Unit]) {

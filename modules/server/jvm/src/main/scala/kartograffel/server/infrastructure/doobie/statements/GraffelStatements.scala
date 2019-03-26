@@ -3,10 +3,9 @@ package kartograffel.server.infrastructure.doobie.statements
 import doobie._
 import doobie.implicits._
 import kartograffel.server.domain.model.{Graffel, GraffelId}
-import kartograffel.shared.domain.model.{GraffelId, Tag}
-import kartograffel.shared.model._
+import kartograffel.server.infrastructure.doobie.DoobieInstances
 
-object GraffelStatements {
+object GraffelStatements extends DoobieInstances {
   def create(graffel: Graffel): Update0 =
     sql"""
       INSERT INTO graffel (id, latitude, longitude)

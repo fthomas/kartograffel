@@ -5,9 +5,12 @@ import eu.timepit.refined.api.Refined
 import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.scalacheck.any.arbitraryFromValidate
 import eu.timepit.refined.types.string.NonEmptyString
-import kartograffel.server.domain.model.{Position, Radius, Tag}
+import kartograffel.server.domain.model._
+import kartograffel.shared.domain.model.Position
 import org.scalacheck.derive.MkArbitrary
 import org.scalacheck.{Arbitrary, Gen}
+
+import eu.timepit.refined.scalacheck.numeric._
 
 import scala.annotation.tailrec
 
@@ -40,14 +43,27 @@ object ArbitraryInstances {
       } yield LocalDateTime.of(date, time)
     }
 
+  implicit lazy val distanceUnit: Arbitrary[DistanceUnit] = Arbitrary {
+    Gen.oneOf(meter, kilometer)
+  }
+
   implicit lazy val nonEmptyStringArbitrary: Arbitrary[NonEmptyString] =
     arbitraryFromValidate[Refined, String, NonEmpty]
+
+  implicit lazy val graffelIdArbitrary: Arbitrary[GraffelId] =
+    MkArbitrary[GraffelId].arbitrary
+
+  implicit lazy val graffelArbitrary: Arbitrary[Graffel] =
+    MkArbitrary[Graffel].arbitrary
 
   implicit lazy val positionArbitrary: Arbitrary[Position] =
     MkArbitrary[Position].arbitrary
 
   implicit lazy val radiusArbitrary: Arbitrary[Radius] =
     MkArbitrary[Radius].arbitrary
+
+  implicit lazy val tagIdArbitrary: Arbitrary[TagId] =
+    MkArbitrary[TagId].arbitrary
 
   implicit lazy val tagArbitrary: Arbitrary[Tag] =
     MkArbitrary[Tag].arbitrary

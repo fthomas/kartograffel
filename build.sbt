@@ -6,18 +6,16 @@ val projectName = "kartograffel"
 val rootPkg = "kartograffel"
 
 val circeVersion = "0.11.1"
-val doobieVersion = "0.5.4"
-val flywayVersion = "5.1.4"
+val doobieVersion = "0.6.0"
+val flywayVersion = "5.2.4"
 val fs2Version = "1.0.4"
 val h2Version = "1.4.198"
-val http4sVersion = "0.18.22"
+val http4sVersion = "0.20.0-M7"
 val logbackVersion = "1.2.3"
 val refinedVersion = "0.9.2"
-val scalacheckShapelessVersion = "1.1.8"
-val scalajsDomVersion = "0.9.6"
+val scalacheckShapelessVersion = "1.2.1"
 val scalajsJqueryVersion = "0.9.4"
-val scalajsReactVersion = "1.4.0"
-val scalajsScalaTagsVersion = "0.6.7"
+val scalajsReactVersion = "1.4.1"
 val scalaTestVersion = "3.0.7"
 val specs2Version = "4.4.1"
 val webjarJqueryVersion = "3.3.1"
@@ -47,13 +45,13 @@ lazy val client = crossProject(JSPlatform)
       "co.fs2" %%% "fs2-core" % fs2Version,
       "com.github.japgolly.scalajs-react" %%% "core" % scalajsReactVersion,
       "com.github.japgolly.scalajs-react" %%% "extra" % scalajsReactVersion,
-      "com.lihaoyi" %%% "scalatags" % scalajsScalaTagsVersion,
-      "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,
       /// test dependencies
+      "com.github.japgolly.scalajs-react" %%% "test" % scalajsReactVersion % Test,
       // Replace with specs2 when it supports Scala.js:
       // https://github.com/etorreborre/specs2/issues/465
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
     ),
+    jsEnv in Test := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv(),
     jsDependencies ++= Seq(
       "org.webjars" % "jquery" % webjarJqueryVersion / s"$webjarJqueryVersion/jquery.js",
       
@@ -168,7 +166,7 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
       "io.circe" %%% "circe-java8" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,
       /// test dependencies
-      "com.github.alexarchambault" %%% "scalacheck-shapeless_1.13" % scalacheckShapelessVersion % Test,
+      "com.github.alexarchambault" %%% "scalacheck-shapeless_1.14" % scalacheckShapelessVersion % Test,
       "eu.timepit" %%% "refined-scalacheck" % refinedVersion % Test,
       "io.circe" %%% "circe-testing" % circeVersion % Test,
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
