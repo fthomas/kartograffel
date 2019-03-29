@@ -18,7 +18,7 @@ object Server extends IOApp {
   private def router(tx: Transactor[IO]) =
     Router(
       "/" -> Service.root,
-      "api" -> Service.api(tx),
+      "/api" -> Service.api(tx),
       Assets.prefix -> Assets.service[IO](ExecutionContext.Implicits.global)
     ).orNotFound
 
