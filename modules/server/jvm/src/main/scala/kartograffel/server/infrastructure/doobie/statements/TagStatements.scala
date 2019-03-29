@@ -7,11 +7,14 @@ import kartograffel.shared.domain.model.Position
 
 object TagStatements extends DoobieInstances {
 
-  def insert(tag: Tag): Update0 =
+  def create(tag: Tag): Update0 =
     sql"""
          INSERT INTO tag (id, name, graffel_id)
          VALUES (${tag.id}, ${tag.name}, ${tag.graffelId})
        """.update
+
+  def find(name: String, graffelId: GraffelId): Query0[Tag] =
+    sql"SELECT ID, NAME, GRAFFEL_ID FROM TAG WHERE NAME=$name AND GRAFFEL_ID=$graffelId".query
 
   def findTagsByPosition(pos: Position, radius: Radius): Query0[(Tag, Graffel)] = {
     val distanceUnit = radius.unit

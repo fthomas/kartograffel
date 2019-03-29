@@ -25,6 +25,8 @@ object Leaflet extends js.Object {
   trait Map extends js.Object {
     @js.native
     def setView(center: LatLng, zoom: Int): Map = js.native
+    @js.native
+    def removeLayer(l: Layer): Map = js.native
   }
 
   @js.native
