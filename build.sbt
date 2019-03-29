@@ -56,24 +56,20 @@ lazy val client = crossProject(JSPlatform)
     jsEnv in Test := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv(),
     jsDependencies ++= Seq(
       "org.webjars" % "jquery" % webjarJqueryVersion / s"$webjarJqueryVersion/jquery.js",
-      
       "org.webjars.npm" % "react" % webjarReactVersion
-        /        "umd/react.development.js"
+        / "umd/react.development.js"
         minified "umd/react.production.min.js"
         commonJSName "React",
-
       "org.webjars.npm" % "react-dom" % webjarReactVersion
-        /         "umd/react-dom.development.js"
-        minified  "umd/react-dom.production.min.js"
+        / "umd/react-dom.development.js"
+        minified "umd/react-dom.production.min.js"
         dependsOn "umd/react.development.js"
         commonJSName "ReactDOM"
     ),
-    
     dependencyOverrides ++= Seq(
       "org.webjars.npm" % "js-tokens" % "4.0.0",
       "org.webjars.npm" % "scheduler" % "0.11.0"
     ),
-    
     scalaJSUseMainModuleInitializer := true
   )
 
