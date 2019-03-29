@@ -46,7 +46,7 @@ object Service {
         }
 
       case GET -> Root / "graffels" :? LatQueryParamMatcher(lat) +& LonQueryParamMatcher(lon) =>
-        val length: Length = refineMV[LengthRange](1)
+        val length: Length = refineMV[LengthRange](50)
         DbGraffelService
           .findNearPosition(Position(lat, lon), Radius(length, kilometer))
           .transact(tx)

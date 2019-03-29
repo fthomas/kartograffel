@@ -8,7 +8,7 @@ import kartograffel.client.leaflet.Leaflet
 import kartograffel.client.leaflet.Leaflet.Layer
 import kartograffel.shared.domain.model.Position
 import kartograffel.shared.ui.model.TagView
-import japgolly.scalajs.react.
+import japgolly.scalajs.react.CatsReact._
 
 import scala.scalajs.js
 
@@ -51,11 +51,19 @@ object LeafletComponent {
             .addTo(map))
     }
 
-    def updateMap(p: Props) = $.state.flatMap { s =>
-      s.m.traverse(map => removeLayer(map, s.ls) >> addLayer(map, p.graffels))
-
-      ???
+    def updateMap(p: Props): Callback = $.state.flatMap { s =>
+      s.m.traverse { map =>
+        for {
+          _ <- removeLayer(map, s.ls)
+          ls <- addLayer(map, p.graffels)
+          _ <- setView(map, p.currentPosition)
+          _ <- $.modState(_.copy(m = Some(map), ls = ls))
+        } yield ()
+      }.void
     }
+
+    def setView(m: Leaflet.Map, p: Position): Callback =
+      Callback(m.setView(Leaflet.latLng(p.latitude.value, p.longitude.value), 13))
 
     def removeLayer(m: Leaflet.Map, ls: List[Layer]): Callback = Callback(ls.foreach(m.removeLayer))
 
@@ -76,7 +84,7 @@ object LeafletComponent {
     .componentDidMount(_.backend.loadMap)
     .componentDidUpdate(f =>
       if (f.prevProps.graffels =!= f.currentProps.graffels || f.prevProps.currentPosition =!= f.currentProps.currentPosition)
-        f.backend.loadMap
+        f.backend.updateMap(f.currentProps)
       else Callback.empty)
     .build
 
