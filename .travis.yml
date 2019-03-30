@@ -1,8 +1,10 @@
 language: scala
 scala:
-- 2.12.6
+- 2.12.8
 jdk:
 - oraclejdk8
+node_js:
+  - "node"
 git:
   depth: 9999
 sudo: false
@@ -10,6 +12,8 @@ addons:
   apt:
     packages:
     - fakeroot
+before_install:
+  - npm i jsdom
 install:
 - pip install --user codecov
 cache:

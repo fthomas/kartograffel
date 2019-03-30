@@ -6,6 +6,6 @@ import org.scalajs.dom.window
 object Client {
 
   def main(args: Array[String]): Unit = {
-    val _ = TagComponent.component().renderIntoDOM(window.document.body)
+    val _ = TagComponent().renderIntoDOM(window.document.getElementById("app"))
   }
 }

@@ -6,22 +6,20 @@ val projectName = "kartograffel"
 val rootPkg = "kartograffel"
 
 val circeVersion = "0.11.1"
-val doobieVersion = "0.5.4"
-val flywayVersion = "5.1.4"
+val doobieVersion = "0.6.0"
+val flywayVersion = "5.2.4"
 val fs2Version = "1.0.4"
 val h2Version = "1.4.198"
-val http4sVersion = "0.18.22"
+val http4sVersion = "0.20.0-M7"
 val logbackVersion = "1.2.3"
 val refinedVersion = "0.9.2"
-val scalacheckShapelessVersion = "1.1.8"
-val scalajsDomVersion = "0.9.6"
+val scalacheckShapelessVersion = "1.2.1"
 val scalajsJqueryVersion = "0.9.4"
-val scalajsReactVersion = "1.4.0"
-val scalajsScalaTagsVersion = "0.6.7"
+val scalajsReactVersion = "1.4.1"
 val scalaTestVersion = "3.0.7"
 val specs2Version = "4.4.1"
 val webjarJqueryVersion = "3.3.1"
-val webjarReactVersion = "15.6.1"
+val webjarReactVersion = "16.7.0"
 
 /// projects
 
@@ -45,25 +43,32 @@ lazy val client = crossProject(JSPlatform)
     libraryDependencies ++= Seq(
       "be.doeraene" %%% "scalajs-jquery" % scalajsJqueryVersion,
       "co.fs2" %%% "fs2-core" % fs2Version,
+      //scalajs-react
       "com.github.japgolly.scalajs-react" %%% "core" % scalajsReactVersion,
-      "com.lihaoyi" %%% "scalatags" % scalajsScalaTagsVersion,
-      "org.scala-js" %%% "scalajs-dom" % scalajsDomVersion,
+      "com.github.japgolly.scalajs-react" %%% "extra" % scalajsReactVersion,
+      "com.github.japgolly.scalajs-react" %%% "ext-cats" % scalajsReactVersion,
       /// test dependencies
+      "com.github.japgolly.scalajs-react" %%% "test" % scalajsReactVersion % Test,
       // Replace with specs2 when it supports Scala.js:
       // https://github.com/etorreborre/specs2/issues/465
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
     ),
+    jsEnv in Test := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv(),
     jsDependencies ++= Seq(
       "org.webjars" % "jquery" % webjarJqueryVersion / s"$webjarJqueryVersion/jquery.js",
-      "org.webjars.bower" % "react" % webjarReactVersion
-        / "react.js"
-        minified "react.min.js"
+      "org.webjars.npm" % "react" % webjarReactVersion
+        / "umd/react.development.js"
+        minified "umd/react.production.min.js"
         commonJSName "React",
-      "org.webjars.bower" % "react" % webjarReactVersion
-        / "react-dom.js"
-        minified "react-dom.min.js"
-        dependsOn "react.js"
+      "org.webjars.npm" % "react-dom" % webjarReactVersion
+        / "umd/react-dom.development.js"
+        minified "umd/react-dom.production.min.js"
+        dependsOn "umd/react.development.js"
         commonJSName "ReactDOM"
+    ),
+    dependencyOverrides ++= Seq(
+      "org.webjars.npm" % "js-tokens" % "4.0.0",
+      "org.webjars.npm" % "scheduler" % "0.11.0"
     ),
     scalaJSUseMainModuleInitializer := true
   )
@@ -159,7 +164,7 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
       "io.circe" %%% "circe-java8" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,
       /// test dependencies
-      "com.github.alexarchambault" %%% "scalacheck-shapeless_1.13" % scalacheckShapelessVersion % Test,
+      "com.github.alexarchambault" %%% "scalacheck-shapeless_1.14" % scalacheckShapelessVersion % Test,
       "eu.timepit" %%% "refined-scalacheck" % refinedVersion % Test,
       "io.circe" %%% "circe-testing" % circeVersion % Test,
       "org.scalatest" %%% "scalatest" % scalaTestVersion % Test
@@ -204,7 +209,6 @@ lazy val compileSettings = Def.settings(
     "-Ywarn-unused:implicits",
     "-Ywarn-unused:imports",
     "-Ywarn-unused:locals",
-    "-Ywarn-unused:params",
     "-Ywarn-unused:patvars",
     "-Ywarn-unused:privates",
     "-Ywarn-numeric-widen",

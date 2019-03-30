@@ -1,35 +1,14 @@
 package kartograffel.server.infrastructure.doobie.repository
-
-import cats.data.OptionT
-import doobie._
-import doobie.implicits._
+import doobie.free.connection.ConnectionIO
+import kartograffel.server.domain.model.{Graffel, GraffelId}
 import kartograffel.server.domain.repository.GraffelRepository
 import kartograffel.server.infrastructure.doobie.statements.GraffelStatements
-import kartograffel.shared.domain.model.Tag
-import kartograffel.shared.model._
+import kartograffel.shared.domain.model.Position
 
-object DbGraffelRepository
-    extends GraffelRepository[ConnectionIO]
-    with DbEntityRepository[Graffel] {
-
-  override def statements: GraffelStatements.type =
-    GraffelStatements
-
-  override def insert(tag: Tag): ConnectionIO[Entity[Tag]] =
-    GraffelStatements
-      .insert(tag)
-      .withUniqueGeneratedKeys[Id[Tag]]("id")
-      .map(Entity(_, tag))
-
-  override def findTagsByPosition(pos: Position, radius: Radius): ConnectionIO[List[Entity[Tag]]] =
-    GraffelStatements.findTagsByPosition(pos, radius).to[List]
-
-  override def findGraffelByPosition(position: Position): ConnectionIO[Option[Entity[Graffel]]] =
-    GraffelStatements.findGraffelByPosition(position).option
-
-  override def findByPositionOrCreate(position: Position): ConnectionIO[Entity[Graffel]] =
-    OptionT(findGraffelByPosition(position)).getOrElseF(create(Graffel(position)))
-
-  override def findTagsByGraffel(id: Id[Graffel]): ConnectionIO[List[Entity[Tag]]] =
-    GraffelStatements.findTagsByGraffel(id).to[List]
+object DbGraffelRepository extends GraffelRepository[ConnectionIO] {
+  override def findById(id: GraffelId): ConnectionIO[Option[Graffel]] =
+    GraffelStatements.findById(id).option
+  override def findByPosition(p: Position): ConnectionIO[Option[Graffel]] =
+    GraffelStatements.findByPosition(p).option
+  override def create(graffel: Graffel): ConnectionIO[Int] = GraffelStatements.create(graffel).run
 }

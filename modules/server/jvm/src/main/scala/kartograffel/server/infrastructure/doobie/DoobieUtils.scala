@@ -1,25 +1,23 @@
 package kartograffel.server.infrastructure.doobie
 
-import cats.effect.Async
+import cats.effect.{Async, ContextShift, Resource}
 import doobie.hikari.HikariTransactor
-import eu.timepit.refined.auto._
-import fs2.Stream
+import doobie.util.ExecutionContexts
 import kartograffel.server.application.Config
 
 object DoobieUtils {
-  def transactor[F[_]: Async](dbConfig: Config.Db): F[HikariTransactor[F]] =
-    HikariTransactor.newHikariTransactor[F](
-      driverClassName = dbConfig.driver,
-      url = dbConfig.url,
-      user = dbConfig.user,
-      pass = dbConfig.password
-    )
+  def transactor[F[_]: Async: ContextShift](dbConfig: Config.Db): Resource[F, HikariTransactor[F]] =
+    for {
+      ce <- ExecutionContexts.fixedThreadPool[F](32)
+      te <- ExecutionContexts.cachedThreadPool[F]
+      xa <- HikariTransactor.newHikariTransactor[F](
+        driverClassName = dbConfig.driver.value,
+        url = dbConfig.url.value,
+        user = dbConfig.user,
+        pass = dbConfig.password,
+        ce,
+        te
+      )
+    } yield xa
 
-  def transactorStream[F[_]: Async](dbConfig: Config.Db): Stream[F, HikariTransactor[F]] =
-    HikariTransactor.stream[F](
-      driverClassName = dbConfig.driver,
-      url = dbConfig.url,
-      user = dbConfig.user,
-      pass = dbConfig.password
-    )
 }
