@@ -9,7 +9,7 @@ val circeVersion = "0.11.1"
 val doobieVersion = "0.6.0"
 val flywayVersion = "5.2.4"
 val fs2Version = "1.0.4"
-val h2Version = "1.4.198"
+val h2Version = "1.4.197"
 val http4sVersion = "0.20.0-M7"
 val logbackVersion = "1.2.3"
 val refinedVersion = "0.9.2"
@@ -110,7 +110,7 @@ lazy val server = crossProject(JVMPlatform)
     javaOptions ++= {
       Seq(
         s"-Dconfig.file=${configFile.value}",
-        s"-Dlogback.configurationFile=${configDirectory.value}/logback.xml"
+        s"-Dlogback.configurationFile=/logback.xml"
       )
     }
   )

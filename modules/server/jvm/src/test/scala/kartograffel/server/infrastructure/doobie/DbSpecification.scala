@@ -1,5 +1,7 @@
 package kartograffel.server.infrastructure.doobie
-import cats.effect.{Async, ContextShift, IO}
+import java.util.UUID
+
+import cats.effect.{Async, ContextShift, IO, Sync}
 import cats.implicits._
 import doobie.free.connection.ConnectionIO
 import doobie.implicits._
@@ -25,15 +27,19 @@ object DbSpecification extends Specification with IOChecker {
   lazy val dbConfig =
     Config.Db(
       driver = NonEmptyString("org.h2.Driver"),
-      url = NonEmptyString("jdbc:h2:mem:;MODE=PostgreSQL;AUTO_SERVER=TRUE"),
+      url = NonEmptyString("jdbc:h2:mem:;MODE=PostgreSQL"),
       user = "",
       password = ""
     )
 
-  def run[F[_]: ContextShift: Async, G](connectionIO: ConnectionIO[G]): F[G] =
+  def runQuery[F[_]: ContextShift: Async, G](connectionIO: ConnectionIO[G]): F[G] =
     for {
-      _ <- DoobieMigration.run[F](dbConfig)
-      c <- DoobieUtils.transactor[F](dbConfig).use(tx => connectionIO.transact(tx))
+      d <- Sync[F].delay {
+        val id = UUID.randomUUID()
+        //inMem with more than one operation needs a name so the instance can be found
+        dbConfig.copy(url = NonEmptyString.unsafeFrom(s"jdbc:h2:mem:${id.toString};MODE=PostgreSQL"))
+      }
+      c <- DoobieUtils.transactor[F](d).use(tx => (DoobieMigration.run[ConnectionIO](d) >> connectionIO).transact(tx))
     } yield c
 
 }
