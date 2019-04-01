@@ -3,7 +3,7 @@ import eu.timepit.refined.refineMV
 import org.scalatest.{FunSuite, Matchers}
 import kartograffel.server.ArbitraryInstances._
 import kartograffel.server.domain.model.Radius.LengthRange
-import kartograffel.server.domain.model.{Radius, kilometer}
+import kartograffel.server.domain.model.{kilometer, Radius}
 import kartograffel.server.infrastructure.doobie.DbSpecification._
 import kartograffel.shared.domain.model.Position
 

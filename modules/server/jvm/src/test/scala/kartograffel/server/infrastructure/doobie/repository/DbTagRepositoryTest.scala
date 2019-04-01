@@ -23,7 +23,7 @@ class DbTagRepositoryTest extends FunSuite with Matchers {
     result.get should be(tag)
   }
 
-  test("find"){
+  test("find") {
     val graffel = sampleOf[Graffel]
     val tag = sampleOf[Tag].copy(graffelId = graffel.id)
     val q = for {
@@ -38,13 +38,14 @@ class DbTagRepositoryTest extends FunSuite with Matchers {
     result.get should be(tag)
   }
 
-  test("findTagsByPosition"){
+  test("findTagsByPosition") {
     val graffel = sampleOf[Graffel]
     val tag = sampleOf[Tag].copy(graffelId = graffel.id)
     val q = for {
       _ <- DbGraffelRepository.create(graffel)
       _ <- DbTagRepository.create(tag)
-      t <- DbTagRepository.findTagsByPosition(graffel.position, Radius(refineMV[LengthRange](1), kilometer))
+      t <- DbTagRepository.findTagsByPosition(graffel.position,
+                                              Radius(refineMV[LengthRange](1), kilometer))
     } yield t
 
     val result = runQuery(q).unsafeRunSync()
