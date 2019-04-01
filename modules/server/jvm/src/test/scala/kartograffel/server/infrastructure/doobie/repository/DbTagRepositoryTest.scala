@@ -20,7 +20,7 @@ class DbTagRepositoryTest extends FunSuite with Matchers {
     val result = runQuery(q).unsafeRunSync()
 
     result should be(defined)
-    result.get should be(tag)
+    result should contain(tag)
   }
 
   test("find") {
@@ -35,7 +35,7 @@ class DbTagRepositoryTest extends FunSuite with Matchers {
     val result = runQuery(q).unsafeRunSync()
 
     result should be(defined)
-    result.get should be(tag)
+    result should contain(tag)
   }
 
   test("findTagsByPosition") {
@@ -51,7 +51,7 @@ class DbTagRepositoryTest extends FunSuite with Matchers {
     val result = runQuery(q).unsafeRunSync()
 
     result should not be empty
-    result.head should be((tag, graffel))
+    result.headOption should contain((tag, graffel))
   }
 
 }

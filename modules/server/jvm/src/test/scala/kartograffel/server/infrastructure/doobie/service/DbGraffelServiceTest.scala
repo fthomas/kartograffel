@@ -21,8 +21,8 @@ class DbGraffelServiceTest extends FunSuite with Matchers {
     val result = runQuery(q).unsafeRunSync()
 
     result.size should be(1)
-    result.head._1.name should be(name)
-    result.head._2.position should be(pos)
+    result.headOption.map(_._1.name) should contain(name)
+    result.headOption.map(_._2.position) should contain(pos)
   }
 
 }

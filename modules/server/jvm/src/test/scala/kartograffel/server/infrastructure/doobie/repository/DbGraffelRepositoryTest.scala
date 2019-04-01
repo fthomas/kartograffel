@@ -16,8 +16,8 @@ class DbGraffelRepositoryTest extends FunSuite with Matchers {
     val result = runQuery(q).unsafeRunSync()
 
     result should be(defined)
-    result.get.id should be(g.id)
-    result.get.position should be(g.position)
+    result.map(_.id) should contain(g.id)
+    result.map(_.position) should contain(g.position)
   }
 
   test("findById") {
@@ -31,8 +31,8 @@ class DbGraffelRepositoryTest extends FunSuite with Matchers {
     val result = runQuery(q).unsafeRunSync()
 
     result should be(defined)
-    result.get.id should be(g.id)
-    result.get.position should be(g.position)
+    result.map(_.id) should contain(g.id)
+    result.map(_.position) should contain(g.position)
   }
 
   test("create") {
@@ -46,8 +46,8 @@ class DbGraffelRepositoryTest extends FunSuite with Matchers {
     val result = runQuery(q).unsafeRunSync()
 
     result should be(defined)
-    result.get.id should be(g.id)
-    result.get.position should be(g.position)
+    result.map(_.id) should contain(g.id)
+    result.map(_.position) should contain(g.position)
   }
 
 }

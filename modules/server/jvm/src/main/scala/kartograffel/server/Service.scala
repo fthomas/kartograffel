@@ -18,6 +18,8 @@ import org.http4s.{HttpRoutes, MediaType}
 import eu.timepit.refined._
 import kartograffel.shared.ui.model.TagView
 
+import scala.util.Try
+
 object Service {
 
   val root: HttpRoutes[IO] = HttpRoutes.of[IO] {
@@ -29,12 +31,7 @@ object Service {
   object LonQueryParamMatcher extends QueryParamDecoderMatcher[Longitude]("lon")
 
   object UUIDVar {
-    def unapply(arg: String): Option[UUID] =
-      try {
-        Option(UUID.fromString(arg))
-      } catch {
-        case _: Exception => Option.empty
-      }
+    def unapply(arg: String): Option[UUID] = Try(UUID.fromString(arg)).toOption
   }
 
   def api(tx: Transactor[IO]): HttpRoutes[IO] =
