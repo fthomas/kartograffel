@@ -37,9 +37,12 @@ object DbSpecification extends Specification with IOChecker {
       d <- Sync[F].delay {
         val id = UUID.randomUUID()
         //inMem with more than one operation needs a name so the instance can be found
-        dbConfig.copy(url = NonEmptyString.unsafeFrom(s"jdbc:h2:mem:${id.toString};MODE=PostgreSQL"))
+        dbConfig.copy(
+          url = NonEmptyString.unsafeFrom(s"jdbc:h2:mem:${id.toString};MODE=PostgreSQL"))
       }
-      c <- DoobieUtils.transactor[F](d).use(tx => (DoobieMigration.run[ConnectionIO](d) >> connectionIO).transact(tx))
+      c <- DoobieUtils
+        .transactor[F](d)
+        .use(tx => (DoobieMigration.run[ConnectionIO](d) >> connectionIO).transact(tx))
     } yield c
 
 }
