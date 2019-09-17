@@ -313,9 +313,11 @@ addCommandsAlias(
   )
 )
 
-addCommandsAlias("deployHerokuCmds",
-                 Seq(
-                   "clean",
-                   "serverJVM/stage",
-                   "serverJVM/deployHeroku"
-                 ))
+addCommandsAlias(
+  "deployHerokuCmds",
+  Seq(
+    "clean",
+    "serverJVM/stage",
+    "serverJVM/deployHeroku"
+  )
+)
