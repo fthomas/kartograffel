@@ -10,7 +10,7 @@ object refined {
 
   implicit def refinedQueryParamDecoder[F[_, _], T, P](
       implicit queryParamDecoder: QueryParamDecoder[T],
-      rt: RefinedType.AuxT[F[T, P], T],
+      rt: RefinedType.AuxT[F[T, P], T]
   ): QueryParamDecoder[F[T, P]] =
     (value: QueryParameterValue) => {
       queryParamDecoder.decode(value).andThen { t =>

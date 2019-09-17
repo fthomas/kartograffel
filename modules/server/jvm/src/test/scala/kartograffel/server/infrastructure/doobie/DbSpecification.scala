@@ -38,7 +38,8 @@ object DbSpecification extends Specification with IOChecker {
         val id = UUID.randomUUID()
         //inMem with more than one operation needs a name so the instance can be found
         dbConfig.copy(
-          url = NonEmptyString.unsafeFrom(s"jdbc:h2:mem:${id.toString};MODE=PostgreSQL"))
+          url = NonEmptyString.unsafeFrom(s"jdbc:h2:mem:${id.toString};MODE=PostgreSQL")
+        )
       }
       c <- DoobieUtils
         .transactor[F](d)

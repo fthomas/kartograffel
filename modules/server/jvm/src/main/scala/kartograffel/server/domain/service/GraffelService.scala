@@ -6,9 +6,11 @@ import kartograffel.server.domain.repository.{GraffelRepository, TagRepository}
 import kartograffel.server.domain.util.UUIDUtil
 import kartograffel.shared.domain.model.Position
 
-class GraffelService[F[_]](graffelRepository: GraffelRepository[F],
-                           tagRepository: TagRepository[F],
-                           UUIDUtil: UUIDUtil[F]) {
+class GraffelService[F[_]](
+    graffelRepository: GraffelRepository[F],
+    tagRepository: TagRepository[F],
+    UUIDUtil: UUIDUtil[F]
+) {
 
   def create(tagName: String, position: Position)(implicit F: Sync[F]): F[Unit] =
     for {

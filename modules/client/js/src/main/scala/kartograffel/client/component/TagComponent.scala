@@ -12,20 +12,25 @@ import scala.util.{Failure, Success}
 
 object TagComponent {
 
-  final case class State(tags: List[TagView] = List.empty,
-                         tagInput: String = "",
-                         position: Option[Position] = Option.empty)
+  final case class State(
+      tags: List[TagView] = List.empty,
+      tagInput: String = "",
+      position: Option[Position] = Option.empty
+  )
 
   final case class Backend($ : BackendScope[Unit, State]) {
 
     def init: Callback =
       GeoLocation.position
         .flatMap(pos => API.getGraffels(pos).map((pos, _)))
-        .completeWith(res =>
-          res match {
-            case Success(result)    => $.modState(_.copy(position = Some(result._1), tags = result._2))
-            case Failure(exception) => Callback(exception.printStackTrace())
-        })
+        .completeWith(
+          res =>
+            res match {
+              case Success(result) =>
+                $.modState(_.copy(position = Some(result._1), tags = result._2))
+              case Failure(exception) => Callback(exception.printStackTrace())
+            }
+        )
 
     def render(state: State): VdomElement =
       <.div(
@@ -34,7 +39,8 @@ object TagComponent {
           p =>
             <.div(
               CreateTagComponent(
-                CreateTagComponent.Props(state.tagInput, tagInputChanged, createTag)),
+                CreateTagComponent.Props(state.tagInput, tagInputChanged, createTag)
+              ),
               LeafletComponent(LeafletComponent.Props(600, 600, state.tags, p)),
               <.div(
                 <.h4("Graffels in deiner Umgebung"),
@@ -42,7 +48,8 @@ object TagComponent {
                   state.tags.toTagMod(tv => <.li(s"Tag: ${tv.name} Position: ${tv.position}"))
                 )
               )
-          ))
+            )
+        )
       )
 
     private def tagInputChanged(e: ReactEventFromInput): Callback =
