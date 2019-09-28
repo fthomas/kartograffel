@@ -84,7 +84,7 @@ lazy val server = crossProject(JVMPlatform)
   .settings(
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % logbackVersion,
-      "com.github.pureconfig" %% "pureconfig-generic" % "0.12.0",
+      "com.github.pureconfig" %% "pureconfig-generic" % "0.12.1",
       "com.h2database" % "h2" % h2Version,
       "eu.timepit" %% "refined" % refinedVersion,
       "eu.timepit" %% "refined-pureconfig" % refinedVersion,
