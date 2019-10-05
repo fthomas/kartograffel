@@ -44,8 +44,10 @@ class DbTagRepositoryTest extends FunSuite with Matchers {
     val q = for {
       _ <- DbGraffelRepository.create(graffel)
       _ <- DbTagRepository.create(tag)
-      t <- DbTagRepository.findTagsByPosition(graffel.position,
-                                              Radius(refineMV[LengthRange](1), kilometer))
+      t <- DbTagRepository.findTagsByPosition(
+        graffel.position,
+        Radius(refineMV[LengthRange](1), kilometer)
+      )
     } yield t
 
     val result = runQuery(q).unsafeRunSync()

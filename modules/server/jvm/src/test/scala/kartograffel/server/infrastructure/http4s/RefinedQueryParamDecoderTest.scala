@@ -16,7 +16,8 @@ class RefinedQueryParamDecoderTest extends Specification with Matchers {
   "QueryParamDecoder[NonNegLong](-1)" >> {
     QueryParamDecoder[NonNegLong].decode(QueryParameterValue("-1")) must_===
       Validated.invalidNel(
-        ParseFailure("Predicate (-1 < 0) did not fail.", "Predicate (-1 < 0) did not fail."))
+        ParseFailure("Predicate (-1 < 0) did not fail.", "Predicate (-1 < 0) did not fail.")
+      )
   }
 
   "QueryParamDecoder[NonNegLong](a)" >> {

@@ -13,10 +13,12 @@ import japgolly.scalajs.react.CatsReact._
 import scala.scalajs.js
 
 object LeafletComponent {
-  final case class Props(width: Int,
-                         height: Int,
-                         graffels: List[TagView],
-                         currentPosition: Position)
+  final case class Props(
+      width: Int,
+      height: Int,
+      graffels: List[TagView],
+      currentPosition: Position
+  )
 
   final case class State(m: Option[Leaflet.Map] = Option.empty, ls: List[Layer] = List.empty)
 
@@ -34,7 +36,8 @@ object LeafletComponent {
         .map("myMap")
         .setView(
           Leaflet.latLng(p.currentPosition.latitude.value, p.currentPosition.longitude.value),
-          13)
+          13
+        )
 
       Leaflet
         .tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", js.Dictionary[Any]())
@@ -48,7 +51,8 @@ object LeafletComponent {
         g =>
           Leaflet
             .marker(Leaflet.latLng(g.position.latitude.value, g.position.longitude.value))
-            .addTo(map))
+            .addTo(map)
+      )
     }
 
     def updateMap(p: Props): Callback = $.state.flatMap { s =>
@@ -73,7 +77,9 @@ object LeafletComponent {
           g =>
             Leaflet
               .marker(Leaflet.latLng(g.position.latitude.value, g.position.longitude.value))
-              .addTo(m)))
+              .addTo(m)
+        )
+      )
 
   }
 
@@ -82,10 +88,12 @@ object LeafletComponent {
     .initialState(State())
     .renderBackend[Backend]
     .componentDidMount(_.backend.loadMap)
-    .componentDidUpdate(f =>
-      if (f.prevProps.graffels =!= f.currentProps.graffels || f.prevProps.currentPosition =!= f.currentProps.currentPosition)
-        f.backend.updateMap(f.currentProps)
-      else Callback.empty)
+    .componentDidUpdate(
+      f =>
+        if (f.prevProps.graffels =!= f.currentProps.graffels || f.prevProps.currentPosition =!= f.currentProps.currentPosition)
+          f.backend.updateMap(f.currentProps)
+        else Callback.empty
+    )
     .build
 
   def apply(p: Props): Unmounted[Props, State, Backend] = component(p)

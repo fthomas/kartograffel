@@ -5,9 +5,11 @@ import japgolly.scalajs.react.component.Scala.Unmounted
 import japgolly.scalajs.react.vdom.VdomElement
 
 object CreateTagComponent {
-  final case class Props(value: String,
-                         valueChanged: ReactEventFromInput => Callback,
-                         createTag: Callback)
+  final case class Props(
+      value: String,
+      valueChanged: ReactEventFromInput => Callback,
+      createTag: Callback
+  )
 
   final case class Backend($ : BackendScope[Props, Unit]) {
 
