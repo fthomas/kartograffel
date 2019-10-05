@@ -5,7 +5,7 @@ import sbtcrossproject.{crossProject, CrossProject}
 val projectName = "kartograffel"
 val rootPkg = "kartograffel"
 
-val circeVersion = "0.11.1"
+val circeVersion = "0.12.1"
 val doobieVersion = "0.7.1"
 val flywayVersion = "6.0.4"
 val fs2Version = "2.0.1"
