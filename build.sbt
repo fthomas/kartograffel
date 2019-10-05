@@ -6,18 +6,18 @@ val projectName = "kartograffel"
 val rootPkg = "kartograffel"
 
 val circeVersion = "0.11.1"
-val doobieVersion = "0.7.0"
-val flywayVersion = "5.2.4"
-val fs2Version = "1.0.5"
+val doobieVersion = "0.7.1"
+val flywayVersion = "6.0.4"
+val fs2Version = "2.0.1"
 val h2Version = "1.4.197"
-val http4sVersion = "0.20.6"
+val http4sVersion = "0.20.11"
 val logbackVersion = "1.2.3"
-val refinedVersion = "0.9.2"
+val refinedVersion = "0.9.10"
 val scalacheckShapelessVersion = "1.2.3"
 val scalajsJqueryVersion = "0.9.5"
 val scalajsReactVersion = "1.4.2"
 val scalaTestVersion = "3.0.8"
-val specs2Version = "4.6.0"
+val specs2Version = "4.7.1"
 val webjarJqueryVersion = "3.3.1"
 val webjarReactVersion = "16.7.0"
 
@@ -84,6 +84,7 @@ lazy val server = crossProject(JVMPlatform)
   .settings(
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % logbackVersion,
+      "com.github.pureconfig" %% "pureconfig-generic" % "0.12.1",
       "com.h2database" % "h2" % h2Version,
       "eu.timepit" %% "refined" % refinedVersion,
       "eu.timepit" %% "refined-pureconfig" % refinedVersion,
@@ -312,9 +313,11 @@ addCommandsAlias(
   )
 )
 
-addCommandsAlias("deployHerokuCmds",
-                 Seq(
-                   "clean",
-                   "serverJVM/stage",
-                   "serverJVM/deployHeroku"
-                 ))
+addCommandsAlias(
+  "deployHerokuCmds",
+  Seq(
+    "clean",
+    "serverJVM/stage",
+    "serverJVM/deployHeroku"
+  )
+)

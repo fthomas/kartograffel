@@ -5,6 +5,7 @@ import eu.timepit.refined.pureconfig._
 import eu.timepit.refined.types.net.PortNumber
 import eu.timepit.refined.types.string.NonEmptyString
 import kartograffel.server.application.Config.{Db, Http}
+import pureconfig.generic.auto._
 
 final case class Config(
     http: Http,
@@ -25,5 +26,5 @@ object Config {
   )
 
   def load[F[_]](implicit F: Sync[F]): F[Config] =
-    F.delay(pureconfig.loadConfigOrThrow[Config])
+    F.delay(pureconfig.ConfigSource.default.loadOrThrow[Config])
 }
