@@ -21,7 +21,6 @@ import kartograffel.shared.ui.model.TagView
 import scala.util.Try
 
 object Service {
-
   val root: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case GET -> Root =>
       Ok(Html.index).map(_.withContentType(`Content-Type`(MediaType.text.html)))

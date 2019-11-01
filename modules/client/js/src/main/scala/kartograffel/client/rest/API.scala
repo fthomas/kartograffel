@@ -12,7 +12,6 @@ import org.scalajs.dom.window._
 import scala.util.Try
 
 object API {
-
   private def origin: AsyncCallback[String] =
     AsyncCallback(
       cb =>
@@ -38,5 +37,4 @@ object API {
         .asAsyncCallback
       req.map(r => decode[List[TagView]](r.responseText).toOption.toList.flatten)
     }
-
 }
