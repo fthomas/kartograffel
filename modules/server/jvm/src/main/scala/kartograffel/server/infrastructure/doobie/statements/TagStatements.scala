@@ -6,7 +6,6 @@ import kartograffel.server.infrastructure.doobie.DoobieInstances
 import kartograffel.shared.domain.model.Position
 
 object TagStatements extends DoobieInstances {
-
   def create(tag: Tag): Update0 =
     sql"""
          INSERT INTO tag (id, name, graffel_id)
@@ -41,5 +40,4 @@ object TagStatements extends DoobieInstances {
                order by g.distance asc
              """.query
   }
-
 }

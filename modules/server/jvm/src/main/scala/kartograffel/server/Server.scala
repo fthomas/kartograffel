@@ -14,7 +14,6 @@ import org.http4s.server.blaze._
 import scala.concurrent.ExecutionContext
 
 object Server extends IOApp {
-
   private def router(tx: Transactor[IO]) =
     Router(
       "/" -> Service.root,
