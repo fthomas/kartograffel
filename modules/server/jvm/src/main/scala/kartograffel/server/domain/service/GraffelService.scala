@@ -11,7 +11,6 @@ class GraffelService[F[_]](
     tagRepository: TagRepository[F],
     UUIDUtil: UUIDUtil[F]
 ) {
-
   def create(tagName: String, position: Position)(implicit F: Sync[F]): F[Unit] =
     for {
       gOpt <- graffelRepository.findByPosition(position)

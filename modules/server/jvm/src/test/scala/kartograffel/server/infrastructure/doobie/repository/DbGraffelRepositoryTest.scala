@@ -49,5 +49,4 @@ class DbGraffelRepositoryTest extends FunSuite with Matchers {
     result.map(_.id) should contain(g.id)
     result.map(_.position) should contain(g.position)
   }
-
 }

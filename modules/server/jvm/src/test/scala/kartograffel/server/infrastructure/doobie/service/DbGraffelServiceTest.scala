@@ -8,7 +8,6 @@ import kartograffel.server.infrastructure.doobie.DbSpecification._
 import kartograffel.shared.domain.model.Position
 
 class DbGraffelServiceTest extends FunSuite with Matchers {
-
   test("create") {
     val name = sampleOf[String]
     val pos = sampleOf[Position]
@@ -24,5 +23,4 @@ class DbGraffelServiceTest extends FunSuite with Matchers {
     result.headOption.map(_._1.name) should contain(name)
     result.headOption.map(_._2.position) should contain(pos)
   }
-
 }

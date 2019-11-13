@@ -12,5 +12,4 @@ trait DoobieInstances extends doobie.refined.Instances {
 
   implicit val uuidMeta: Meta[UUID] =
     Meta[String].imap(UUID.fromString)(_.toString)
-
 }

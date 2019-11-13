@@ -23,7 +23,6 @@ object LeafletComponent {
   final case class State(m: Option[Leaflet.Map] = Option.empty, ls: List[Layer] = List.empty)
 
   final case class Backend($ : BackendScope[Props, State]) {
-
     def render(p: Props): VdomElement =
       <.div(^.id := "myMap", ^.width := p.width.px, ^.height := p.height.px)
 
@@ -80,7 +79,6 @@ object LeafletComponent {
               .addTo(m)
         )
       )
-
   }
 
   private val component = ScalaComponent
@@ -97,5 +95,4 @@ object LeafletComponent {
     .build
 
   def apply(p: Props): Unmounted[Props, State, Backend] = component(p)
-
 }

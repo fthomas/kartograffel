@@ -12,13 +12,11 @@ object CreateTagComponent {
   )
 
   final case class Backend($ : BackendScope[Props, Unit]) {
-
     def render(p: Props): VdomElement = <.div(
       <.label(^.`for` := "tag", "Tag name:"),
       <.input(^.id := "tag", ^.`type` := "text", ^.value := p.value, ^.onChange ==> p.valueChanged),
       <.button(^.onClick --> p.createTag, "Create Tag")
     )
-
   }
 
   private val component =

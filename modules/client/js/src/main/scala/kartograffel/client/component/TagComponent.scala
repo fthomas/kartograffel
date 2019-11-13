@@ -11,7 +11,6 @@ import cats.implicits._
 import scala.util.{Failure, Success}
 
 object TagComponent {
-
   final case class State(
       tags: List[TagView] = List.empty,
       tagInput: String = "",
@@ -19,7 +18,6 @@ object TagComponent {
   )
 
   final case class Backend($ : BackendScope[Unit, State]) {
-
     def init: Callback =
       GeoLocation.position
         .flatMap(pos => API.getGraffels(pos).map((pos, _)))
@@ -67,7 +65,6 @@ object TagComponent {
 
     private def reloadGraffels(p: Position) =
       API.getGraffels(p).completeWith(l => $.modState(_.copy(tags = l.toList.flatten)))
-
   }
 
   private val component = ScalaComponent

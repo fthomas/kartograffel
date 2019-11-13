@@ -17,5 +17,4 @@ class TagStatementsTest extends FunSuite {
   test("create") {
     check(TagStatements.create(sampleOf[Tag]))
   }
-
 }

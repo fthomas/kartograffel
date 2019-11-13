@@ -19,5 +19,4 @@ object DoobieUtils {
         blocker
       )
     } yield xa
-
 }

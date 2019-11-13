@@ -14,7 +14,6 @@ import org.specs2.mutable.Specification
 import scala.concurrent.ExecutionContext
 
 object DbSpecification extends Specification with IOChecker {
-
   implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
   override def transactor: doobie.Transactor[IO] = Transactor.fromDriverManager[IO](
@@ -45,5 +44,4 @@ object DbSpecification extends Specification with IOChecker {
         .transactor[F](d)
         .use(tx => (DoobieMigration.run[ConnectionIO](d) >> connectionIO).transact(tx))
     } yield c
-
 }

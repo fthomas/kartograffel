@@ -7,7 +7,6 @@ import kartograffel.server.infrastructure.doobie.DbSpecification._
 import org.scalatest.{FunSuite, Matchers}
 
 class DbTagRepositoryTest extends FunSuite with Matchers {
-
   test("create") {
     val graffel = sampleOf[Graffel]
     val tag = sampleOf[Tag].copy(graffelId = graffel.id)
@@ -55,5 +54,4 @@ class DbTagRepositoryTest extends FunSuite with Matchers {
     result should not be empty
     result.headOption should contain((tag, graffel))
   }
-
 }
