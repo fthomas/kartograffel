@@ -5,7 +5,7 @@ import sbtcrossproject.{crossProject, CrossProject}
 val projectName = "kartograffel"
 val rootPkg = "kartograffel"
 
-val circeVersion = "0.11.1"
+val circeVersion = "0.11.2"
 val doobieVersion = "0.8.6"
 val flywayVersion = "6.0.8"
 val fs2Version = "2.1.0"
@@ -162,7 +162,6 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
       "eu.timepit" %%% "refined" % refinedVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
       "io.circe" %%% "circe-refined" % circeVersion,
-      "io.circe" %%% "circe-java8" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,
       /// test dependencies
       "com.github.alexarchambault" %%% "scalacheck-shapeless_1.14" % scalacheckShapelessVersion % Test,
