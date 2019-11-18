@@ -162,7 +162,6 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
       "eu.timepit" %%% "refined" % refinedVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
       "io.circe" %%% "circe-refined" % circeVersion,
-      "io.circe" %%% "circe-java8" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,
       /// test dependencies
       "com.github.alexarchambault" %%% "scalacheck-shapeless_1.14" % scalacheckShapelessVersion % Test,
