@@ -13,13 +13,12 @@ import scala.util.Try
 
 object API {
   private def origin: AsyncCallback[String] =
-    AsyncCallback(
-      cb =>
-        Callback {
-          val host = location.host
-          val protocol = location.protocol
-          cb(Try(s"$protocol//$host")).runNow()
-        }
+    AsyncCallback(cb =>
+      Callback {
+        val host = location.host
+        val protocol = location.protocol
+        cb(Try(s"$protocol//$host")).runNow()
+      }
     )
 
   def createGraffel(name: String, position: Position): AsyncCallback[XMLHttpRequest] =
