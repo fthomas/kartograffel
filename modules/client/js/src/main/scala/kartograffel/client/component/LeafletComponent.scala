@@ -46,11 +46,10 @@ object LeafletComponent {
         .marker(Leaflet.latLng(p.currentPosition.latitude.value, p.currentPosition.longitude.value))
         .addTo(map)
 
-      p.graffels.foreach(
-        g =>
-          Leaflet
-            .marker(Leaflet.latLng(g.position.latitude.value, g.position.longitude.value))
-            .addTo(map)
+      p.graffels.foreach(g =>
+        Leaflet
+          .marker(Leaflet.latLng(g.position.latitude.value, g.position.longitude.value))
+          .addTo(map)
       )
     }
 
@@ -72,11 +71,10 @@ object LeafletComponent {
 
     def addLayer(m: Leaflet.Map, tags: List[TagView]): CallbackTo[List[Layer]] =
       CallbackTo(
-        tags.map(
-          g =>
-            Leaflet
-              .marker(Leaflet.latLng(g.position.latitude.value, g.position.longitude.value))
-              .addTo(m)
+        tags.map(g =>
+          Leaflet
+            .marker(Leaflet.latLng(g.position.latitude.value, g.position.longitude.value))
+            .addTo(m)
         )
       )
   }
@@ -86,11 +84,10 @@ object LeafletComponent {
     .initialState(State())
     .renderBackend[Backend]
     .componentDidMount(_.backend.loadMap)
-    .componentDidUpdate(
-      f =>
-        if (f.prevProps.graffels =!= f.currentProps.graffels || f.prevProps.currentPosition =!= f.currentProps.currentPosition)
-          f.backend.updateMap(f.currentProps)
-        else Callback.empty
+    .componentDidUpdate(f =>
+      if (f.prevProps.graffels =!= f.currentProps.graffels || f.prevProps.currentPosition =!= f.currentProps.currentPosition)
+        f.backend.updateMap(f.currentProps)
+      else Callback.empty
     )
     .build
 

@@ -21,32 +21,30 @@ object TagComponent {
     def init: Callback =
       GeoLocation.position
         .flatMap(pos => API.getGraffels(pos).map((pos, _)))
-        .completeWith(
-          res =>
-            res match {
-              case Success(result) =>
-                $.modState(_.copy(position = Some(result._1), tags = result._2))
-              case Failure(exception) => Callback(exception.printStackTrace())
-            }
+        .completeWith(res =>
+          res match {
+            case Success(result) =>
+              $.modState(_.copy(position = Some(result._1), tags = result._2))
+            case Failure(exception) => Callback(exception.printStackTrace())
+          }
         )
 
     def render(state: State): VdomElement =
       <.div(
         ^.display.flex,
-        state.position.whenDefined(
-          p =>
+        state.position.whenDefined(p =>
+          <.div(
+            CreateTagComponent(
+              CreateTagComponent.Props(state.tagInput, tagInputChanged, createTag)
+            ),
+            LeafletComponent(LeafletComponent.Props(600, 600, state.tags, p)),
             <.div(
-              CreateTagComponent(
-                CreateTagComponent.Props(state.tagInput, tagInputChanged, createTag)
-              ),
-              LeafletComponent(LeafletComponent.Props(600, 600, state.tags, p)),
-              <.div(
-                <.h4("Graffels in deiner Umgebung"),
-                <.ul(
-                  state.tags.toTagMod(tv => <.li(s"Tag: ${tv.name} Position: ${tv.position}"))
-                )
+              <.h4("Graffels in deiner Umgebung"),
+              <.ul(
+                state.tags.toTagMod(tv => <.li(s"Tag: ${tv.name} Position: ${tv.position}"))
               )
             )
+          )
         )
       )
 
