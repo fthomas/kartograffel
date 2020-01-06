@@ -6,8 +6,8 @@ val projectName = "kartograffel"
 val rootPkg = "kartograffel"
 
 val circeVersion = "0.11.2"
-val doobieVersion = "0.8.8"
-val flywayVersion = "6.1.3"
+val doobieVersion = "0.8.7"
+val flywayVersion = "6.1.4"
 val fs2Version = "2.1.0"
 val h2Version = "1.4.200"
 val http4sVersion = "0.20.15"
@@ -15,7 +15,7 @@ val logbackVersion = "1.2.3"
 val refinedVersion = "0.9.10"
 val scalacheckShapelessVersion = "1.2.3"
 val scalajsJqueryVersion = "0.9.6"
-val scalajsReactVersion = "1.4.2"
+val scalajsReactVersion = "1.5.0"
 val scalaTestVersion = "3.0.8"
 val specs2Version = "4.8.1"
 val webjarJqueryVersion = "3.3.1"
@@ -84,7 +84,7 @@ lazy val server = crossProject(JVMPlatform)
   .settings(
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % logbackVersion,
-      "com.github.pureconfig" %% "pureconfig-generic" % "0.12.1",
+      "com.github.pureconfig" %% "pureconfig-generic" % "0.12.2",
       "com.h2database" % "h2" % h2Version,
       "eu.timepit" %% "refined" % refinedVersion,
       "eu.timepit" %% "refined-pureconfig" % refinedVersion,
