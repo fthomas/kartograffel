@@ -13,7 +13,7 @@ addons:
     packages:
     - fakeroot
 before_install:
-  - npm i jsdom
+  - npm i jsdom@15.2.1
 install:
 - pip install --user codecov
 cache:
