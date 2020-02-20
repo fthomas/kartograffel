@@ -26,9 +26,7 @@ object LeafletComponent {
     def render(p: Props): VdomElement =
       <.div(^.id := "myMap", ^.width := p.width.px, ^.height := p.height.px)
 
-    def loadMap: Callback = $.props.flatMap { p =>
-      renderMap(p)
-    }
+    def loadMap: Callback = $.props.flatMap(p => renderMap(p))
 
     def renderMap(p: Props): Callback = Callback {
       val map = Leaflet
