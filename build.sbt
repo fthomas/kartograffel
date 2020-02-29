@@ -16,8 +16,8 @@ val refinedVersion = "0.9.12"
 val scalacheckShapelessVersion = "1.2.4"
 val scalajsJqueryVersion = "1.0.0"
 val scalajsReactVersion = "1.6.0"
-val scalaTestVersion = "3.1.1"
-val specs2Version = "4.8.3"
+val scalaTestVersion = "3.0.8"
+val specs2Version = "4.9.0"
 val webjarJqueryVersion = "3.3.1"
 val webjarReactVersion = "16.7.0"
 
@@ -84,7 +84,7 @@ lazy val server = crossProject(JVMPlatform)
   .settings(
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % logbackVersion,
-      "com.github.pureconfig" %% "pureconfig-generic" % "0.12.2",
+      "com.github.pureconfig" %% "pureconfig-generic" % "0.12.3",
       "com.h2database" % "h2" % h2Version,
       "eu.timepit" %% "refined" % refinedVersion,
       "eu.timepit" %% "refined-pureconfig" % refinedVersion,
