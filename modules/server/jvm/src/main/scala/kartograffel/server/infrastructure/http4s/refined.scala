@@ -8,8 +8,8 @@ import org.http4s.{ParseFailure, QueryParamDecoder, QueryParameterValue}
 object refined {
   object NonNegLongVar extends RefinedPathVar[NonNegLong, Long](_.toLong)
 
-  implicit def refinedQueryParamDecoder[F[_, _], T, P](
-      implicit queryParamDecoder: QueryParamDecoder[T],
+  implicit def refinedQueryParamDecoder[F[_, _], T, P](implicit
+      queryParamDecoder: QueryParamDecoder[T],
       rt: RefinedType.AuxT[F[T, P], T]
   ): QueryParamDecoder[F[T, P]] =
     (value: QueryParameterValue) => {
