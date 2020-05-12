@@ -16,12 +16,13 @@ import scala.concurrent.ExecutionContext
 object DbSpecification extends Specification with IOChecker {
   implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
-  override def transactor: doobie.Transactor[IO] = Transactor.fromDriverManager[IO](
-    dbConfig.driver.value,
-    dbConfig.url.value,
-    dbConfig.user,
-    dbConfig.password
-  )
+  override def transactor: doobie.Transactor[IO] =
+    Transactor.fromDriverManager[IO](
+      dbConfig.driver.value,
+      dbConfig.url.value,
+      dbConfig.user,
+      dbConfig.password
+    )
 
   lazy val dbConfig =
     Config.Db(
@@ -40,8 +41,9 @@ object DbSpecification extends Specification with IOChecker {
           url = NonEmptyString.unsafeFrom(s"jdbc:h2:mem:${id.toString};MODE=PostgreSQL")
         )
       }
-      c <- DoobieUtils
-        .transactor[F](d)
-        .use(tx => (DoobieMigration.run[ConnectionIO](d) >> connectionIO).transact(tx))
+      c <-
+        DoobieUtils
+          .transactor[F](d)
+          .use(tx => (DoobieMigration.run[ConnectionIO](d) >> connectionIO).transact(tx))
     } yield c
 }
