@@ -28,39 +28,43 @@ object LeafletComponent {
 
     def loadMap: Callback = $.props.flatMap(p => renderMap(p))
 
-    def renderMap(p: Props): Callback = Callback {
-      val map = Leaflet
-        .map("myMap")
-        .setView(
-          Leaflet.latLng(p.currentPosition.latitude.value, p.currentPosition.longitude.value),
-          13
-        )
+    def renderMap(p: Props): Callback =
+      Callback {
+        val map = Leaflet
+          .map("myMap")
+          .setView(
+            Leaflet.latLng(p.currentPosition.latitude.value, p.currentPosition.longitude.value),
+            13
+          )
 
-      Leaflet
-        .tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", js.Dictionary[Any]())
-        .addTo(map)
-
-      Leaflet
-        .marker(Leaflet.latLng(p.currentPosition.latitude.value, p.currentPosition.longitude.value))
-        .addTo(map)
-
-      p.graffels.foreach(g =>
         Leaflet
-          .marker(Leaflet.latLng(g.position.latitude.value, g.position.longitude.value))
+          .tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", js.Dictionary[Any]())
           .addTo(map)
-      )
-    }
 
-    def updateMap(p: Props): Callback = $.state.flatMap { s =>
-      s.m.traverse { map =>
-        for {
-          _ <- removeLayer(map, s.ls)
-          ls <- addLayer(map, p.graffels)
-          _ <- setView(map, p.currentPosition)
-          _ <- $.modState(_.copy(m = Some(map), ls = ls))
-        } yield ()
-      }.void
-    }
+        Leaflet
+          .marker(
+            Leaflet.latLng(p.currentPosition.latitude.value, p.currentPosition.longitude.value)
+          )
+          .addTo(map)
+
+        p.graffels.foreach(g =>
+          Leaflet
+            .marker(Leaflet.latLng(g.position.latitude.value, g.position.longitude.value))
+            .addTo(map)
+        )
+      }
+
+    def updateMap(p: Props): Callback =
+      $.state.flatMap { s =>
+        s.m.traverse { map =>
+          for {
+            _ <- removeLayer(map, s.ls)
+            ls <- addLayer(map, p.graffels)
+            _ <- setView(map, p.currentPosition)
+            _ <- $.modState(_.copy(m = Some(map), ls = ls))
+          } yield ()
+        }.void
+      }
 
     def setView(m: Leaflet.Map, p: Position): Callback =
       Callback(m.setView(Leaflet.latLng(p.latitude.value, p.longitude.value), 13))
@@ -83,7 +87,9 @@ object LeafletComponent {
     .renderBackend[Backend]
     .componentDidMount(_.backend.loadMap)
     .componentDidUpdate(f =>
-      if (f.prevProps.graffels =!= f.currentProps.graffels || f.prevProps.currentPosition =!= f.currentProps.currentPosition)
+      if (
+        f.prevProps.graffels =!= f.currentProps.graffels || f.prevProps.currentPosition =!= f.currentProps.currentPosition
+      )
         f.backend.updateMap(f.currentProps)
       else Callback.empty
     )
