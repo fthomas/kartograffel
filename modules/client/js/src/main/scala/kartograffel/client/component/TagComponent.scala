@@ -51,12 +51,13 @@ object TagComponent {
     private def tagInputChanged(e: ReactEventFromInput): Callback =
       e.extract(_.target.value)(value => $.modState(_.copy(tagInput = value)))
 
-    private def createTag: Callback = $.state.flatMap { s =>
-      s.position match {
-        case Some(p) => sendRequest(s.tagInput, p)
-        case None    => Callback.empty
+    private def createTag: Callback =
+      $.state.flatMap { s =>
+        s.position match {
+          case Some(p) => sendRequest(s.tagInput, p)
+          case None    => Callback.empty
+        }
       }
-    }
 
     private def sendRequest(name: String, position: Position): Callback =
       API.createGraffel(name, position).completeWith(_ => reloadGraffels(position))

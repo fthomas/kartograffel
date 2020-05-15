@@ -25,9 +25,10 @@ object Server extends IOApp {
     for {
       conf <- Config.load[IO]
       _ <- DoobieMigration.run[IO](conf.db)
-      c <- DoobieUtils
-        .transactor[IO](conf.db)
-        .use(r => blazeBuilder(conf.http, r).serve.compile.drain.as(ExitCode.Success))
+      c <-
+        DoobieUtils
+          .transactor[IO](conf.db)
+          .use(r => blazeBuilder(conf.http, r).serve.compile.drain.as(ExitCode.Success))
     } yield c
 
   def blazeBuilder(httpConfig: Config.Http, tx: Transactor[IO]): BlazeServerBuilder[IO] =
