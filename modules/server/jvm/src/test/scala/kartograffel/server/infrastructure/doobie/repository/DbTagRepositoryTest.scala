@@ -4,9 +4,10 @@ import kartograffel.server.ArbitraryInstances._
 import kartograffel.server.domain.model.Radius.LengthRange
 import kartograffel.server.domain.model._
 import kartograffel.server.infrastructure.doobie.DbSpecification._
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class DbTagRepositoryTest extends FunSuite with Matchers {
+class DbTagRepositoryTest extends AnyFunSuite with Matchers {
   test("create") {
     val graffel = sampleOf[Graffel]
     val tag = sampleOf[Tag].copy(graffelId = graffel.id)
