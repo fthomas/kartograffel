@@ -1,10 +1,11 @@
 package kartograffel.server.infrastructure.doobie.repository
-import org.scalatest.{FunSuite, Matchers}
 import kartograffel.server.ArbitraryInstances._
 import kartograffel.server.domain.model.Graffel
 import kartograffel.server.infrastructure.doobie.DbSpecification._
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class DbGraffelRepositoryTest extends FunSuite with Matchers {
+class DbGraffelRepositoryTest extends AnyFunSuite with Matchers {
   test("findByPosition") {
     val g = sampleOf[Graffel]
 
