@@ -21,9 +21,8 @@ import kartograffel.shared.ui.model.TagView
 import scala.util.Try
 
 object Service {
-  val root: HttpRoutes[IO] = HttpRoutes.of[IO] {
-    case GET -> Root =>
-      Ok(Html.index).map(_.withContentType(`Content-Type`(MediaType.text.html)))
+  val root: HttpRoutes[IO] = HttpRoutes.of[IO] { case GET -> Root =>
+    Ok(Html.index).map(_.withContentType(`Content-Type`(MediaType.text.html)))
   }
 
   object LatQueryParamMatcher extends QueryParamDecoderMatcher[Latitude]("lat")
@@ -49,12 +48,11 @@ object Service {
           .flatMap(l => Ok(l.map(t => TagView(t._1.name, t._2.position)).asJson))
 
       case request @ PUT -> Root / "graffel" =>
-        request.decodeJson[(String, Position)].flatMap {
-          case (name, position) =>
-            DbGraffelService
-              .create(name, position)
-              .transact(tx)
-              .flatMap(_ => Ok())
+        request.decodeJson[(String, Position)].flatMap { case (name, position) =>
+          DbGraffelService
+            .create(name, position)
+            .transact(tx)
+            .flatMap(_ => Ok())
         }
 
       case GET -> Root / "version" => Ok(BuildInfo.version.asJson)

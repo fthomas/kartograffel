@@ -128,9 +128,8 @@ lazy val server = crossProject(JVMPlatform)
         assetsRoot,
         assetsPath,
         crossTarget,
-        BuildInfoKey.map(isDevMode.in(scalaJSPipeline)) {
-          case (_, value) =>
-            "jsOptPostfix" -> (if (value) "fastopt" else "opt")
+        BuildInfoKey.map(isDevMode.in(scalaJSPipeline)) { case (_, value) =>
+          "jsOptPostfix" -> (if (value) "fastopt" else "opt")
         }
       )
     },
