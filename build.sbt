@@ -17,7 +17,7 @@ val scalacheckShapelessVersion = "1.2.5"
 val scalajsJqueryVersion = "1.0.0"
 val scalajsReactVersion = "1.7.5"
 val scalaTestVersion = "3.2.2"
-val specs2Version = "4.10.3"
+val specs2Version = "4.10.5"
 val webjarJqueryVersion = "3.3.1"
 val webjarReactVersion = "16.7.0"
 
